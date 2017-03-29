@@ -3,6 +3,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
 using UE4_Binary_Builder.Properties;
+using System.Text.RegularExpressions;
+using System.Drawing;
 
 namespace UE4_Binary_Builder
 {
@@ -10,6 +12,7 @@ namespace UE4_Binary_Builder
     {
         private static string AUTOMATION_TOOL_NAME = "AutomationTool";
         private string AutomationExePath = Settings.Default.AutomationPath;
+        private Process AutomationToolProcess;
 
         public MainWindow()
         {
@@ -71,6 +74,8 @@ namespace UE4_Binary_Builder
                             break;
                     }                    
                 }
+
+                BuildRocketUE.Enabled = false;
                 string CommandLineArgs = "BuildGraph -target=\"Make Installed Build Win64\" -script=Engine/Build/InstalledEngineBuild.xml -set:WithDDC=" + GetConditionalString(bWithDDC.Checked) + " -set:SignExecutables=" + GetConditionalString(bSignExecutables.Checked) + " -set:EnableSymStore=" + GetConditionalString(bEnableSymStore.Checked);                
 
                 if (bHostPlatformOnly.Checked)
@@ -95,11 +100,24 @@ namespace UE4_Binary_Builder
                 {
                     CommandLineArgs += " -Clean";
                 }
+
+                AddLog(string.Format("Commandline: {0}\n", CommandLineArgs));
                 ProcessStartInfo AutomationStartInfo = new ProcessStartInfo();
                 AutomationStartInfo.FileName = AutomationExePath;
                 AutomationStartInfo.Arguments = CommandLineArgs;
-                Process.Start(AutomationStartInfo);
-                Application.Exit();
+                AutomationStartInfo.UseShellExecute = false;
+                AutomationStartInfo.RedirectStandardError = true;
+                AutomationStartInfo.RedirectStandardOutput = true;
+
+                AutomationToolProcess = new Process();
+                AutomationToolProcess.StartInfo = AutomationStartInfo;
+                AutomationToolProcess.EnableRaisingEvents = true;
+                AutomationToolProcess.OutputDataReceived += new DataReceivedEventHandler(AutomationToolProcess_OutputDataReceived);
+                AutomationToolProcess.ErrorDataReceived += new DataReceivedEventHandler(AutomationToolProcess_ErrorDataReceived);
+                AutomationToolProcess.Exited += new EventHandler(AutomationToolProcess_Exited);
+                AutomationToolProcess.Start();
+                AutomationToolProcess.BeginErrorReadLine();
+                AutomationToolProcess.BeginOutputReadLine();
             }
         }
 
@@ -152,7 +170,52 @@ namespace UE4_Binary_Builder
 
         private void AboutMenu_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("A helper application designed to create binary version of Unreal Engine 4 from source.\n\nCreated by Satheesh (a.k.a ryanjon2040)");
+            MessageBox.Show("A helper application designed to create binary version of Unreal Engine 4 from source.\n\nCreated by Satheesh (ryanjon2040)");
+        }
+
+        private void GetSourceCodeMenu_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/ryanjon2040/UE4-Binary-Builder");
+        }
+
+        private void AutomationToolProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            AddLog(e.Data);
+        }
+
+        private void AutomationToolProcess_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            AddLog(e.Data);
+        }
+
+        private void AutomationToolProcess_Exited(object sender, EventArgs e)
+        {
+            AddLog(string.Format("AutomationToolProcess exited with code {0}\n", AutomationToolProcess.ExitCode.ToString()));
+        }
+
+        private void AddLog(string Message)
+        {
+            string WarningPattern = @"/warning/";
+            string ErrorPattern = @"/error/";
+
+            Regex WarningRgx = new Regex(WarningPattern, RegexOptions.IgnoreCase);
+            Regex ErrorRgx = new Regex(ErrorPattern, RegexOptions.IgnoreCase);
+            MatchCollection WarningMatches = WarningRgx.Matches(Message);
+            MatchCollection ErrorMatches = ErrorRgx.Matches(Message);
+
+            LogWindow.ForeColor = Color.White;
+
+            if (WarningMatches.Count > 0)
+            {
+                LogWindow.ForeColor = Color.Yellow;
+            }
+
+            if (ErrorMatches.Count > 0)
+            {
+                LogWindow.ForeColor = Color.Red;
+            }
+
+            LogWindow.Text += Message;
         }
     }
 }

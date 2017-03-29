@@ -46,14 +46,16 @@
             this.bWithMac = new System.Windows.Forms.CheckBox();
             this.bWithWin32 = new System.Windows.Forms.CheckBox();
             this.bWithWin64 = new System.Windows.Forms.CheckBox();
+            this.bHostPlatformOnly = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BuildRocketUE = new System.Windows.Forms.Button();
             this.AutomationToolBrowse = new System.Windows.Forms.Button();
             this.AutomationToolPath = new System.Windows.Forms.TextBox();
-            this.bHostPlatformOnly = new System.Windows.Forms.CheckBox();
             this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
             this.AboutMenu = new System.Windows.Forms.MenuItem();
             this.label2 = new System.Windows.Forms.Label();
+            this.LogWindow = new System.Windows.Forms.TextBox();
+            this.GetSourceCodeMenu = new System.Windows.Forms.MenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -253,6 +255,19 @@
             this.bWithWin64.Text = "Win64";
             this.bWithWin64.UseVisualStyleBackColor = true;
             // 
+            // bHostPlatformOnly
+            // 
+            this.bHostPlatformOnly.AutoSize = true;
+            this.bHostPlatformOnly.Location = new System.Drawing.Point(6, 22);
+            this.bHostPlatformOnly.Name = "bHostPlatformOnly";
+            this.bHostPlatformOnly.Size = new System.Drawing.Size(133, 20);
+            this.bHostPlatformOnly.TabIndex = 0;
+            this.bHostPlatformOnly.Text = "Host Platform Only";
+            this.toolTip1.SetToolTip(this.bHostPlatformOnly, "A helper option to make an installed build for your host platform only, so that y" +
+        "ou don\'t have to disable each platform individually");
+            this.bHostPlatformOnly.UseVisualStyleBackColor = true;
+            this.bHostPlatformOnly.CheckedChanged += new System.EventHandler(this.bHostPlatformOnly_CheckedChanged);
+            // 
             // toolTip1
             // 
             this.toolTip1.IsBalloon = true;
@@ -293,23 +308,11 @@
             this.AutomationToolPath.Size = new System.Drawing.Size(318, 23);
             this.AutomationToolPath.TabIndex = 0;
             // 
-            // bHostPlatformOnly
-            // 
-            this.bHostPlatformOnly.AutoSize = true;
-            this.bHostPlatformOnly.Location = new System.Drawing.Point(6, 22);
-            this.bHostPlatformOnly.Name = "bHostPlatformOnly";
-            this.bHostPlatformOnly.Size = new System.Drawing.Size(133, 20);
-            this.bHostPlatformOnly.TabIndex = 0;
-            this.bHostPlatformOnly.Text = "Host Platform Only";
-            this.toolTip1.SetToolTip(this.bHostPlatformOnly, "A helper option to make an installed build for your host platform only, so that y" +
-        "ou don\'t have to disable each platform individually");
-            this.bHostPlatformOnly.UseVisualStyleBackColor = true;
-            this.bHostPlatformOnly.CheckedChanged += new System.EventHandler(this.bHostPlatformOnly_CheckedChanged);
-            // 
             // mainMenu1
             // 
             this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.AboutMenu});
+            this.AboutMenu,
+            this.GetSourceCodeMenu});
             // 
             // AboutMenu
             // 
@@ -327,11 +330,30 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "Binary builds can be found in Your Engine Folder\\LocalBuilds folder";
             // 
+            // LogWindow
+            // 
+            this.LogWindow.BackColor = System.Drawing.SystemColors.WindowText;
+            this.LogWindow.ForeColor = System.Drawing.Color.White;
+            this.LogWindow.Location = new System.Drawing.Point(391, 12);
+            this.LogWindow.Multiline = true;
+            this.LogWindow.Name = "LogWindow";
+            this.LogWindow.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.LogWindow.Size = new System.Drawing.Size(862, 306);
+            this.LogWindow.TabIndex = 6;
+            this.LogWindow.Text = "Welcome to UE4 Binary Builder\r\n------------------------------------\r\n";
+            // 
+            // GetSourceCodeMenu
+            // 
+            this.GetSourceCodeMenu.Index = 1;
+            this.GetSourceCodeMenu.Text = "Get Source Code";
+            this.GetSourceCodeMenu.Click += new System.EventHandler(this.GetSourceCodeMenu_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(395, 330);
+            this.ClientSize = new System.Drawing.Size(1265, 330);
+            this.Controls.Add(this.LogWindow);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.AutomationToolBrowse);
             this.Controls.Add(this.BuildRocketUE);
@@ -382,6 +404,8 @@
         private System.Windows.Forms.MainMenu mainMenu1;
         private System.Windows.Forms.MenuItem AboutMenu;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox LogWindow;
+        private System.Windows.Forms.MenuItem GetSourceCodeMenu;
     }
 }
 
