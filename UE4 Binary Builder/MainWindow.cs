@@ -14,11 +14,13 @@ namespace UE4_Binary_Builder
         private string AutomationExePath = Settings.Default.AutomationPath;
         private Process AutomationToolProcess;
 
+        private delegate void SetLogTextDelegate(string Text);
+
         public MainWindow()
         {
             InitializeComponent();
 
-            AutomationToolPath.Text = AutomationExePath;
+            AutomationToolPath.Text = AutomationExePath;            
 
             if (File.Exists(AutomationExePath) && Path.GetFileNameWithoutExtension(AutomationExePath) == AUTOMATION_TOOL_NAME)
             {
@@ -106,6 +108,7 @@ namespace UE4_Binary_Builder
                 AutomationStartInfo.FileName = AutomationExePath;
                 AutomationStartInfo.Arguments = CommandLineArgs;
                 AutomationStartInfo.UseShellExecute = false;
+                AutomationStartInfo.CreateNoWindow = true;
                 AutomationStartInfo.RedirectStandardError = true;
                 AutomationStartInfo.RedirectStandardOutput = true;
 
@@ -180,42 +183,61 @@ namespace UE4_Binary_Builder
 
         private void AutomationToolProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            AddLog(e.Data);
+            SetLogText(e.Data);
         }
 
         private void AutomationToolProcess_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            AddLog(e.Data);
+            SetLogText(e.Data);
         }
 
         private void AutomationToolProcess_Exited(object sender, EventArgs e)
         {
-            AddLog(string.Format("AutomationToolProcess exited with code {0}\n", AutomationToolProcess.ExitCode.ToString()));
+            SetLogText(string.Format("AutomationToolProcess exited with code {0}\n", AutomationToolProcess.ExitCode.ToString()));
         }
 
         private void AddLog(string Message)
         {
-            string WarningPattern = @"/warning/";
-            string ErrorPattern = @"/error/";
-
-            Regex WarningRgx = new Regex(WarningPattern, RegexOptions.IgnoreCase);
-            Regex ErrorRgx = new Regex(ErrorPattern, RegexOptions.IgnoreCase);
-            MatchCollection WarningMatches = WarningRgx.Matches(Message);
-            MatchCollection ErrorMatches = ErrorRgx.Matches(Message);
-
-            LogWindow.ForeColor = Color.White;
-
-            if (WarningMatches.Count > 0)
+            if (Message != null)
             {
-                LogWindow.ForeColor = Color.Yellow;
-            }
+                string WarningPattern = @"/warning/";
+                string ErrorPattern = @"/error/";
 
-            if (ErrorMatches.Count > 0)
+                Regex WarningRgx = new Regex(WarningPattern, RegexOptions.IgnoreCase);
+                Regex ErrorRgx = new Regex(ErrorPattern, RegexOptions.IgnoreCase);
+                MatchCollection WarningMatches = WarningRgx.Matches(Message);
+                MatchCollection ErrorMatches = ErrorRgx.Matches(Message);
+
+                LogWindow.ForeColor = Color.White;
+
+                if (WarningRgx.IsMatch(Message))
+                {
+                    LogWindow.ForeColor = Color.Yellow;
+                }
+
+                if (ErrorRgx.IsMatch(Message))
+                {
+                    LogWindow.ForeColor = Color.Red;
+                }
+
+                LogWindow.Text += Message + "\r\n";
+                LogWindow.SelectionStart = LogWindow.TextLength;
+                LogWindow.ScrollToCaret();
+            }
+        }
+
+        private void SetLogText(string Message)
+        {
+            /* InvokeRequired returns true if the calling thread ID is different from creation thread ID */
+            if (LogWindow.InvokeRequired)
             {
-                LogWindow.ForeColor = Color.Red;
+                SetLogTextDelegate LogDelegate = new SetLogTextDelegate(SetLogText);
+                Invoke(LogDelegate, new object[] { Message });
             }
-
-            LogWindow.Text += Message;
+            else
+            {
+                AddLog(Message);
+            }
         }
     }
 }

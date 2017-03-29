@@ -53,9 +53,9 @@
             this.AutomationToolPath = new System.Windows.Forms.TextBox();
             this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
             this.AboutMenu = new System.Windows.Forms.MenuItem();
+            this.GetSourceCodeMenu = new System.Windows.Forms.MenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.LogWindow = new System.Windows.Forms.TextBox();
-            this.GetSourceCodeMenu = new System.Windows.Forms.MenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -320,6 +320,12 @@
             this.AboutMenu.Text = "About";
             this.AboutMenu.Click += new System.EventHandler(this.AboutMenu_Click);
             // 
+            // GetSourceCodeMenu
+            // 
+            this.GetSourceCodeMenu.Index = 1;
+            this.GetSourceCodeMenu.Text = "Get Source Code";
+            this.GetSourceCodeMenu.Click += new System.EventHandler(this.GetSourceCodeMenu_Click);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -332,27 +338,24 @@
             // 
             // LogWindow
             // 
+            this.LogWindow.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.LogWindow.BackColor = System.Drawing.SystemColors.WindowText;
             this.LogWindow.ForeColor = System.Drawing.Color.White;
             this.LogWindow.Location = new System.Drawing.Point(391, 12);
             this.LogWindow.Multiline = true;
             this.LogWindow.Name = "LogWindow";
             this.LogWindow.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.LogWindow.Size = new System.Drawing.Size(862, 306);
+            this.LogWindow.Size = new System.Drawing.Size(892, 314);
             this.LogWindow.TabIndex = 6;
             this.LogWindow.Text = "Welcome to UE4 Binary Builder\r\n------------------------------------\r\n";
-            // 
-            // GetSourceCodeMenu
-            // 
-            this.GetSourceCodeMenu.Index = 1;
-            this.GetSourceCodeMenu.Text = "Get Source Code";
-            this.GetSourceCodeMenu.Click += new System.EventHandler(this.GetSourceCodeMenu_Click);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1265, 330);
+            this.ClientSize = new System.Drawing.Size(1295, 336);
             this.Controls.Add(this.LogWindow);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.AutomationToolBrowse);
@@ -361,7 +364,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.AutomationToolPath);
             this.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Menu = this.mainMenu1;
