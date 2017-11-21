@@ -155,6 +155,37 @@ namespace UE4_Binary_Builder.Properties {
             }
         }
         
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool bWithPS4
+        {
+            get
+            {
+                return ((bool)(this["bWithPS4"]));
+            }
+            set
+            {
+                this["bWithPS4"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool bWithXboxOne
+        {
+            get
+            {
+                return ((bool)(this["bWithXboxOne"]));
+            }
+            set
+            {
+                this["bWithXboxOne"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
