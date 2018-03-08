@@ -316,7 +316,6 @@
             this.AutomationToolBrowse.Size = new System.Drawing.Size(47, 23);
             this.AutomationToolBrowse.TabIndex = 4;
             this.AutomationToolBrowse.Text = "...";
-            this.toolTip1.SetToolTip(this.AutomationToolBrowse, resources.GetString("AutomationToolBrowse.ToolTip"));
             this.AutomationToolBrowse.UseVisualStyleBackColor = true;
             this.AutomationToolBrowse.Click += new System.EventHandler(this.AutomationToolBrowse_Click);
             // 
@@ -384,7 +383,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.AutomationToolPath);
             this.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Menu = this.mainMenu1;
