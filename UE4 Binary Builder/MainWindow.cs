@@ -202,6 +202,7 @@ namespace UE4_Binary_Builder
         private void AutomationToolProcess_Exited(object sender, EventArgs e)
         {
             SetLogText(string.Format("AutomationToolProcess exited with code {0}\n", AutomationToolProcess.ExitCode.ToString()));
+            BuildRocketUE.Enabled = true;
         }
 
         private void AddLog(string Message)
