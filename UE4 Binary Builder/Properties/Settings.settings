@@ -53,5 +53,11 @@
     <Setting Name="bWithXboxOne" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="GameConfigurations" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Development;Shipping</Value>
+    </Setting>
+    <Setting Name="bWithFullDebugInfo" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

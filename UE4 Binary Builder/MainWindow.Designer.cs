@@ -32,6 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.GameConfigurations = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.bCleanBuild = new System.Windows.Forms.CheckBox();
             this.bEnableSymStore = new System.Windows.Forms.CheckBox();
             this.bSignExecutables = new System.Windows.Forms.CheckBox();
@@ -58,6 +60,7 @@
             this.GetSourceCodeMenu = new System.Windows.Forms.MenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.LogWindow = new System.Windows.Forms.TextBox();
+            this.bWithFullDebugInfo = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -73,6 +76,9 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.bWithFullDebugInfo);
+            this.groupBox1.Controls.Add(this.GameConfigurations);
+            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.bCleanBuild);
             this.groupBox1.Controls.Add(this.bEnableSymStore);
             this.groupBox1.Controls.Add(this.bSignExecutables);
@@ -80,10 +86,29 @@
             this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Location = new System.Drawing.Point(14, 71);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(371, 193);
+            this.groupBox1.Size = new System.Drawing.Size(388, 247);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
+            // 
+            // GameConfigurations
+            // 
+            this.GameConfigurations.Location = new System.Drawing.Point(12, 210);
+            this.GameConfigurations.Name = "GameConfigurations";
+            this.GameConfigurations.Size = new System.Drawing.Size(353, 23);
+            this.GameConfigurations.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.GameConfigurations, "Which game configurations to include for packaged applications. Defaults to Devel" +
+        "opment;Shipping");
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(9, 191);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(127, 16);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Game Configurations";
+            this.toolTip1.SetToolTip(this.label3, "Which game configurations to include for packaged applications");
             // 
             // bCleanBuild
             // 
@@ -300,9 +325,9 @@
             // BuildRocketUE
             // 
             this.BuildRocketUE.Enabled = false;
-            this.BuildRocketUE.Location = new System.Drawing.Point(12, 270);
+            this.BuildRocketUE.Location = new System.Drawing.Point(14, 324);
             this.BuildRocketUE.Name = "BuildRocketUE";
-            this.BuildRocketUE.Size = new System.Drawing.Size(371, 52);
+            this.BuildRocketUE.Size = new System.Drawing.Size(388, 52);
             this.BuildRocketUE.TabIndex = 3;
             this.BuildRocketUE.Text = "Build";
             this.toolTip1.SetToolTip(this.BuildRocketUE, "Start build process.");
@@ -313,7 +338,7 @@
             // 
             this.AutomationToolBrowse.Location = new System.Drawing.Point(338, 41);
             this.AutomationToolBrowse.Name = "AutomationToolBrowse";
-            this.AutomationToolBrowse.Size = new System.Drawing.Size(47, 23);
+            this.AutomationToolBrowse.Size = new System.Drawing.Size(64, 23);
             this.AutomationToolBrowse.TabIndex = 4;
             this.AutomationToolBrowse.Text = "...";
             this.AutomationToolBrowse.UseVisualStyleBackColor = true;
@@ -349,7 +374,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(11, 325);
+            this.label2.Location = new System.Drawing.Point(11, 379);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(323, 13);
             this.label2.TabIndex = 5;
@@ -362,19 +387,30 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LogWindow.BackColor = System.Drawing.SystemColors.WindowText;
             this.LogWindow.ForeColor = System.Drawing.Color.White;
-            this.LogWindow.Location = new System.Drawing.Point(391, 12);
+            this.LogWindow.Location = new System.Drawing.Point(408, 12);
             this.LogWindow.Multiline = true;
             this.LogWindow.Name = "LogWindow";
             this.LogWindow.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.LogWindow.Size = new System.Drawing.Size(892, 324);
+            this.LogWindow.Size = new System.Drawing.Size(875, 483);
             this.LogWindow.TabIndex = 6;
             this.LogWindow.Text = "Welcome to UE4 Binary Builder\r\n------------------------------------\r\n";
+            // 
+            // bWithFullDebugInfo
+            // 
+            this.bWithFullDebugInfo.AutoSize = true;
+            this.bWithFullDebugInfo.Location = new System.Drawing.Point(222, 135);
+            this.bWithFullDebugInfo.Name = "bWithFullDebugInfo";
+            this.bWithFullDebugInfo.Size = new System.Drawing.Size(158, 20);
+            this.bWithFullDebugInfo.TabIndex = 8;
+            this.bWithFullDebugInfo.Text = "Include Full Debug Info";
+            this.toolTip1.SetToolTip(this.bWithFullDebugInfo, "Generate full debug info for binary editor and packaged application builds");
+            this.bWithFullDebugInfo.UseVisualStyleBackColor = true;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1295, 346);
+            this.ClientSize = new System.Drawing.Size(1295, 505);
             this.Controls.Add(this.LogWindow);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.AutomationToolBrowse);
@@ -429,6 +465,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox LogWindow;
         private System.Windows.Forms.MenuItem GetSourceCodeMenu;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox GameConfigurations;
+        private System.Windows.Forms.CheckBox bWithFullDebugInfo;
     }
 }
 
