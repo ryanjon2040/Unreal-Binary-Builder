@@ -39,10 +39,10 @@ namespace UE4_Binary_Builder
             bWithSwitch.Checked = Settings.Default.bWithSwitch;
             bWithPS4.Checked = Settings.Default.bWithPS4;
             bWithXboxOne.Checked = Settings.Default.bWithXboxOne;
+            bWithLumin.Checked = Settings.Default.bWithLumin;
 
             bWithDDC.Checked = Settings.Default.bWithDDC;
             bSignExecutables.Checked = Settings.Default.bSignExes;
-            bEnableSymStore.Checked = Settings.Default.bSymStore;
             bCleanBuild.Checked = Settings.Default.bCleanBuild;
         }
 
@@ -59,6 +59,7 @@ namespace UE4_Binary_Builder
             bWithSwitch.Enabled = !bHostPlatformOnly.Checked;
             bWithPS4.Enabled = !bHostPlatformOnly.Checked;
             bWithXboxOne.Enabled = !bHostPlatformOnly.Checked;
+            bWithLumin.Enabled = !bHostPlatformOnly.Checked;
         }
 
         private void BuildRocketUE_Click(object sender, EventArgs e)
@@ -82,7 +83,7 @@ namespace UE4_Binary_Builder
                 }
 
                 BuildRocketUE.Enabled = false;
-                string CommandLineArgs = "BuildGraph -target=\"Make Installed Build Win64\" -script=Engine/Build/InstalledEngineBuild.xml -set:WithDDC=" + GetConditionalString(bWithDDC.Checked) + " -set:SignExecutables=" + GetConditionalString(bSignExecutables.Checked) + " -set:EnableSymStore=" + GetConditionalString(bEnableSymStore.Checked);                
+                string CommandLineArgs = "BuildGraph -target=\"Make Installed Build Win64\" -script=Engine/Build/InstalledEngineBuild.xml -set:WithDDC=" + GetConditionalString(bWithDDC.Checked) + " -set:SignExecutables=" + GetConditionalString(bSignExecutables.Checked);                
 
                 if (bHostPlatformOnly.Checked)
                 {
@@ -90,7 +91,7 @@ namespace UE4_Binary_Builder
                 }
                 else
                 {
-                    CommandLineArgs += String.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithHTML5={7} -set:WithSwitch={8} -set:WithPS4={9} -set:WithXboxOne={10}", 
+                    CommandLineArgs += String.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithHTML5={7} -set:WithSwitch={8} -set:WithPS4={9} -set:WithXboxOne={10} -set:WithLumin={10}", 
                         GetConditionalString(bWithWin64.Checked),
                         GetConditionalString(bWithWin32.Checked),
                         GetConditionalString(bWithMac.Checked),
@@ -101,7 +102,8 @@ namespace UE4_Binary_Builder
                         GetConditionalString(bWithHTML5.Checked),
                         GetConditionalString(bWithSwitch.Checked),
                         GetConditionalString(bWithPS4.Checked),
-                        GetConditionalString(bWithXboxOne.Checked));
+                        GetConditionalString(bWithXboxOne.Checked),
+                        GetConditionalString(bWithLumin.Checked));
                 }
 
                 if (bCleanBuild.Checked)
@@ -171,10 +173,10 @@ namespace UE4_Binary_Builder
             Settings.Default.bWithSwitch = bWithSwitch.Checked;
             Settings.Default.bWithPS4 = bWithPS4.Checked;
             Settings.Default.bWithXboxOne = bWithXboxOne.Checked;
+            Settings.Default.bWithLumin = bWithLumin.Checked;
 
             Settings.Default.bWithDDC = bWithDDC.Checked;
             Settings.Default.bSignExes = bSignExecutables.Checked;
-            Settings.Default.bSymStore = bEnableSymStore.Checked;
             Settings.Default.bCleanBuild = bCleanBuild.Checked;
             Settings.Default.Save();
         }

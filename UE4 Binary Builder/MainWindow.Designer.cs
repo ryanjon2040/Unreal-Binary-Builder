@@ -33,10 +33,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.bCleanBuild = new System.Windows.Forms.CheckBox();
-            this.bEnableSymStore = new System.Windows.Forms.CheckBox();
             this.bSignExecutables = new System.Windows.Forms.CheckBox();
             this.bWithDDC = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.bWithLumin = new System.Windows.Forms.CheckBox();
             this.bWithXboxOne = new System.Windows.Forms.CheckBox();
             this.bWithPS4 = new System.Windows.Forms.CheckBox();
             this.bWithSwitch = new System.Windows.Forms.CheckBox();
@@ -74,13 +74,12 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.bCleanBuild);
-            this.groupBox1.Controls.Add(this.bEnableSymStore);
             this.groupBox1.Controls.Add(this.bSignExecutables);
             this.groupBox1.Controls.Add(this.bWithDDC);
             this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Location = new System.Drawing.Point(14, 71);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(371, 193);
+            this.groupBox1.Size = new System.Drawing.Size(387, 193);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
@@ -88,7 +87,7 @@
             // bCleanBuild
             // 
             this.bCleanBuild.AutoSize = true;
-            this.bCleanBuild.Location = new System.Drawing.Point(222, 109);
+            this.bCleanBuild.Location = new System.Drawing.Point(261, 96);
             this.bCleanBuild.Name = "bCleanBuild";
             this.bCleanBuild.Size = new System.Drawing.Size(90, 20);
             this.bCleanBuild.TabIndex = 5;
@@ -96,22 +95,10 @@
             this.toolTip1.SetToolTip(this.bCleanBuild, "Cleans any previous builds");
             this.bCleanBuild.UseVisualStyleBackColor = true;
             // 
-            // bEnableSymStore
-            // 
-            this.bEnableSymStore.AutoSize = true;
-            this.bEnableSymStore.Location = new System.Drawing.Point(222, 83);
-            this.bEnableSymStore.Name = "bEnableSymStore";
-            this.bEnableSymStore.Size = new System.Drawing.Size(146, 20);
-            this.bEnableSymStore.TabIndex = 4;
-            this.bEnableSymStore.Text = "Enable Symbol Store";
-            this.toolTip1.SetToolTip(this.bEnableSymStore, "Whether to add Source indexing to Windows game apps so they can be added to a sym" +
-        "bol server");
-            this.bEnableSymStore.UseVisualStyleBackColor = true;
-            // 
             // bSignExecutables
             // 
             this.bSignExecutables.AutoSize = true;
-            this.bSignExecutables.Location = new System.Drawing.Point(222, 57);
+            this.bSignExecutables.Location = new System.Drawing.Point(261, 70);
             this.bSignExecutables.Name = "bSignExecutables";
             this.bSignExecutables.Size = new System.Drawing.Size(123, 20);
             this.bSignExecutables.TabIndex = 3;
@@ -124,7 +111,7 @@
             this.bWithDDC.AutoSize = true;
             this.bWithDDC.Checked = true;
             this.bWithDDC.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.bWithDDC.Location = new System.Drawing.Point(222, 31);
+            this.bWithDDC.Location = new System.Drawing.Point(261, 44);
             this.bWithDDC.Name = "bWithDDC";
             this.bWithDDC.Size = new System.Drawing.Size(96, 20);
             this.bWithDDC.TabIndex = 2;
@@ -134,6 +121,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.bWithLumin);
             this.groupBox2.Controls.Add(this.bWithXboxOne);
             this.groupBox2.Controls.Add(this.bWithPS4);
             this.groupBox2.Controls.Add(this.bWithSwitch);
@@ -148,10 +136,19 @@
             this.groupBox2.Controls.Add(this.bHostPlatformOnly);
             this.groupBox2.Location = new System.Drawing.Point(6, 22);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(210, 166);
+            this.groupBox2.Size = new System.Drawing.Size(249, 166);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Platforms";
+            // 
+            // bWithLumin
+            // 
+            this.bWithLumin.Location = new System.Drawing.Point(144, 136);
+            this.bWithLumin.Name = "bWithLumin";
+            this.bWithLumin.Size = new System.Drawing.Size(104, 24);
+            this.bWithLumin.TabIndex = 11;
+            this.bWithLumin.Text = "Magic Leap";
+            this.bWithLumin.UseVisualStyleBackColor = true;
             // 
             // bWithXboxOne
             // 
@@ -159,7 +156,7 @@
             this.bWithXboxOne.Name = "bWithXboxOne";
             this.bWithXboxOne.Size = new System.Drawing.Size(104, 24);
             this.bWithXboxOne.TabIndex = 11;
-            this.bWithXboxOne.Text = "Xbox One";
+            this.bWithXboxOne.Text = "Xbone";
             this.bWithXboxOne.UseVisualStyleBackColor = true;
             // 
             // bWithPS4
@@ -302,7 +299,7 @@
             this.BuildRocketUE.Enabled = false;
             this.BuildRocketUE.Location = new System.Drawing.Point(12, 270);
             this.BuildRocketUE.Name = "BuildRocketUE";
-            this.BuildRocketUE.Size = new System.Drawing.Size(371, 52);
+            this.BuildRocketUE.Size = new System.Drawing.Size(386, 52);
             this.BuildRocketUE.TabIndex = 3;
             this.BuildRocketUE.Text = "Build";
             this.toolTip1.SetToolTip(this.BuildRocketUE, "Start build process.");
@@ -311,12 +308,11 @@
             // 
             // AutomationToolBrowse
             // 
-            this.AutomationToolBrowse.Location = new System.Drawing.Point(338, 41);
+            this.AutomationToolBrowse.Location = new System.Drawing.Point(351, 41);
             this.AutomationToolBrowse.Name = "AutomationToolBrowse";
             this.AutomationToolBrowse.Size = new System.Drawing.Size(47, 23);
             this.AutomationToolBrowse.TabIndex = 4;
             this.AutomationToolBrowse.Text = "...";
-            this.toolTip1.SetToolTip(this.AutomationToolBrowse, resources.GetString("AutomationToolBrowse.ToolTip"));
             this.AutomationToolBrowse.UseVisualStyleBackColor = true;
             this.AutomationToolBrowse.Click += new System.EventHandler(this.AutomationToolBrowse_Click);
             // 
@@ -325,7 +321,7 @@
             this.AutomationToolPath.Location = new System.Drawing.Point(14, 41);
             this.AutomationToolPath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.AutomationToolPath.Name = "AutomationToolPath";
-            this.AutomationToolPath.Size = new System.Drawing.Size(318, 23);
+            this.AutomationToolPath.Size = new System.Drawing.Size(331, 23);
             this.AutomationToolPath.TabIndex = 0;
             // 
             // mainMenu1
@@ -363,11 +359,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LogWindow.BackColor = System.Drawing.SystemColors.WindowText;
             this.LogWindow.ForeColor = System.Drawing.Color.White;
-            this.LogWindow.Location = new System.Drawing.Point(391, 12);
+            this.LogWindow.Location = new System.Drawing.Point(407, 12);
             this.LogWindow.Multiline = true;
             this.LogWindow.Name = "LogWindow";
             this.LogWindow.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.LogWindow.Size = new System.Drawing.Size(892, 324);
+            this.LogWindow.Size = new System.Drawing.Size(876, 324);
             this.LogWindow.TabIndex = 6;
             this.LogWindow.Text = "Welcome to UE4 Binary Builder\r\n------------------------------------\r\n";
             // 
@@ -409,6 +405,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.CheckBox bHostPlatformOnly;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.CheckBox bWithLumin;
         private System.Windows.Forms.CheckBox bWithXboxOne;
         private System.Windows.Forms.CheckBox bWithPS4;
         private System.Windows.Forms.CheckBox bWithSwitch;
@@ -420,7 +417,6 @@
         private System.Windows.Forms.CheckBox bWithMac;
         private System.Windows.Forms.CheckBox bWithWin32;
         private System.Windows.Forms.CheckBox bWithWin64;
-        private System.Windows.Forms.CheckBox bEnableSymStore;
         private System.Windows.Forms.CheckBox bSignExecutables;
         private System.Windows.Forms.CheckBox bWithDDC;
         private System.Windows.Forms.Button BuildRocketUE;
