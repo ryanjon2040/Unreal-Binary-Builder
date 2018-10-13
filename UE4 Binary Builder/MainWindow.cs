@@ -10,9 +10,17 @@ namespace UE4_Binary_Builder
 {
     public partial class MainWindow : Form
     {
-        private static string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
+        private static readonly string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
+        private static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
         private string AutomationExePath = Settings.Default.AutomationPath;
         private Process AutomationToolProcess;
+
+        private int NumErrors = 0;
+        private int NumWarnings = 0;
+
+        private bool bIsBuilding = false;
+
+        private Stopwatch StopwatchTimer = new Stopwatch();
 
         private delegate void SetLogTextDelegate(string Text);
 
@@ -47,6 +55,9 @@ namespace UE4_Binary_Builder
             bWithFullDebugInfo.Checked = Settings.Default.bWithFullDebugInfo;
 
             GameConfigurations.Text = Settings.Default.GameConfigurations;
+            CustomBuildXMLFile.Text = Settings.Default.CustomBuildXML;
+            ChangeStatusLabel("Idle.");
+            LogWindow.Text = "Welcome to UE4 Binary Builder\r\n------------------------------------\r\n";
         }
 
         private void bHostPlatformOnly_CheckedChanged(object sender, EventArgs e)
@@ -66,6 +77,30 @@ namespace UE4_Binary_Builder
 
         private void BuildRocketUE_Click(object sender, EventArgs e)
         {
+            if (bIsBuilding)
+            {
+                AutomationToolProcess.Kill();
+                return;
+            }
+
+            ChangeStatusLabel("Preparing to build...");
+            if (CustomBuildXMLFile.Text != DEFAULT_BUILD_XML_FILE)
+            {
+                if (CustomBuildXMLFile.Text == string.Empty)
+                {
+                    ChangeStatusLabel("Error. Empty build xml file.");
+                    MessageBox.Show(string.Format("Build XML cannot be empty.\n\nIf you don't have a custom build file, press \"Reset to default\" to use default InstalledEngineBuild.xml", CustomBuildXMLFile.Text), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (File.Exists(CustomBuildXMLFile.Text) == false)
+                {
+                    ChangeStatusLabel("Error. Build xml does not exist.");
+                    MessageBox.Show(string.Format("Build XML {0} does not exist!", CustomBuildXMLFile.Text), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
             if (MessageBox.Show("You are going to build a binary version of Unreal Engine 4. This is a long process and might take time to finish. Are you sure you want to continue? ", "Build Binary Version", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (bWithDDC.Checked)
@@ -84,14 +119,22 @@ namespace UE4_Binary_Builder
                     }                    
                 }
 
-                BuildRocketUE.Enabled = false;
+                LogWindow.Text = "Welcome to UE4 Binary Builder\r\n------------------------------------\r\n";
+                BuildRocketUE.Text = "Stop Build";
 
                 if (GameConfigurations.Text == "")
                 {
                     GameConfigurations.Text = "Development;Shipping";
                 }
 
-                string CommandLineArgs = String.Format("BuildGraph -target=\"Make Installed Build Win64\" -script=Engine/Build/InstalledEngineBuild.xml -set:WithDDC={0} -set:SignExecutables={1} -set:EmbedSrcSrvInfo={2} -set:GameConfigurations={3} -set:WithFullDebugInfo={4}", 
+                string BuildXMLFile = CustomBuildXMLFile.Text;
+                if (BuildXMLFile != DEFAULT_BUILD_XML_FILE)
+                {
+                    BuildXMLFile = string.Format("\"{0}\"", CustomBuildXMLFile.Text);
+                }
+
+                string CommandLineArgs = String.Format("BuildGraph -target=\"Make Installed Build Win64\" -script={0} -set:WithDDC={1} -set:SignExecutables={2} -set:EmbedSrcSrvInfo={3} -set:GameConfigurations={4} -set:WithFullDebugInfo={5}",
+                    BuildXMLFile,
                     GetConditionalString(bWithDDC.Checked), 
                     GetConditionalString(bSignExecutables.Checked), 
                     GetConditionalString(bEnableSymStore.Checked), 
@@ -124,13 +167,17 @@ namespace UE4_Binary_Builder
                 }
 
                 AddLog(string.Format("Commandline: {0}\n", CommandLineArgs));
-                ProcessStartInfo AutomationStartInfo = new ProcessStartInfo();
-                AutomationStartInfo.FileName = AutomationExePath;
-                AutomationStartInfo.Arguments = CommandLineArgs;
-                AutomationStartInfo.UseShellExecute = false;
-                AutomationStartInfo.CreateNoWindow = true;
-                AutomationStartInfo.RedirectStandardError = true;
-                AutomationStartInfo.RedirectStandardOutput = true;
+                ProcessStartInfo AutomationStartInfo = new ProcessStartInfo
+                {
+                    FileName = AutomationExePath,
+                    Arguments = CommandLineArgs,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                };
+
+                StopwatchTimer.Start();
 
                 AutomationToolProcess = new Process();
                 AutomationToolProcess.StartInfo = AutomationStartInfo;
@@ -141,14 +188,28 @@ namespace UE4_Binary_Builder
                 AutomationToolProcess.Start();
                 AutomationToolProcess.BeginErrorReadLine();
                 AutomationToolProcess.BeginOutputReadLine();
+
+                bIsBuilding = true;
+                
+                if (CustomBuildXMLFile.Text == DEFAULT_BUILD_XML_FILE)
+                {
+                    ChangeStatusLabel("Building...");
+                }
+                else
+                {
+                    ChangeStatusLabel("Building using custom xml...");
+                }
             }
         }
 
         private void AutomationToolBrowse_Click(object sender, EventArgs e)
         {
-            OpenFileDialog NewFileDialog = new OpenFileDialog();
-            NewFileDialog.Filter = "exe file (*.exe)|*.exe";
+            OpenFileDialog NewFileDialog = new OpenFileDialog
+            {
+                Filter = "exe file (*.exe)|*.exe"
+            };
 
+            ChangeStatusLabel(string.Format("Waiting for {0}.exe", AUTOMATION_TOOL_NAME));
             if (NewFileDialog.ShowDialog() == DialogResult.OK)
             {
                 AutomationExePath = NewFileDialog.FileName;
@@ -156,12 +217,39 @@ namespace UE4_Binary_Builder
                 if (Path.GetFileNameWithoutExtension(AutomationExePath) == AUTOMATION_TOOL_NAME)
                 {
                     BuildRocketUE.Enabled = true;
+                    ChangeStatusLabel("Idle.");
                 }
                 else
                 {
+                    ChangeStatusLabel("Error. Invalid automation tool file selected.");
                     MessageBox.Show("This is not Automation Tool Launcher. Please select AutomationToolLauncher.exe", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+
+                return;
             }
+
+            ChangeStatusLabel("Idle.");
+        }
+
+        private void CustomBuildXMLBrowse_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog NewFileDialog = new OpenFileDialog
+            {
+                Filter = "xml file (*.xml)|*.xml"
+            };
+
+            ChangeStatusLabel("Waiting for custom build file...");
+            if (NewFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                CustomBuildXMLFile.Text = NewFileDialog.FileName;                
+            }
+
+            ChangeStatusLabel("Idle.");
+        }
+
+        private void ResetDefaultBuildXML_Click(object sender, EventArgs e)
+        {
+            CustomBuildXMLFile.Text = DEFAULT_BUILD_XML_FILE;
         }
 
         private string GetConditionalString(bool bCondition)
@@ -193,6 +281,7 @@ namespace UE4_Binary_Builder
             Settings.Default.bWithFullDebugInfo = bWithFullDebugInfo.Checked;
 
             Settings.Default.GameConfigurations = GameConfigurations.Text;
+            Settings.Default.CustomBuildXML = CustomBuildXMLFile.Text;
             Settings.Default.Save();
         }
 
@@ -213,21 +302,30 @@ namespace UE4_Binary_Builder
 
         private void AutomationToolProcess_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
+            NumErrors++;
             SetLogText(e.Data);
         }
 
         private void AutomationToolProcess_Exited(object sender, EventArgs e)
         {
+            StopwatchTimer.Stop();
             SetLogText(string.Format("AutomationToolProcess exited with code {0}\n", AutomationToolProcess.ExitCode.ToString()));
-            BuildRocketUE.Enabled = true;
+            BuildRocketUE.Text = "Build";
+            ChangeStatusLabel(string.Format("Build finished with code {0}. {1} errors, {2} warnings. Time elapsed: {3:hh\\:mm\\:ss}", AutomationToolProcess.ExitCode, NumErrors, NumWarnings, StopwatchTimer.Elapsed));            
+            bIsBuilding = false;
+            AutomationToolProcess.Close();
+            AutomationToolProcess.Dispose();
+            AutomationToolProcess = null;
+            NumErrors = 0;
+            NumWarnings = 0;
         }
 
         private void AddLog(string Message)
         {
             if (Message != null)
             {
-                string WarningPattern = @"/warning/";
-                string ErrorPattern = @"/error/";
+                string WarningPattern = @"(warning)";
+                string ErrorPattern = @"(error)";
 
                 Regex WarningRgx = new Regex(WarningPattern, RegexOptions.IgnoreCase);
                 Regex ErrorRgx = new Regex(ErrorPattern, RegexOptions.IgnoreCase);
@@ -238,6 +336,7 @@ namespace UE4_Binary_Builder
 
                 if (WarningRgx.IsMatch(Message))
                 {
+                    NumWarnings++;
                     LogWindow.ForeColor = Color.Yellow;
                 }
 
@@ -264,6 +363,11 @@ namespace UE4_Binary_Builder
             {
                 AddLog(Message);
             }
+        }
+
+        private void ChangeStatusLabel(string InStatus)
+        {
+            StatusLabel.Text = string.Format("Status: {0}", InStatus);
         }
     }
 }

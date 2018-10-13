@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.bWithFullDebugInfo = new System.Windows.Forms.CheckBox();
             this.GameConfigurations = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.bCleanBuild = new System.Windows.Forms.CheckBox();
@@ -60,9 +61,14 @@
             this.GetSourceCodeMenu = new System.Windows.Forms.MenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.LogWindow = new System.Windows.Forms.TextBox();
-            this.bWithFullDebugInfo = new System.Windows.Forms.CheckBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.ResetDefaultBuildXML = new System.Windows.Forms.Button();
+            this.CustomBuildXMLBrowse = new System.Windows.Forms.Button();
+            this.CustomBuildXMLFile = new System.Windows.Forms.TextBox();
+            this.StatusLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -84,12 +90,23 @@
             this.groupBox1.Controls.Add(this.bSignExecutables);
             this.groupBox1.Controls.Add(this.bWithDDC);
             this.groupBox1.Controls.Add(this.groupBox2);
-            this.groupBox1.Location = new System.Drawing.Point(14, 71);
+            this.groupBox1.Location = new System.Drawing.Point(14, 174);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(388, 247);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
+            // 
+            // bWithFullDebugInfo
+            // 
+            this.bWithFullDebugInfo.AutoSize = true;
+            this.bWithFullDebugInfo.Location = new System.Drawing.Point(222, 135);
+            this.bWithFullDebugInfo.Name = "bWithFullDebugInfo";
+            this.bWithFullDebugInfo.Size = new System.Drawing.Size(158, 20);
+            this.bWithFullDebugInfo.TabIndex = 8;
+            this.bWithFullDebugInfo.Text = "Include Full Debug Info";
+            this.toolTip1.SetToolTip(this.bWithFullDebugInfo, "Generate full debug info for binary editor and packaged application builds");
+            this.bWithFullDebugInfo.UseVisualStyleBackColor = true;
             // 
             // GameConfigurations
             // 
@@ -105,9 +122,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(9, 191);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(127, 16);
+            this.label3.Size = new System.Drawing.Size(188, 16);
             this.label3.TabIndex = 6;
-            this.label3.Text = "Game Configurations";
+            this.label3.Text = "Game Configurations (Optional)";
             this.toolTip1.SetToolTip(this.label3, "Which game configurations to include for packaged applications");
             // 
             // bCleanBuild
@@ -325,7 +342,7 @@
             // BuildRocketUE
             // 
             this.BuildRocketUE.Enabled = false;
-            this.BuildRocketUE.Location = new System.Drawing.Point(14, 324);
+            this.BuildRocketUE.Location = new System.Drawing.Point(14, 427);
             this.BuildRocketUE.Name = "BuildRocketUE";
             this.BuildRocketUE.Size = new System.Drawing.Size(388, 52);
             this.BuildRocketUE.TabIndex = 3;
@@ -374,7 +391,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(11, 379);
+            this.label2.Location = new System.Drawing.Point(11, 482);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(323, 13);
             this.label2.TabIndex = 5;
@@ -391,26 +408,65 @@
             this.LogWindow.Multiline = true;
             this.LogWindow.Name = "LogWindow";
             this.LogWindow.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.LogWindow.Size = new System.Drawing.Size(875, 483);
+            this.LogWindow.Size = new System.Drawing.Size(875, 467);
             this.LogWindow.TabIndex = 6;
-            this.LogWindow.Text = "Welcome to UE4 Binary Builder\r\n------------------------------------\r\n";
             // 
-            // bWithFullDebugInfo
+            // groupBox3
             // 
-            this.bWithFullDebugInfo.AutoSize = true;
-            this.bWithFullDebugInfo.Location = new System.Drawing.Point(222, 135);
-            this.bWithFullDebugInfo.Name = "bWithFullDebugInfo";
-            this.bWithFullDebugInfo.Size = new System.Drawing.Size(158, 20);
-            this.bWithFullDebugInfo.TabIndex = 8;
-            this.bWithFullDebugInfo.Text = "Include Full Debug Info";
-            this.toolTip1.SetToolTip(this.bWithFullDebugInfo, "Generate full debug info for binary editor and packaged application builds");
-            this.bWithFullDebugInfo.UseVisualStyleBackColor = true;
+            this.groupBox3.Controls.Add(this.ResetDefaultBuildXML);
+            this.groupBox3.Controls.Add(this.CustomBuildXMLBrowse);
+            this.groupBox3.Controls.Add(this.CustomBuildXMLFile);
+            this.groupBox3.Location = new System.Drawing.Point(14, 71);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(388, 100);
+            this.groupBox3.TabIndex = 7;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Custom Installed Engine Build XML (Optional)";
+            // 
+            // ResetDefaultBuildXML
+            // 
+            this.ResetDefaultBuildXML.Location = new System.Drawing.Point(222, 63);
+            this.ResetDefaultBuildXML.Name = "ResetDefaultBuildXML";
+            this.ResetDefaultBuildXML.Size = new System.Drawing.Size(157, 31);
+            this.ResetDefaultBuildXML.TabIndex = 3;
+            this.ResetDefaultBuildXML.Text = "Reset to default";
+            this.ResetDefaultBuildXML.UseVisualStyleBackColor = true;
+            this.ResetDefaultBuildXML.Click += new System.EventHandler(this.ResetDefaultBuildXML_Click);
+            // 
+            // CustomBuildXMLBrowse
+            // 
+            this.CustomBuildXMLBrowse.Location = new System.Drawing.Point(324, 34);
+            this.CustomBuildXMLBrowse.Name = "CustomBuildXMLBrowse";
+            this.CustomBuildXMLBrowse.Size = new System.Drawing.Size(55, 23);
+            this.CustomBuildXMLBrowse.TabIndex = 2;
+            this.CustomBuildXMLBrowse.Text = "...";
+            this.CustomBuildXMLBrowse.UseVisualStyleBackColor = true;
+            this.CustomBuildXMLBrowse.Click += new System.EventHandler(this.CustomBuildXMLBrowse_Click);
+            // 
+            // CustomBuildXMLFile
+            // 
+            this.CustomBuildXMLFile.Location = new System.Drawing.Point(12, 34);
+            this.CustomBuildXMLFile.Name = "CustomBuildXMLFile";
+            this.CustomBuildXMLFile.Size = new System.Drawing.Size(306, 23);
+            this.CustomBuildXMLFile.TabIndex = 1;
+            // 
+            // StatusLabel
+            // 
+            this.StatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.StatusLabel.AutoSize = true;
+            this.StatusLabel.Location = new System.Drawing.Point(405, 482);
+            this.StatusLabel.Name = "StatusLabel";
+            this.StatusLabel.Size = new System.Drawing.Size(49, 16);
+            this.StatusLabel.TabIndex = 8;
+            this.StatusLabel.Text = "Status:";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1295, 505);
+            this.Controls.Add(this.StatusLabel);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.LogWindow);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.AutomationToolBrowse);
@@ -430,6 +486,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -468,6 +526,11 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox GameConfigurations;
         private System.Windows.Forms.CheckBox bWithFullDebugInfo;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TextBox CustomBuildXMLFile;
+        private System.Windows.Forms.Button ResetDefaultBuildXML;
+        private System.Windows.Forms.Button CustomBuildXMLBrowse;
+        private System.Windows.Forms.Label StatusLabel;
     }
 }
 

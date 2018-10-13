@@ -59,5 +59,8 @@
     <Setting Name="bWithFullDebugInfo" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="CustomBuildXML" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Engine/Build/InstalledEngineBuild.xml</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
