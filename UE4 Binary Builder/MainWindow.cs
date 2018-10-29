@@ -5,6 +5,7 @@ using System.Diagnostics;
 using UE4_Binary_Builder.Properties;
 using System.Text.RegularExpressions;
 using System.Drawing;
+using System.Windows.Threading;
 
 namespace UE4_Binary_Builder
 {
@@ -21,6 +22,7 @@ namespace UE4_Binary_Builder
         private bool bIsBuilding = false;
 
         private Stopwatch StopwatchTimer = new Stopwatch();
+        private DispatcherTimer DispatchTimer = new DispatcherTimer();
 
         private delegate void SetLogTextDelegate(string Text);
 
@@ -58,6 +60,14 @@ namespace UE4_Binary_Builder
             CustomBuildXMLFile.Text = Settings.Default.CustomBuildXML;
             ChangeStatusLabel("Idle.");
             LogWindow.Text = "Welcome to UE4 Binary Builder\r\n------------------------------------\r\n";
+
+            DispatchTimer.Tick += new EventHandler(DispatchTimer_Tick);
+            DispatchTimer.Interval = new TimeSpan(0, 0, 1);
+        }
+
+        private void DispatchTimer_Tick(object sender, EventArgs e)
+        {
+            ChangeStatusLabel(string.Format("Building... Time Elapsed: {0:hh\\:mm\\:ss}", StopwatchTimer.Elapsed));
         }
 
         private void bHostPlatformOnly_CheckedChanged(object sender, EventArgs e)
@@ -177,6 +187,7 @@ namespace UE4_Binary_Builder
                     RedirectStandardOutput = true
                 };
 
+                DispatchTimer.Start();
                 StopwatchTimer.Start();
 
                 AutomationToolProcess = new Process();
@@ -308,6 +319,7 @@ namespace UE4_Binary_Builder
 
         private void AutomationToolProcess_Exited(object sender, EventArgs e)
         {
+            DispatchTimer.Stop();
             StopwatchTimer.Stop();
             SetLogText(string.Format("AutomationToolProcess exited with code {0}\n", AutomationToolProcess.ExitCode.ToString()));
             BuildRocketUE.Text = "Build";
@@ -318,6 +330,7 @@ namespace UE4_Binary_Builder
             AutomationToolProcess = null;
             NumErrors = 0;
             NumWarnings = 0;
+            StopwatchTimer.Reset();
         }
 
         private void AddLog(string Message)
