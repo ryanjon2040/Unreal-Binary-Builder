@@ -66,9 +66,13 @@
             this.CustomBuildXMLBrowse = new System.Windows.Forms.Button();
             this.CustomBuildXMLFile = new System.Windows.Forms.TextBox();
             this.StatusLabel = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.bShutdownIfSuccess = new System.Windows.Forms.CheckBox();
+            this.bShutdownWindows = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -342,9 +346,9 @@
             // BuildRocketUE
             // 
             this.BuildRocketUE.Enabled = false;
-            this.BuildRocketUE.Location = new System.Drawing.Point(14, 427);
+            this.BuildRocketUE.Location = new System.Drawing.Point(14, 488);
             this.BuildRocketUE.Name = "BuildRocketUE";
-            this.BuildRocketUE.Size = new System.Drawing.Size(388, 52);
+            this.BuildRocketUE.Size = new System.Drawing.Size(388, 50);
             this.BuildRocketUE.TabIndex = 3;
             this.BuildRocketUE.Text = "Build";
             this.toolTip1.SetToolTip(this.BuildRocketUE, "Start build process.");
@@ -391,7 +395,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(11, 482);
+            this.label2.Location = new System.Drawing.Point(11, 541);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(323, 13);
             this.label2.TabIndex = 5;
@@ -408,7 +412,7 @@
             this.LogWindow.Multiline = true;
             this.LogWindow.Name = "LogWindow";
             this.LogWindow.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.LogWindow.Size = new System.Drawing.Size(875, 467);
+            this.LogWindow.Size = new System.Drawing.Size(875, 528);
             this.LogWindow.TabIndex = 6;
             // 
             // groupBox3
@@ -454,17 +458,49 @@
             // 
             this.StatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.StatusLabel.AutoSize = true;
-            this.StatusLabel.Location = new System.Drawing.Point(405, 482);
+            this.StatusLabel.Location = new System.Drawing.Point(405, 541);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(49, 16);
             this.StatusLabel.TabIndex = 8;
             this.StatusLabel.Text = "Status:";
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.bShutdownIfSuccess);
+            this.groupBox4.Controls.Add(this.bShutdownWindows);
+            this.groupBox4.Location = new System.Drawing.Point(14, 427);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(388, 55);
+            this.groupBox4.TabIndex = 9;
+            this.groupBox4.TabStop = false;
+            // 
+            // bShutdownIfSuccess
+            // 
+            this.bShutdownIfSuccess.AutoSize = true;
+            this.bShutdownIfSuccess.Location = new System.Drawing.Point(12, 27);
+            this.bShutdownIfSuccess.Name = "bShutdownIfSuccess";
+            this.bShutdownIfSuccess.Size = new System.Drawing.Size(228, 20);
+            this.bShutdownIfSuccess.TabIndex = 11;
+            this.bShutdownIfSuccess.Text = "Shutdown only if build is successful";
+            this.bShutdownIfSuccess.UseVisualStyleBackColor = true;
+            // 
+            // bShutdownWindows
+            // 
+            this.bShutdownWindows.AutoSize = true;
+            this.bShutdownWindows.Location = new System.Drawing.Point(12, 0);
+            this.bShutdownWindows.Name = "bShutdownWindows";
+            this.bShutdownWindows.Size = new System.Drawing.Size(201, 20);
+            this.bShutdownWindows.TabIndex = 10;
+            this.bShutdownWindows.Text = "Shutdown computer after buid";
+            this.bShutdownWindows.UseVisualStyleBackColor = true;
+            this.bShutdownWindows.CheckedChanged += new System.EventHandler(this.bShutdownWindows_CheckedChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1295, 505);
+            this.ClientSize = new System.Drawing.Size(1295, 563);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.LogWindow);
@@ -488,6 +524,8 @@
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -531,6 +569,9 @@
         private System.Windows.Forms.Button ResetDefaultBuildXML;
         private System.Windows.Forms.Button CustomBuildXMLBrowse;
         private System.Windows.Forms.Label StatusLabel;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.CheckBox bShutdownWindows;
+        private System.Windows.Forms.CheckBox bShutdownIfSuccess;
     }
 }
 

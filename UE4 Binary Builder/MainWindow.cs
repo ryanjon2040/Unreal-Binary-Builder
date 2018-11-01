@@ -20,6 +20,7 @@ namespace UE4_Binary_Builder
         private int NumWarnings = 0;
 
         private bool bIsBuilding = false;
+        private bool bLastBuildSuccess = false;
 
         private Stopwatch StopwatchTimer = new Stopwatch();
         private DispatcherTimer DispatchTimer = new DispatcherTimer();
@@ -58,11 +59,17 @@ namespace UE4_Binary_Builder
 
             GameConfigurations.Text = Settings.Default.GameConfigurations;
             CustomBuildXMLFile.Text = Settings.Default.CustomBuildXML;
+
+            bShutdownWindows.Checked = Settings.Default.bShutdownWindows;
+            bShutdownIfSuccess.Checked = Settings.Default.bShutdownIfSuccess;
+
             ChangeStatusLabel("Idle.");
             LogWindow.Text = "Welcome to UE4 Binary Builder\r\n------------------------------------\r\n";
 
             DispatchTimer.Tick += new EventHandler(DispatchTimer_Tick);
             DispatchTimer.Interval = new TimeSpan(0, 0, 1);
+
+            bShutdownIfSuccess.Enabled = bShutdownWindows.Checked;
         }
 
         private void DispatchTimer_Tick(object sender, EventArgs e)
@@ -87,6 +94,8 @@ namespace UE4_Binary_Builder
 
         private void BuildRocketUE_Click(object sender, EventArgs e)
         {
+            bLastBuildSuccess = false;
+
             if (bIsBuilding)
             {
                 AutomationToolProcess.Kill();
@@ -263,12 +272,17 @@ namespace UE4_Binary_Builder
             CustomBuildXMLFile.Text = DEFAULT_BUILD_XML_FILE;
         }
 
+        private void bShutdownWindows_CheckedChanged(object sender, EventArgs e)
+        {
+            bShutdownIfSuccess.Enabled = bShutdownWindows.Checked;
+        }
+
         private string GetConditionalString(bool bCondition)
         {
             return bCondition ? "true" : "false";
         }
 
-        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        private void SaveAllSettings()
         {
             Settings.Default.AutomationPath = AutomationExePath;
 
@@ -293,7 +307,16 @@ namespace UE4_Binary_Builder
 
             Settings.Default.GameConfigurations = GameConfigurations.Text;
             Settings.Default.CustomBuildXML = CustomBuildXMLFile.Text;
+
+            Settings.Default.bShutdownWindows = bShutdownWindows.Checked;
+            Settings.Default.bShutdownIfSuccess = bShutdownIfSuccess.Checked;
+
             Settings.Default.Save();
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveAllSettings();
         }
 
         private void AboutMenu_Click(object sender, EventArgs e)
@@ -321,6 +344,7 @@ namespace UE4_Binary_Builder
         {
             DispatchTimer.Stop();
             StopwatchTimer.Stop();
+            bLastBuildSuccess = AutomationToolProcess.ExitCode == 0;
             SetLogText(string.Format("AutomationToolProcess exited with code {0}\n", AutomationToolProcess.ExitCode.ToString()));
             BuildRocketUE.Text = "Build";
             ChangeStatusLabel(string.Format("Build finished with code {0}. {1} errors, {2} warnings. Time elapsed: {3:hh\\:mm\\:ss}", AutomationToolProcess.ExitCode, NumErrors, NumWarnings, StopwatchTimer.Elapsed));            
@@ -330,7 +354,12 @@ namespace UE4_Binary_Builder
             AutomationToolProcess = null;
             NumErrors = 0;
             NumWarnings = 0;
+            AddLog("==========================BUILD FINISHED==========================");
+            AddLog(string.Format("Took {0:hh\\:mm\\:ss}", StopwatchTimer.Elapsed));
+            AddLog(string.Format("Build ended at {0}", DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")));
+            WriteToLogFile();
             StopwatchTimer.Reset();
+            TryShutdown();
         }
 
         private void AddLog(string Message)
@@ -381,6 +410,36 @@ namespace UE4_Binary_Builder
         private void ChangeStatusLabel(string InStatus)
         {
             StatusLabel.Text = string.Format("Status: {0}", InStatus);
+        }
+
+        private void TryShutdown()
+        {
+            if (bShutdownWindows.Checked)
+            {
+                if (bShutdownIfSuccess.Checked)
+                {
+                    if (bLastBuildSuccess)
+                    {
+                        Internal_ShutdownWindows();
+                    }
+                }
+                else
+                {
+                    Internal_ShutdownWindows();
+                }
+            }
+        }
+
+        private void Internal_ShutdownWindows()
+        {
+            Process.Start("shutdown", "/s /t 2");
+            Application.Exit();
+        }
+
+        private void WriteToLogFile()
+        {
+            string LogFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "UnrealBinaryBuilderLog.log");
+            File.WriteAllText(LogFile, LogWindow.Text);
         }
     }
 }

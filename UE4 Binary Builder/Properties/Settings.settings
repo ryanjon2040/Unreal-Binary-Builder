@@ -62,5 +62,11 @@
     <Setting Name="CustomBuildXML" Type="System.String" Scope="User">
       <Value Profile="(Default)">Engine/Build/InstalledEngineBuild.xml</Value>
     </Setting>
+    <Setting Name="bShutdownWindows" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="bShutdownIfSuccess" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

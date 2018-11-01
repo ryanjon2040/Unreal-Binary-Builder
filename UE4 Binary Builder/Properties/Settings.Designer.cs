@@ -262,5 +262,29 @@ namespace UE4_Binary_Builder.Properties {
                 this["CustomBuildXML"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool bShutdownWindows {
+            get {
+                return ((bool)(this["bShutdownWindows"]));
+            }
+            set {
+                this["bShutdownWindows"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool bShutdownIfSuccess {
+            get {
+                return ((bool)(this["bShutdownIfSuccess"]));
+            }
+            set {
+                this["bShutdownIfSuccess"] = value;
+            }
+        }
     }
 }
