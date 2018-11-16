@@ -69,6 +69,7 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.bShutdownIfSuccess = new System.Windows.Forms.CheckBox();
             this.bShutdownWindows = new System.Windows.Forms.CheckBox();
+            this.bWithLumin = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -96,7 +97,7 @@
             this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Location = new System.Drawing.Point(14, 174);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(388, 247);
+            this.groupBox1.Size = new System.Drawing.Size(415, 247);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
@@ -104,7 +105,7 @@
             // bWithFullDebugInfo
             // 
             this.bWithFullDebugInfo.AutoSize = true;
-            this.bWithFullDebugInfo.Location = new System.Drawing.Point(222, 135);
+            this.bWithFullDebugInfo.Location = new System.Drawing.Point(250, 135);
             this.bWithFullDebugInfo.Name = "bWithFullDebugInfo";
             this.bWithFullDebugInfo.Size = new System.Drawing.Size(158, 20);
             this.bWithFullDebugInfo.TabIndex = 8;
@@ -134,7 +135,7 @@
             // bCleanBuild
             // 
             this.bCleanBuild.AutoSize = true;
-            this.bCleanBuild.Location = new System.Drawing.Point(222, 109);
+            this.bCleanBuild.Location = new System.Drawing.Point(250, 109);
             this.bCleanBuild.Name = "bCleanBuild";
             this.bCleanBuild.Size = new System.Drawing.Size(90, 20);
             this.bCleanBuild.TabIndex = 5;
@@ -145,7 +146,7 @@
             // bEnableSymStore
             // 
             this.bEnableSymStore.AutoSize = true;
-            this.bEnableSymStore.Location = new System.Drawing.Point(222, 83);
+            this.bEnableSymStore.Location = new System.Drawing.Point(250, 83);
             this.bEnableSymStore.Name = "bEnableSymStore";
             this.bEnableSymStore.Size = new System.Drawing.Size(146, 20);
             this.bEnableSymStore.TabIndex = 4;
@@ -157,7 +158,7 @@
             // bSignExecutables
             // 
             this.bSignExecutables.AutoSize = true;
-            this.bSignExecutables.Location = new System.Drawing.Point(222, 57);
+            this.bSignExecutables.Location = new System.Drawing.Point(250, 57);
             this.bSignExecutables.Name = "bSignExecutables";
             this.bSignExecutables.Size = new System.Drawing.Size(123, 20);
             this.bSignExecutables.TabIndex = 3;
@@ -170,7 +171,7 @@
             this.bWithDDC.AutoSize = true;
             this.bWithDDC.Checked = true;
             this.bWithDDC.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.bWithDDC.Location = new System.Drawing.Point(222, 31);
+            this.bWithDDC.Location = new System.Drawing.Point(250, 31);
             this.bWithDDC.Name = "bWithDDC";
             this.bWithDDC.Size = new System.Drawing.Size(96, 20);
             this.bWithDDC.TabIndex = 2;
@@ -180,6 +181,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.bWithLumin);
             this.groupBox2.Controls.Add(this.bWithXboxOne);
             this.groupBox2.Controls.Add(this.bWithPS4);
             this.groupBox2.Controls.Add(this.bWithSwitch);
@@ -194,7 +196,7 @@
             this.groupBox2.Controls.Add(this.bHostPlatformOnly);
             this.groupBox2.Location = new System.Drawing.Point(6, 22);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(210, 166);
+            this.groupBox2.Size = new System.Drawing.Size(234, 166);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Platforms";
@@ -220,7 +222,7 @@
             // bWithSwitch
             // 
             this.bWithSwitch.AutoSize = true;
-            this.bWithSwitch.Location = new System.Drawing.Point(144, 110);
+            this.bWithSwitch.Location = new System.Drawing.Point(162, 110);
             this.bWithSwitch.Name = "bWithSwitch";
             this.bWithSwitch.Size = new System.Drawing.Size(65, 20);
             this.bWithSwitch.TabIndex = 9;
@@ -256,7 +258,7 @@
             this.bWithTVOS.AutoSize = true;
             this.bWithTVOS.Checked = true;
             this.bWithTVOS.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.bWithTVOS.Location = new System.Drawing.Point(144, 84);
+            this.bWithTVOS.Location = new System.Drawing.Point(162, 84);
             this.bWithTVOS.Name = "bWithTVOS";
             this.bWithTVOS.Size = new System.Drawing.Size(60, 20);
             this.bWithTVOS.TabIndex = 6;
@@ -292,7 +294,7 @@
             this.bWithMac.AutoSize = true;
             this.bWithMac.Checked = true;
             this.bWithMac.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.bWithMac.Location = new System.Drawing.Point(144, 58);
+            this.bWithMac.Location = new System.Drawing.Point(162, 58);
             this.bWithMac.Name = "bWithMac";
             this.bWithMac.Size = new System.Drawing.Size(50, 20);
             this.bWithMac.TabIndex = 3;
@@ -348,7 +350,7 @@
             this.BuildRocketUE.Enabled = false;
             this.BuildRocketUE.Location = new System.Drawing.Point(14, 488);
             this.BuildRocketUE.Name = "BuildRocketUE";
-            this.BuildRocketUE.Size = new System.Drawing.Size(388, 50);
+            this.BuildRocketUE.Size = new System.Drawing.Size(415, 50);
             this.BuildRocketUE.TabIndex = 3;
             this.BuildRocketUE.Text = "Build";
             this.toolTip1.SetToolTip(this.BuildRocketUE, "Start build process.");
@@ -357,9 +359,9 @@
             // 
             // AutomationToolBrowse
             // 
-            this.AutomationToolBrowse.Location = new System.Drawing.Point(338, 41);
+            this.AutomationToolBrowse.Location = new System.Drawing.Point(397, 41);
             this.AutomationToolBrowse.Name = "AutomationToolBrowse";
-            this.AutomationToolBrowse.Size = new System.Drawing.Size(64, 23);
+            this.AutomationToolBrowse.Size = new System.Drawing.Size(32, 23);
             this.AutomationToolBrowse.TabIndex = 4;
             this.AutomationToolBrowse.Text = "...";
             this.AutomationToolBrowse.UseVisualStyleBackColor = true;
@@ -370,7 +372,7 @@
             this.AutomationToolPath.Location = new System.Drawing.Point(14, 41);
             this.AutomationToolPath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.AutomationToolPath.Name = "AutomationToolPath";
-            this.AutomationToolPath.Size = new System.Drawing.Size(318, 23);
+            this.AutomationToolPath.Size = new System.Drawing.Size(377, 23);
             this.AutomationToolPath.TabIndex = 0;
             // 
             // mainMenu1
@@ -408,11 +410,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LogWindow.BackColor = System.Drawing.SystemColors.WindowText;
             this.LogWindow.ForeColor = System.Drawing.Color.White;
-            this.LogWindow.Location = new System.Drawing.Point(408, 12);
+            this.LogWindow.Location = new System.Drawing.Point(435, 12);
             this.LogWindow.Multiline = true;
             this.LogWindow.Name = "LogWindow";
             this.LogWindow.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.LogWindow.Size = new System.Drawing.Size(875, 528);
+            this.LogWindow.Size = new System.Drawing.Size(848, 528);
             this.LogWindow.TabIndex = 6;
             // 
             // groupBox3
@@ -422,14 +424,14 @@
             this.groupBox3.Controls.Add(this.CustomBuildXMLFile);
             this.groupBox3.Location = new System.Drawing.Point(14, 71);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(388, 100);
+            this.groupBox3.Size = new System.Drawing.Size(415, 100);
             this.groupBox3.TabIndex = 7;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Custom Installed Engine Build XML (Optional)";
             // 
             // ResetDefaultBuildXML
             // 
-            this.ResetDefaultBuildXML.Location = new System.Drawing.Point(222, 63);
+            this.ResetDefaultBuildXML.Location = new System.Drawing.Point(252, 63);
             this.ResetDefaultBuildXML.Name = "ResetDefaultBuildXML";
             this.ResetDefaultBuildXML.Size = new System.Drawing.Size(157, 31);
             this.ResetDefaultBuildXML.TabIndex = 3;
@@ -439,9 +441,9 @@
             // 
             // CustomBuildXMLBrowse
             // 
-            this.CustomBuildXMLBrowse.Location = new System.Drawing.Point(324, 34);
+            this.CustomBuildXMLBrowse.Location = new System.Drawing.Point(373, 34);
             this.CustomBuildXMLBrowse.Name = "CustomBuildXMLBrowse";
-            this.CustomBuildXMLBrowse.Size = new System.Drawing.Size(55, 23);
+            this.CustomBuildXMLBrowse.Size = new System.Drawing.Size(36, 23);
             this.CustomBuildXMLBrowse.TabIndex = 2;
             this.CustomBuildXMLBrowse.Text = "...";
             this.CustomBuildXMLBrowse.UseVisualStyleBackColor = true;
@@ -451,14 +453,14 @@
             // 
             this.CustomBuildXMLFile.Location = new System.Drawing.Point(12, 34);
             this.CustomBuildXMLFile.Name = "CustomBuildXMLFile";
-            this.CustomBuildXMLFile.Size = new System.Drawing.Size(306, 23);
+            this.CustomBuildXMLFile.Size = new System.Drawing.Size(355, 23);
             this.CustomBuildXMLFile.TabIndex = 1;
             // 
             // StatusLabel
             // 
             this.StatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.StatusLabel.AutoSize = true;
-            this.StatusLabel.Location = new System.Drawing.Point(405, 541);
+            this.StatusLabel.Location = new System.Drawing.Point(432, 543);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(49, 16);
             this.StatusLabel.TabIndex = 8;
@@ -470,7 +472,7 @@
             this.groupBox4.Controls.Add(this.bShutdownWindows);
             this.groupBox4.Location = new System.Drawing.Point(14, 427);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(388, 55);
+            this.groupBox4.Size = new System.Drawing.Size(415, 55);
             this.groupBox4.TabIndex = 9;
             this.groupBox4.TabStop = false;
             // 
@@ -495,6 +497,15 @@
             this.bShutdownWindows.UseVisualStyleBackColor = true;
             this.bShutdownWindows.CheckedChanged += new System.EventHandler(this.bShutdownWindows_CheckedChanged);
             // 
+            // bWithLumin
+            // 
+            this.bWithLumin.Location = new System.Drawing.Point(162, 136);
+            this.bWithLumin.Name = "bWithLumin";
+            this.bWithLumin.Size = new System.Drawing.Size(65, 24);
+            this.bWithLumin.TabIndex = 12;
+            this.bWithLumin.Text = "Lumin";
+            this.bWithLumin.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -518,6 +529,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "UE4 Binary Build Helper";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
+            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -572,6 +584,7 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.CheckBox bShutdownWindows;
         private System.Windows.Forms.CheckBox bShutdownIfSuccess;
+        private System.Windows.Forms.CheckBox bWithLumin;
     }
 }
 
