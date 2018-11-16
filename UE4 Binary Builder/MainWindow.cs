@@ -6,6 +6,7 @@ using UE4_Binary_Builder.Properties;
 using System.Text.RegularExpressions;
 using System.Drawing;
 using System.Windows.Threading;
+using System.Reflection;
 
 namespace UE4_Binary_Builder
 {
@@ -50,6 +51,7 @@ namespace UE4_Binary_Builder
             bWithSwitch.Checked = Settings.Default.bWithSwitch;
             bWithPS4.Checked = Settings.Default.bWithPS4;
             bWithXboxOne.Checked = Settings.Default.bWithXboxOne;
+            bWithLumin.Checked = Settings.Default.bWithLumin;
 
             bWithDDC.Checked = Settings.Default.bWithDDC;
             bSignExecutables.Checked = Settings.Default.bSignExes;
@@ -90,6 +92,7 @@ namespace UE4_Binary_Builder
             bWithSwitch.Enabled = !bHostPlatformOnly.Checked;
             bWithPS4.Enabled = !bHostPlatformOnly.Checked;
             bWithXboxOne.Enabled = !bHostPlatformOnly.Checked;
+            bWithLumin.Enabled = !bHostPlatformOnly.Checked;
         }
 
         private void BuildRocketUE_Click(object sender, EventArgs e)
@@ -166,7 +169,7 @@ namespace UE4_Binary_Builder
                 }
                 else
                 {
-                    CommandLineArgs += String.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithHTML5={7} -set:WithSwitch={8} -set:WithPS4={9} -set:WithXboxOne={10}", 
+                    CommandLineArgs += String.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithHTML5={7} -set:WithSwitch={8} -set:WithPS4={9} -set:WithXboxOne={10} -set:WithLumin={11}", 
                         GetConditionalString(bWithWin64.Checked),
                         GetConditionalString(bWithWin32.Checked),
                         GetConditionalString(bWithMac.Checked),
@@ -177,7 +180,8 @@ namespace UE4_Binary_Builder
                         GetConditionalString(bWithHTML5.Checked),
                         GetConditionalString(bWithSwitch.Checked),
                         GetConditionalString(bWithPS4.Checked),
-                        GetConditionalString(bWithXboxOne.Checked));
+                        GetConditionalString(bWithXboxOne.Checked),
+                        GetConditionalString(bWithLumin.Checked));
                 }
 
                 if (bCleanBuild.Checked)
@@ -298,6 +302,7 @@ namespace UE4_Binary_Builder
             Settings.Default.bWithSwitch = bWithSwitch.Checked;
             Settings.Default.bWithPS4 = bWithPS4.Checked;
             Settings.Default.bWithXboxOne = bWithXboxOne.Checked;
+            Settings.Default.bWithLumin = bWithLumin.Checked;
 
             Settings.Default.bWithDDC = bWithDDC.Checked;
             Settings.Default.bSignExes = bSignExecutables.Checked;
@@ -440,6 +445,14 @@ namespace UE4_Binary_Builder
         {
             string LogFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "UnrealBinaryBuilderLog.log");
             File.WriteAllText(LogFile, LogWindow.Text);
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+            //Enabled double buffered log to prevent flickering
+            var doubleBufferPropertyInfo = LogWindow.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            doubleBufferPropertyInfo.SetValue(LogWindow, true, null);
+
         }
     }
 }
