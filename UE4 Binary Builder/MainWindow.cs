@@ -326,7 +326,7 @@ namespace UE4_Binary_Builder
 
         private void AboutMenu_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("A helper application designed to create binary version of Unreal Engine 4 from source.\n\nCreated by Satheesh (ryanjon2040)\n\nUpdated for 4.18 and PS4/Xbox Support by James Baxter (TheJamsh)");
+            MessageBox.Show("A helper application designed to create binary version of Unreal Engine 4 from source.\n\nCreated by Satheesh (ryanjon2040)\n\nUpdated for 4.18 and PS4/Xbox Support by James Baxter (TheJamsh)\nUpdated for 4.21 and Lumin support by KarstenMaxim (AlphaSoftLLC)");
         }
 
         private void GetSourceCodeMenu_Click(object sender, EventArgs e)
