@@ -12,6 +12,8 @@ namespace UE4_Binary_Builder
 {
     public partial class MainWindow : Form
     {
+        private static readonly string PRODUCT_VERSION = "v1.5";
+
         private static readonly string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
         private static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
         private string AutomationExePath = Settings.Default.AutomationPath;
@@ -54,6 +56,7 @@ namespace UE4_Binary_Builder
             bWithLumin.Checked = Settings.Default.bWithLumin;
 
             bWithDDC.Checked = Settings.Default.bWithDDC;
+            bHostPlatformDDCOnly.Checked = Settings.Default.bHostPlatformDDCOnly;
             bSignExecutables.Checked = Settings.Default.bSignExes;
             bEnableSymStore.Checked = Settings.Default.bSymStore;
             bCleanBuild.Checked = Settings.Default.bCleanBuild;
@@ -65,13 +68,25 @@ namespace UE4_Binary_Builder
             bShutdownWindows.Checked = Settings.Default.bShutdownWindows;
             bShutdownIfSuccess.Checked = Settings.Default.bShutdownIfSuccess;
 
+            CustomOptions.Text = Settings.Default.CustomOptions;
+            bForceOldCompiler.Checked = Settings.Default.bForceOldCompiler;
+
             ChangeStatusLabel("Idle.");
-            LogWindow.Text = "Welcome to UE4 Binary Builder\r\n------------------------------------\r\n";
+            LogWindow.Text = string.Format("Welcome to UE4 Binary Builder {0}\r\n------------------------------------\r\n", PRODUCT_VERSION);
 
             DispatchTimer.Tick += new EventHandler(DispatchTimer_Tick);
             DispatchTimer.Interval = new TimeSpan(0, 0, 1);
 
             bShutdownIfSuccess.Enabled = bShutdownWindows.Checked;
+            CustomOptions.Enabled = CustomBuildXMLFile.Text != DEFAULT_BUILD_XML_FILE && CustomBuildXMLFile.Text != string.Empty;
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+            //Enabled double buffered log to prevent flickering
+            var doubleBufferPropertyInfo = LogWindow.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            doubleBufferPropertyInfo.SetValue(LogWindow, true, null);
+
         }
 
         private void DispatchTimer_Tick(object sender, EventArgs e)
@@ -141,7 +156,7 @@ namespace UE4_Binary_Builder
                     }                    
                 }
 
-                LogWindow.Text = "Welcome to UE4 Binary Builder\r\n------------------------------------\r\n";
+                LogWindow.Text = string.Format("Welcome to UE4 Binary Builder {0}\r\n------------------------------------\r\n", PRODUCT_VERSION);
                 BuildRocketUE.Text = "Stop Build";
 
                 if (GameConfigurations.Text == "")
@@ -155,7 +170,7 @@ namespace UE4_Binary_Builder
                     BuildXMLFile = string.Format("\"{0}\"", CustomBuildXMLFile.Text);
                 }
 
-                string CommandLineArgs = String.Format("BuildGraph -target=\"Make Installed Build Win64\" -script={0} -set:WithDDC={1} -set:SignExecutables={2} -set:EmbedSrcSrvInfo={3} -set:GameConfigurations={4} -set:WithFullDebugInfo={5}",
+                string CommandLineArgs = string.Format("BuildGraph -target=\"Make Installed Build Win64\" -script={0} -set:WithDDC={1} -set:SignExecutables={2} -set:EmbedSrcSrvInfo={3} -set:GameConfigurations={4} -set:WithFullDebugInfo={5}",
                     BuildXMLFile,
                     GetConditionalString(bWithDDC.Checked), 
                     GetConditionalString(bSignExecutables.Checked), 
@@ -163,13 +178,24 @@ namespace UE4_Binary_Builder
                     GameConfigurations.Text,
                     GetConditionalString(bWithFullDebugInfo.Checked));
 
+                if (bWithDDC.Checked && bHostPlatformDDCOnly.Checked)
+                {
+                    CommandLineArgs += " -set:HostPlatformDDCOnly=true";
+                }
+
+                if (bForceOldCompiler.Checked)
+                {
+                    CommandLineArgs += " -set:ForceVS2015=true";
+                    AddLog("WARNING: Using 2015 Compiler...");
+                }
+
                 if (bHostPlatformOnly.Checked)
                 {
                     CommandLineArgs += " -set:HostPlatformOnly=true";
                 }
                 else
                 {
-                    CommandLineArgs += String.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithHTML5={7} -set:WithSwitch={8} -set:WithPS4={9} -set:WithXboxOne={10} -set:WithLumin={11}", 
+                    CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithHTML5={7} -set:WithSwitch={8} -set:WithPS4={9} -set:WithXboxOne={10} -set:WithLumin={11}", 
                         GetConditionalString(bWithWin64.Checked),
                         GetConditionalString(bWithWin32.Checked),
                         GetConditionalString(bWithMac.Checked),
@@ -182,6 +208,12 @@ namespace UE4_Binary_Builder
                         GetConditionalString(bWithPS4.Checked),
                         GetConditionalString(bWithXboxOne.Checked),
                         GetConditionalString(bWithLumin.Checked));
+                }
+
+                if (BuildXMLFile != DEFAULT_BUILD_XML_FILE && CustomOptions.Text != string.Empty)
+                {
+                    CommandLineArgs += string.Format(" {0}", CustomOptions.Text);
+                    AddLog("Using custom options...");
                 }
 
                 if (bCleanBuild.Checked)
@@ -265,7 +297,8 @@ namespace UE4_Binary_Builder
             ChangeStatusLabel("Waiting for custom build file...");
             if (NewFileDialog.ShowDialog() == DialogResult.OK)
             {
-                CustomBuildXMLFile.Text = NewFileDialog.FileName;                
+                CustomBuildXMLFile.Text = NewFileDialog.FileName;
+                CustomOptions.Enabled = true;
             }
 
             ChangeStatusLabel("Idle.");
@@ -274,6 +307,7 @@ namespace UE4_Binary_Builder
         private void ResetDefaultBuildXML_Click(object sender, EventArgs e)
         {
             CustomBuildXMLFile.Text = DEFAULT_BUILD_XML_FILE;
+            CustomOptions.Enabled = false;
         }
 
         private void bShutdownWindows_CheckedChanged(object sender, EventArgs e)
@@ -305,6 +339,7 @@ namespace UE4_Binary_Builder
             Settings.Default.bWithLumin = bWithLumin.Checked;
 
             Settings.Default.bWithDDC = bWithDDC.Checked;
+            Settings.Default.bHostPlatformDDCOnly = bHostPlatformDDCOnly.Checked;
             Settings.Default.bSignExes = bSignExecutables.Checked;
             Settings.Default.bSymStore = bEnableSymStore.Checked;
             Settings.Default.bCleanBuild = bCleanBuild.Checked;
@@ -315,6 +350,9 @@ namespace UE4_Binary_Builder
 
             Settings.Default.bShutdownWindows = bShutdownWindows.Checked;
             Settings.Default.bShutdownIfSuccess = bShutdownIfSuccess.Checked;
+
+            Settings.Default.CustomOptions = CustomOptions.Text;
+            Settings.Default.bForceOldCompiler = bForceOldCompiler.Checked;
 
             Settings.Default.Save();
         }
@@ -447,12 +485,9 @@ namespace UE4_Binary_Builder
             File.WriteAllText(LogFile, LogWindow.Text);
         }
 
-        private void MainWindow_Load(object sender, EventArgs e)
+        private void bWithDDC_CheckedChanged(object sender, EventArgs e)
         {
-            //Enabled double buffered log to prevent flickering
-            var doubleBufferPropertyInfo = LogWindow.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            doubleBufferPropertyInfo.SetValue(LogWindow, true, null);
-
+            bHostPlatformDDCOnly.Enabled = bWithDDC.Checked;
         }
     }
 }

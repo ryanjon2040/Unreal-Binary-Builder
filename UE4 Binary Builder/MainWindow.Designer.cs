@@ -32,6 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.CustomOptions = new System.Windows.Forms.TextBox();
             this.bWithFullDebugInfo = new System.Windows.Forms.CheckBox();
             this.GameConfigurations = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -40,6 +42,7 @@
             this.bSignExecutables = new System.Windows.Forms.CheckBox();
             this.bWithDDC = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.bWithLumin = new System.Windows.Forms.CheckBox();
             this.bWithXboxOne = new System.Windows.Forms.CheckBox();
             this.bWithPS4 = new System.Windows.Forms.CheckBox();
             this.bWithSwitch = new System.Windows.Forms.CheckBox();
@@ -69,7 +72,8 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.bShutdownIfSuccess = new System.Windows.Forms.CheckBox();
             this.bShutdownWindows = new System.Windows.Forms.CheckBox();
-            this.bWithLumin = new System.Windows.Forms.CheckBox();
+            this.bHostPlatformDDCOnly = new System.Windows.Forms.CheckBox();
+            this.bForceOldCompiler = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -87,6 +91,9 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.bHostPlatformDDCOnly);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.CustomOptions);
             this.groupBox1.Controls.Add(this.bWithFullDebugInfo);
             this.groupBox1.Controls.Add(this.GameConfigurations);
             this.groupBox1.Controls.Add(this.label3);
@@ -102,10 +109,28 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(208, 191);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(98, 16);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Custom Options";
+            this.toolTip1.SetToolTip(this.label4, "Pass custom commandline options if using Custom Installed Engine Build XML.");
+            // 
+            // CustomOptions
+            // 
+            this.CustomOptions.Location = new System.Drawing.Point(211, 210);
+            this.CustomOptions.Name = "CustomOptions";
+            this.CustomOptions.Size = new System.Drawing.Size(185, 23);
+            this.CustomOptions.TabIndex = 9;
+            this.toolTip1.SetToolTip(this.CustomOptions, "Pass custom commandline options if using Custom Installed Engine Build XML.");
+            // 
             // bWithFullDebugInfo
             // 
             this.bWithFullDebugInfo.AutoSize = true;
-            this.bWithFullDebugInfo.Location = new System.Drawing.Point(250, 135);
+            this.bWithFullDebugInfo.Location = new System.Drawing.Point(250, 158);
             this.bWithFullDebugInfo.Name = "bWithFullDebugInfo";
             this.bWithFullDebugInfo.Size = new System.Drawing.Size(158, 20);
             this.bWithFullDebugInfo.TabIndex = 8;
@@ -117,7 +142,7 @@
             // 
             this.GameConfigurations.Location = new System.Drawing.Point(12, 210);
             this.GameConfigurations.Name = "GameConfigurations";
-            this.GameConfigurations.Size = new System.Drawing.Size(353, 23);
+            this.GameConfigurations.Size = new System.Drawing.Size(185, 23);
             this.GameConfigurations.TabIndex = 7;
             this.toolTip1.SetToolTip(this.GameConfigurations, "Which game configurations to include for packaged applications. Defaults to Devel" +
         "opment;Shipping");
@@ -135,7 +160,7 @@
             // bCleanBuild
             // 
             this.bCleanBuild.AutoSize = true;
-            this.bCleanBuild.Location = new System.Drawing.Point(250, 109);
+            this.bCleanBuild.Location = new System.Drawing.Point(250, 132);
             this.bCleanBuild.Name = "bCleanBuild";
             this.bCleanBuild.Size = new System.Drawing.Size(90, 20);
             this.bCleanBuild.TabIndex = 5;
@@ -146,7 +171,7 @@
             // bEnableSymStore
             // 
             this.bEnableSymStore.AutoSize = true;
-            this.bEnableSymStore.Location = new System.Drawing.Point(250, 83);
+            this.bEnableSymStore.Location = new System.Drawing.Point(250, 106);
             this.bEnableSymStore.Name = "bEnableSymStore";
             this.bEnableSymStore.Size = new System.Drawing.Size(146, 20);
             this.bEnableSymStore.TabIndex = 4;
@@ -158,7 +183,7 @@
             // bSignExecutables
             // 
             this.bSignExecutables.AutoSize = true;
-            this.bSignExecutables.Location = new System.Drawing.Point(250, 57);
+            this.bSignExecutables.Location = new System.Drawing.Point(250, 80);
             this.bSignExecutables.Name = "bSignExecutables";
             this.bSignExecutables.Size = new System.Drawing.Size(123, 20);
             this.bSignExecutables.TabIndex = 3;
@@ -178,6 +203,7 @@
             this.bWithDDC.Text = "Include DDC";
             this.toolTip1.SetToolTip(this.bWithDDC, resources.GetString("bWithDDC.ToolTip"));
             this.bWithDDC.UseVisualStyleBackColor = true;
+            this.bWithDDC.CheckedChanged += new System.EventHandler(this.bWithDDC_CheckedChanged);
             // 
             // groupBox2
             // 
@@ -200,6 +226,15 @@
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Platforms";
+            // 
+            // bWithLumin
+            // 
+            this.bWithLumin.Location = new System.Drawing.Point(162, 136);
+            this.bWithLumin.Name = "bWithLumin";
+            this.bWithLumin.Size = new System.Drawing.Size(65, 24);
+            this.bWithLumin.TabIndex = 12;
+            this.bWithLumin.Text = "Lumin";
+            this.bWithLumin.UseVisualStyleBackColor = true;
             // 
             // bWithXboxOne
             // 
@@ -348,9 +383,9 @@
             // BuildRocketUE
             // 
             this.BuildRocketUE.Enabled = false;
-            this.BuildRocketUE.Location = new System.Drawing.Point(14, 488);
+            this.BuildRocketUE.Location = new System.Drawing.Point(14, 514);
             this.BuildRocketUE.Name = "BuildRocketUE";
-            this.BuildRocketUE.Size = new System.Drawing.Size(415, 50);
+            this.BuildRocketUE.Size = new System.Drawing.Size(415, 45);
             this.BuildRocketUE.TabIndex = 3;
             this.BuildRocketUE.Text = "Build";
             this.toolTip1.SetToolTip(this.BuildRocketUE, "Start build process.");
@@ -397,7 +432,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(11, 541);
+            this.label2.Location = new System.Drawing.Point(11, 560);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(323, 13);
             this.label2.TabIndex = 5;
@@ -414,7 +449,7 @@
             this.LogWindow.Multiline = true;
             this.LogWindow.Name = "LogWindow";
             this.LogWindow.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.LogWindow.Size = new System.Drawing.Size(848, 528);
+            this.LogWindow.Size = new System.Drawing.Size(848, 547);
             this.LogWindow.TabIndex = 6;
             // 
             // groupBox3
@@ -460,7 +495,7 @@
             // 
             this.StatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.StatusLabel.AutoSize = true;
-            this.StatusLabel.Location = new System.Drawing.Point(432, 543);
+            this.StatusLabel.Location = new System.Drawing.Point(432, 562);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(49, 16);
             this.StatusLabel.TabIndex = 8;
@@ -497,20 +532,37 @@
             this.bShutdownWindows.UseVisualStyleBackColor = true;
             this.bShutdownWindows.CheckedChanged += new System.EventHandler(this.bShutdownWindows_CheckedChanged);
             // 
-            // bWithLumin
+            // bHostPlatformDDCOnly
             // 
-            this.bWithLumin.Location = new System.Drawing.Point(162, 136);
-            this.bWithLumin.Name = "bWithLumin";
-            this.bWithLumin.Size = new System.Drawing.Size(65, 24);
-            this.bWithLumin.TabIndex = 12;
-            this.bWithLumin.Text = "Lumin";
-            this.bWithLumin.UseVisualStyleBackColor = true;
+            this.bHostPlatformDDCOnly.AutoSize = true;
+            this.bHostPlatformDDCOnly.Checked = true;
+            this.bHostPlatformDDCOnly.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.bHostPlatformDDCOnly.Location = new System.Drawing.Point(250, 54);
+            this.bHostPlatformDDCOnly.Name = "bHostPlatformDDCOnly";
+            this.bHostPlatformDDCOnly.Size = new System.Drawing.Size(161, 20);
+            this.bHostPlatformDDCOnly.TabIndex = 11;
+            this.bHostPlatformDDCOnly.Text = "Host Platform DDC Only";
+            this.toolTip1.SetToolTip(this.bHostPlatformDDCOnly, "Whether to include DDC for the host platform only. Requires DDC to be turned on.");
+            this.bHostPlatformDDCOnly.UseVisualStyleBackColor = true;
+            // 
+            // bForceOldCompiler
+            // 
+            this.bForceOldCompiler.AutoSize = true;
+            this.bForceOldCompiler.Location = new System.Drawing.Point(17, 488);
+            this.bForceOldCompiler.Name = "bForceOldCompiler";
+            this.bForceOldCompiler.Size = new System.Drawing.Size(146, 20);
+            this.bForceOldCompiler.TabIndex = 12;
+            this.bForceOldCompiler.Text = "Force 2015 Compiler";
+            this.toolTip1.SetToolTip(this.bForceOldCompiler, "Whether to force use of the VS2015 compiler for Windows targets. Object files bui" +
+        "lt against the VS2015 CRT are compatible with VS2017 CRT, but not vice versa.");
+            this.bForceOldCompiler.UseVisualStyleBackColor = true;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1295, 563);
+            this.ClientSize = new System.Drawing.Size(1295, 582);
+            this.Controls.Add(this.bForceOldCompiler);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.groupBox3);
@@ -585,6 +637,10 @@
         private System.Windows.Forms.CheckBox bShutdownWindows;
         private System.Windows.Forms.CheckBox bShutdownIfSuccess;
         private System.Windows.Forms.CheckBox bWithLumin;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox CustomOptions;
+        private System.Windows.Forms.CheckBox bHostPlatformDDCOnly;
+        private System.Windows.Forms.CheckBox bForceOldCompiler;
     }
 }
 
