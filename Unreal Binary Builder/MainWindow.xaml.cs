@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using Unreal_Binary_Builder.Properties;
 
@@ -14,7 +15,7 @@ namespace Unreal_Binary_Builder
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static readonly string PRODUCT_VERSION = "2.0";
+        private static readonly string PRODUCT_VERSION = "2.1";
 
         private static readonly string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
         private static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
@@ -27,8 +28,8 @@ namespace Unreal_Binary_Builder
         private bool bIsBuilding = false;
         private bool bLastBuildSuccess = false;
 
-        private Stopwatch StopwatchTimer = new Stopwatch();
-        private DispatcherTimer DispatchTimer = new DispatcherTimer();
+        private readonly Stopwatch StopwatchTimer = new Stopwatch();
+        private readonly DispatcherTimer DispatchTimer = new DispatcherTimer();
 
         private string LogMessage = "";
 
@@ -63,6 +64,8 @@ namespace Unreal_Binary_Builder
             bEnableSymStore.IsChecked = Settings.Default.bSymStore;
             bCleanBuild.IsChecked = Settings.Default.bCleanBuild;
             bWithFullDebugInfo.IsChecked = Settings.Default.bWithFullDebugInfo;
+			bWithServer.IsChecked = Settings.Default.bWithServer;
+			bWithClient.IsChecked = Settings.Default.bWithClient;
 
             GameConfigurations.Text = Settings.Default.GameConfigurations;
             CustomBuildXMLFile.Text = Settings.Default.CustomBuildXML;
@@ -160,6 +163,8 @@ namespace Unreal_Binary_Builder
             Settings.Default.bSymStore = (bool)bEnableSymStore.IsChecked;
             Settings.Default.bCleanBuild = (bool)bCleanBuild.IsChecked;
             Settings.Default.bWithFullDebugInfo = (bool)bWithFullDebugInfo.IsChecked;
+			Settings.Default.bWithServer = (bool)bWithServer.IsChecked;
+			Settings.Default.bWithClient = (bool)bWithClient.IsChecked;
 
             Settings.Default.GameConfigurations = GameConfigurations.Text;
             Settings.Default.CustomBuildXML = CustomBuildXMLFile.Text;
@@ -406,6 +411,13 @@ namespace Unreal_Binary_Builder
                         GetConditionalString(bWithLumin.IsChecked));
                 }
 
+				if (EngineVersionSelection.SelectedIndex > 0)
+				{
+					CommandLineArgs += string.Format(" -set:WithServer={0} -set:WithClient={1}", 
+						GetConditionalString(bWithServer.IsChecked), 
+						GetConditionalString(bWithClient.IsChecked));
+				}
+
                 if (BuildXMLFile != DEFAULT_BUILD_XML_FILE && CustomOptions.Text != string.Empty)
                 {
                     CommandLineArgs += string.Format(" {0}", CustomOptions.Text);
@@ -466,5 +478,5 @@ namespace Unreal_Binary_Builder
 
             SaveAllSettings();
         }
-    }
+	}
 }
