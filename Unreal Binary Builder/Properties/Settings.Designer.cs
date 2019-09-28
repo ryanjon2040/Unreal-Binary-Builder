@@ -346,5 +346,17 @@ namespace Unreal_Binary_Builder.Properties {
                 this["bWithClient"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool bWithHoloLens {
+            get {
+                return ((bool)(this["bWithHoloLens"]));
+            }
+            set {
+                this["bWithHoloLens"] = value;
+            }
+        }
     }
 }

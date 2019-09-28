@@ -6,6 +6,7 @@
 		xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 		xmlns:local="clr-namespace:Unreal_Binary_Builder"
 		xmlns:Converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf"
+		xmlns:converterNamespace="clr-namespace:ConverterNamespace"
 		mc:Ignorable="d"
 		TextElement.Foreground="{DynamicResource MaterialDesignBody}"
 		Background="{DynamicResource MaterialDesignPaper}"
@@ -18,6 +19,7 @@
 		Title="Unreal Engine Binary Builder" Height="800" Width="1200" WindowStartupLocation="CenterScreen" Closing="UnrealBinaryBuilderWindow_Closing">
 	<Window.Resources>
 		<Converters:NotConverter x:Key="NotConverter"/>
+		<converterNamespace:BooleanAndNotConverter x:Key="booleanAndNotConverter" />
 	</Window.Resources>
 	<DockPanel>
 		<Menu IsMainMenu="True" DockPanel.Dock="Top">
@@ -80,6 +82,23 @@
 
 					<Label Content ="Lumin" Margin="280,73,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" />
 					<ToggleButton x:Name="bWithLumin" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="357,72,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+					<Label Content ="HoloLens" Margin="280,105,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0">
+						<Label.IsEnabled>
+							<MultiBinding Converter="{StaticResource booleanAndNotConverter}">
+								<Binding ElementName="bHostPlatformOnly" Path="IsChecked" Mode="OneWay" />
+								<Binding ElementName="EngineVersionSelection" Path="SelectedIndex" Mode="OneWay"/>
+							</MultiBinding>
+						</Label.IsEnabled>
+					</Label>
+					<ToggleButton x:Name="bWithHoloLens" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="357,104,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+						<ToggleButton.IsEnabled>
+							<MultiBinding Converter="{StaticResource booleanAndNotConverter}">
+								<Binding ElementName="bHostPlatformOnly" Path="IsChecked" Mode="OneWay" />
+								<Binding ElementName="EngineVersionSelection" Path="SelectedIndex" Mode="OneWay"/>
+							</MultiBinding>
+						</ToggleButton.IsEnabled>
+					</ToggleButton>
 				</Grid>
 			</GroupBox>
 

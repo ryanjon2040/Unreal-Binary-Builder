@@ -15,7 +15,7 @@ namespace Unreal_Binary_Builder
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static readonly string PRODUCT_VERSION = "2.1";
+        private static readonly string PRODUCT_VERSION = "2.2";
 
         private static readonly string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
         private static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
@@ -66,6 +66,7 @@ namespace Unreal_Binary_Builder
             bWithFullDebugInfo.IsChecked = Settings.Default.bWithFullDebugInfo;
 			bWithServer.IsChecked = Settings.Default.bWithServer;
 			bWithClient.IsChecked = Settings.Default.bWithClient;
+			bWithHoloLens.IsChecked = Settings.Default.bWithHoloLens;
 
             GameConfigurations.Text = Settings.Default.GameConfigurations;
             CustomBuildXMLFile.Text = Settings.Default.CustomBuildXML;
@@ -165,6 +166,7 @@ namespace Unreal_Binary_Builder
             Settings.Default.bWithFullDebugInfo = (bool)bWithFullDebugInfo.IsChecked;
 			Settings.Default.bWithServer = (bool)bWithServer.IsChecked;
 			Settings.Default.bWithClient = (bool)bWithClient.IsChecked;
+			Settings.Default.bWithHoloLens = (bool)bWithHoloLens.IsChecked;
 
             Settings.Default.GameConfigurations = GameConfigurations.Text;
             Settings.Default.CustomBuildXML = CustomBuildXMLFile.Text;
@@ -413,9 +415,10 @@ namespace Unreal_Binary_Builder
 
 				if (EngineVersionSelection.SelectedIndex > 0)
 				{
-					CommandLineArgs += string.Format(" -set:WithServer={0} -set:WithClient={1}", 
+					CommandLineArgs += string.Format(" -set:WithServer={0} -set:WithClient={1} -set:WithHoloLens={2}", 
 						GetConditionalString(bWithServer.IsChecked), 
-						GetConditionalString(bWithClient.IsChecked));
+						GetConditionalString(bWithClient.IsChecked),
+						GetConditionalString(bWithHoloLens.IsChecked));
 				}
 
                 if (BuildXMLFile != DEFAULT_BUILD_XML_FILE && CustomOptions.Text != string.Empty)
