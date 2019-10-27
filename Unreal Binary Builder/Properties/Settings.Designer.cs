@@ -12,7 +12,7 @@ namespace Unreal_Binary_Builder.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.2.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.3.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -356,6 +356,150 @@ namespace Unreal_Binary_Builder.Properties {
             }
             set {
                 this["bWithHoloLens"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool bZipBuild {
+            get {
+                return ((bool)(this["bZipBuild"]));
+            }
+            set {
+                this["bZipBuild"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ZipPath {
+            get {
+                return ((string)(this["ZipPath"]));
+            }
+            set {
+                this["ZipPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool bIncludePDB {
+            get {
+                return ((bool)(this["bIncludePDB"]));
+            }
+            set {
+                this["bIncludePDB"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool bIncludeDEBUG {
+            get {
+                return ((bool)(this["bIncludeDEBUG"]));
+            }
+            set {
+                this["bIncludeDEBUG"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool bIncludeDocumentation {
+            get {
+                return ((bool)(this["bIncludeDocumentation"]));
+            }
+            set {
+                this["bIncludeDocumentation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool bIncludeExtras {
+            get {
+                return ((bool)(this["bIncludeExtras"]));
+            }
+            set {
+                this["bIncludeExtras"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool bIncludeSource {
+            get {
+                return ((bool)(this["bIncludeSource"]));
+            }
+            set {
+                this["bIncludeSource"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool bIncludeFeaturePacks {
+            get {
+                return ((bool)(this["bIncludeFeaturePacks"]));
+            }
+            set {
+                this["bIncludeFeaturePacks"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool bIncludeSamples {
+            get {
+                return ((bool)(this["bIncludeSamples"]));
+            }
+            set {
+                this["bIncludeSamples"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool bIncludeTemplates {
+            get {
+                return ((bool)(this["bIncludeTemplates"]));
+            }
+            set {
+                this["bIncludeTemplates"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool bFastCompression {
+            get {
+                return ((bool)(this["bFastCompression"]));
+            }
+            set {
+                this["bFastCompression"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ZipFileName {
+            get {
+                return ((string)(this["ZipFileName"]));
+            }
+            set {
+                this["ZipFileName"] = value;
             }
         }
     }

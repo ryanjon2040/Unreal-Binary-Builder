@@ -150,7 +150,8 @@
 
 			<local:LogViewer x:Name="LogControl" Margin="10,377,7.6,47.4" Height="Auto" Width="Auto"/>
 
-			<Label x:Name="StatusLabel" Content="Status: "  VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,17" Padding="0"/>
+			<Label x:Name="StatusLabel" Content="Status: " VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,17" Padding="0"/>
+			<Button x:Name="PostBuildSettings" Style="{DynamicResource MaterialDesignFlatButton}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Post-Build Settings" Margin="0,0,100,10" Click="PostBuildSettings_Click" />
 			<Button x:Name="BuildRocketUE" Style="{DynamicResource MaterialDesignFlatButton}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Start Build" Margin="0,0,10,10" Click="BuildRocketUE_Click"/>
 
 			<materialDesign:DialogHost x:Name="AboutDialog" IsOpen="False" CloseOnClickAway="True">
@@ -158,6 +159,18 @@
 					<Grid>
 						<Label x:Name="AboutMessageLabel" Content="A helper application designed to create binary version of Unreal Engine 4 from source.&#xA;&#xA;Created by Satheesh (ryanjon2040)&#xA;&#xA;Updated for 4.18 and PS4/Xbox Support by James Baxter (TheJamsh)&#xA;Updated for 4.21 and Lumin support by KarstenMaxim (AlphaSoftLLC)" />
 						<Button x:Name="AboutBtn_Ok" VerticalAlignment="Bottom" Margin="10,110,10,10" Content="Ok" Click="AboutBtn_Ok_Click"/>
+					</Grid>
+				</materialDesign:DialogHost.DialogContent>
+			</materialDesign:DialogHost>
+
+			<materialDesign:DialogHost x:Name="ZipProgressDialog" IsOpen="False" CloseOnClickAway="False">
+				<materialDesign:DialogHost.DialogContent>
+					<Grid>
+						<Label x:Name="CurrentFileSaving" Content="FileName" Margin="10"/>
+						<Label x:Name="FileSaveState" Content="State" Margin="10 35"/>
+						<Label x:Name="TotalResult" Content="File Size" Margin="10 60"/>
+						<ProgressBar x:Name="FileProgressbar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Value="20" Width="700" Height="30" Margin="10 10 10 50" IsIndeterminate="True"/>
+						<ProgressBar x:Name="OverallProgressbar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Value="50.3" Width="700" Height="30" Margin="10 140 10 10" IsIndeterminate="True"/>						
 					</Grid>
 				</materialDesign:DialogHost.DialogContent>
 			</materialDesign:DialogHost>

@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Threading;
 using Unreal_Binary_Builder.Properties;
 
@@ -15,7 +14,7 @@ namespace Unreal_Binary_Builder
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static readonly string PRODUCT_VERSION = "2.2";
+        private static readonly string PRODUCT_VERSION = "2.3";
 
         private static readonly string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
         private static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
@@ -32,6 +31,9 @@ namespace Unreal_Binary_Builder
         private readonly DispatcherTimer DispatchTimer = new DispatcherTimer();
 
         private string LogMessage = "";
+
+		private string FinalBuildPath = "";
+		private PostBuildSettings postBuildSettings = new PostBuildSettings();
 
         public MainWindow()
         {
@@ -227,11 +229,10 @@ namespace Unreal_Binary_Builder
             AddLogEntry("==========================BUILD FINISHED==========================");
             AddLogEntry(string.Format("Took {0:hh\\:mm\\:ss}", StopwatchTimer.Elapsed));
             AddLogEntry(string.Format("Build ended at {0}", DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")));
-            WriteToLogFile();
             StopwatchTimer.Reset();
             Dispatcher.Invoke(() =>
             {
-                TryShutdown();
+				OnBuildFinished(bLastBuildSuccess);
             });
         }
 
@@ -241,7 +242,24 @@ namespace Unreal_Binary_Builder
             File.WriteAllText(LogFile, LogMessage);
         }
 
-        private void TryShutdown()
+		private void OnBuildFinished(bool bBuildSucess)
+		{
+			if (bBuildSucess)
+			{
+				if (postBuildSettings.CanSaveToZip())
+				{
+					postBuildSettings.SaveToZip(this, FinalBuildPath, postBuildSettings.ZipPath.Text, postBuildSettings.ZipFileName.Text);
+					AddLogEntry("Saving zip file to " + postBuildSettings.ZipPath.Text);
+					WriteToLogFile();
+					return;
+				}
+			}
+
+			WriteToLogFile();
+			TryShutdown();
+		}
+
+        public void TryShutdown()
         {
             if (bShutdownWindows.IsChecked == true)
             {
@@ -276,12 +294,13 @@ namespace Unreal_Binary_Builder
             if (NewFileDialog.ShowDialog() == true)
             {
                 AutomationExePath = NewFileDialog.FileName;
-                AutomationToolPath.Text = AutomationExePath;
+                AutomationToolPath.Text = AutomationExePath;				
                 if (Path.GetFileNameWithoutExtension(AutomationExePath) == AUTOMATION_TOOL_NAME)
                 {
                     BuildRocketUE.IsEnabled = true;
                     ChangeStatusLabel("Idle.");
-                }
+					FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@"\Engine\Binaries\DotNET", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
+				}
                 else
                 {
                     ChangeStatusLabel("Error. Invalid automation tool file selected.");
@@ -328,6 +347,12 @@ namespace Unreal_Binary_Builder
             }
 
             ChangeStatusLabel("Preparing to build...");
+
+			if (postBuildSettings.ShouldSaveToZip() && postBuildSettings.DirectoryIsWritable() == false)
+			{
+				MessageBox.Show(string.Format("You chose to save Engine build as a zip file but below directory is either not available or not writable.\n\n{0}", postBuildSettings.ZipPath.Text), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return;
+			}
 
             if (CustomBuildXMLFile.Text != DEFAULT_BUILD_XML_FILE)
             {
@@ -481,5 +506,11 @@ namespace Unreal_Binary_Builder
 
             SaveAllSettings();
         }
+
+		private void PostBuildSettings_Click(object sender, RoutedEventArgs e)
+		{
+			postBuildSettings.Owner = this;
+			postBuildSettings.ShowDialog();
+		}
 	}
 }
