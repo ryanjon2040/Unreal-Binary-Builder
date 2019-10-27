@@ -10,7 +10,7 @@ This is a small app designed to create binary build of [Unreal Engine 4](https:/
 ![Screenshot](https://i.imgur.com/z9u42gI.png)
 
 Through this app you can also zip the final rocket build for distribution.
-![Screenshot](https://i.imgur.com/ECztMYp.png)
+![Screenshot](https://i.imgur.com/oOKw8uy.png)
 
 # Credits
 
