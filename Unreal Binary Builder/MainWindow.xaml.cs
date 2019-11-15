@@ -14,7 +14,7 @@ namespace Unreal_Binary_Builder
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static readonly string PRODUCT_VERSION = "2.3";
+        private static readonly string PRODUCT_VERSION = "2.4";
 
         private static readonly string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
         private static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
@@ -45,6 +45,8 @@ namespace Unreal_Binary_Builder
             {
                 BuildRocketUE.IsEnabled = true;
             }
+
+			EngineVersionSelection.SelectedIndex = Settings.Default.EngineSelection;
 
             bHostPlatformOnly.IsChecked = Settings.Default.SettingHostPlatformOnly;
             bWithWin64.IsChecked = Settings.Default.bWithWin64;
@@ -146,6 +148,7 @@ namespace Unreal_Binary_Builder
         {
             Settings.Default.AutomationPath = AutomationExePath;
 
+			Settings.Default.EngineSelection = EngineVersionSelection.SelectedIndex;
             Settings.Default.SettingHostPlatformOnly = (bool)bHostPlatformOnly.IsChecked;
             Settings.Default.bWithWin64 = (bool)bWithWin64.IsChecked;
             Settings.Default.bWithWin32 = (bool)bWithWin32.IsChecked;
@@ -346,6 +349,12 @@ namespace Unreal_Binary_Builder
                 return;
             }
 
+			if (EngineVersionSelection.SelectedIndex == 0)
+			{
+				MessageBox.Show("Please select your Engine version to build. If you are unsure about the version number look into the following file:\n\n/Engine/Source/Runtime/Launch/Resources/Version.h\n\nAnd check ENGINE_MAJOR_VERSION and ENGINE_MINOR_VERSION.", "Select Engine Version.", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				return;
+			}
+
             ChangeStatusLabel("Preparing to build...");
 
 			if (postBuildSettings.ShouldSaveToZip() && postBuildSettings.DirectoryIsWritable() == false)
@@ -370,6 +379,12 @@ namespace Unreal_Binary_Builder
                     return;
                 }
             }
+
+			if (SupportHTML5() == false && bWithHTML5.IsChecked == true)
+			{
+				bWithHTML5.IsChecked = false;
+				MessageBox.Show("HTML5 support was removed from Unreal Engine 4.24 and higher. You had it enabled but since it is of no use, I disabled it.");
+			}
 
             if (MessageBox.Show("You are going to build a binary version of Unreal Engine 4. This is a long process and might take time to finish. Are you sure you want to continue? ", "Build Binary Version", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
@@ -423,22 +438,40 @@ namespace Unreal_Binary_Builder
                 }
                 else
                 {
-                    CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithHTML5={7} -set:WithSwitch={8} -set:WithPS4={9} -set:WithXboxOne={10} -set:WithLumin={11}",
-                        GetConditionalString(bWithWin64.IsChecked),
-                        GetConditionalString(bWithWin32.IsChecked),
-                        GetConditionalString(bWithMac.IsChecked),
-                        GetConditionalString(bWithAndroid.IsChecked),
-                        GetConditionalString(bWithIOS.IsChecked),
-                        GetConditionalString(bWithTVOS.IsChecked),
-                        GetConditionalString(bWithLinux.IsChecked),
-                        GetConditionalString(bWithHTML5.IsChecked),
-                        GetConditionalString(bWithSwitch.IsChecked),
-                        GetConditionalString(bWithPS4.IsChecked),
-                        GetConditionalString(bWithXboxOne.IsChecked),
-                        GetConditionalString(bWithLumin.IsChecked));
+                    if (SupportHTML5())
+					{
+						CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithHTML5={7} -set:WithSwitch={8} -set:WithPS4={9} -set:WithXboxOne={10} -set:WithLumin={11}",
+						GetConditionalString(bWithWin64.IsChecked),
+						GetConditionalString(bWithWin32.IsChecked),
+						GetConditionalString(bWithMac.IsChecked),
+						GetConditionalString(bWithAndroid.IsChecked),
+						GetConditionalString(bWithIOS.IsChecked),
+						GetConditionalString(bWithTVOS.IsChecked),
+						GetConditionalString(bWithLinux.IsChecked),
+						GetConditionalString(bWithHTML5.IsChecked),
+						GetConditionalString(bWithSwitch.IsChecked),
+						GetConditionalString(bWithPS4.IsChecked),
+						GetConditionalString(bWithXboxOne.IsChecked),
+						GetConditionalString(bWithLumin.IsChecked));
+					}
+					else
+					{
+						CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithSwitch={7} -set:WithPS4={8} -set:WithXboxOne={9} -set:WithLumin={10}",
+						GetConditionalString(bWithWin64.IsChecked),
+						GetConditionalString(bWithWin32.IsChecked),
+						GetConditionalString(bWithMac.IsChecked),
+						GetConditionalString(bWithAndroid.IsChecked),
+						GetConditionalString(bWithIOS.IsChecked),
+						GetConditionalString(bWithTVOS.IsChecked),
+						GetConditionalString(bWithLinux.IsChecked),
+						GetConditionalString(bWithSwitch.IsChecked),
+						GetConditionalString(bWithPS4.IsChecked),
+						GetConditionalString(bWithXboxOne.IsChecked),
+						GetConditionalString(bWithLumin.IsChecked));
+					}
                 }
 
-				if (EngineVersionSelection.SelectedIndex > 0)
+				if (EngineVersionSelection.SelectedIndex > 1)
 				{
 					CommandLineArgs += string.Format(" -set:WithServer={0} -set:WithClient={1} -set:WithHoloLens={2}", 
 						GetConditionalString(bWithServer.IsChecked), 
@@ -511,6 +544,17 @@ namespace Unreal_Binary_Builder
 		{
 			postBuildSettings.Owner = this;
 			postBuildSettings.ShowDialog();
+		}
+
+		private void EngineVersionSelection_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+		{
+			bWithServer.IsEnabled = bWithClient.IsEnabled = bWithServerLabel.IsEnabled = bWithClientLabel.IsEnabled = EngineVersionSelection.SelectedIndex > 1;
+			bWithHTML5.IsEnabled = bWithHTML5Label.IsEnabled = EngineVersionSelection.SelectedIndex < 3;
+		}
+
+		private bool SupportHTML5()
+		{
+			return EngineVersionSelection.SelectedIndex < 3;
 		}
 	}
 }

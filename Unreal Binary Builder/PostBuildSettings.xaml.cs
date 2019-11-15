@@ -64,7 +64,7 @@ namespace Unreal_Binary_Builder
 						}
 					}
 				}
-				catch (Exception Ex)
+				catch (Exception)
 				{
 
 				}

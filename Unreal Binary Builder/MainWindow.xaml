@@ -65,7 +65,7 @@
 					<Label Content ="iOS" Margin="154,42,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0"/>
 					<ToggleButton x:Name="bWithIOS" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="231,40,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-					<Label Content ="HTML5" Margin="154,73,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0"/>
+					<Label x:Name="bWithHTML5Label" Content ="HTML5" Margin="154,73,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0"/>
 					<ToggleButton x:Name="bWithHTML5" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="231,73,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
 					<Label Content ="TvOS" Margin="154,105,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0"/>
@@ -124,11 +124,11 @@
 					<ToggleButton x:Name="bCleanBuild" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,170,0,0"/>
 					<Label Content="Remove Previous Build" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="45,165,0,0" ToolTip="Cleans any previous builds. Appends -Clean command line."/>
 
-					<ToggleButton x:Name="bWithServer" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="285,11,0,0" IsEnabled="{Binding IsSelected, ElementName=comboBoxItem1}"/>
-					<Label Content="With Server" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="324,5,0,0" ToolTip="Create dedicated server target." IsEnabled="{Binding IsSelected, ElementName=comboBoxItem1}" />
+					<ToggleButton x:Name="bWithServer" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="285,11,0,0"/>
+					<Label x:Name="bWithServerLabel" Content="With Server" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="324,5,0,0" ToolTip="Create dedicated server target."/>
 
-					<ToggleButton x:Name="bWithClient" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="285,43,0,0" IsEnabled="{Binding IsSelected, ElementName=comboBoxItem1}"/>
-					<Label Content="With Client" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="324,37,0,0" ToolTip="Create client target." IsEnabled="{Binding IsSelected, ElementName=comboBoxItem1}"/>
+					<ToggleButton x:Name="bWithClient" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="285,43,0,0"/>
+					<Label x:Name="bWithClientLabel" Content="With Client" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="324,37,0,0" ToolTip="Create client target."/>
 
 					<GroupBox Header="Shutdown Settings"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="475,6,0,0" Height="178">
 						<Grid>
@@ -143,9 +143,11 @@
 			</GroupBox>
 
 			<Label Content="Select Engine Version" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" Margin="10,14,0,0"></Label>
-			<ComboBox x:Name="EngineVersionSelection" SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="159,8,0,0" Width="204">
-				<ComboBoxItem x:Name="comboBoxItem" Content="4.22"/>
-				<ComboBoxItem x:Name="comboBoxItem1" Content="4.23 and above"/>
+			<ComboBox x:Name="EngineVersionSelection" SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="159,8,0,0" Width="204" SelectionChanged="EngineVersionSelection_SelectionChanged">
+				<ComboBoxItem x:Name="comboBoxItem" Content="None"/>
+				<ComboBoxItem x:Name="comboBoxItem1" Content="4.22"/>
+				<ComboBoxItem x:Name="comboBoxItem2" Content="4.23"/>
+				<ComboBoxItem x:Name="comboBoxItem3" Content="4.24"/>
 			</ComboBox>
 
 			<local:LogViewer x:Name="LogControl" Margin="10,377,7.6,47.4" Height="Auto" Width="Auto"/>

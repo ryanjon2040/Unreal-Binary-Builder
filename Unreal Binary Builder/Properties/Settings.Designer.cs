@@ -502,5 +502,17 @@ namespace Unreal_Binary_Builder.Properties {
                 this["ZipFileName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int EngineSelection {
+            get {
+                return ((int)(this["EngineSelection"]));
+            }
+            set {
+                this["EngineSelection"] = value;
+            }
+        }
     }
 }
