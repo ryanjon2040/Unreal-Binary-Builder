@@ -101,7 +101,7 @@ namespace Unreal_Binary_Builder
 
                 if (bIsError == false)
                 {
-                    const string StepPattern = @"\*{6} \[(\d*)\/(\d*)\]";
+                    const string StepPattern = @"\*{6} \[(\d+)\/(\d+)\]";
                     const string WarningPattern = @"warning|\*\*\* Unable to determine ";
                     const string DebugPattern = @".+\*\s\D\d\D\d\D\s\w+|.+\*\sFor\sUE4";
                     const string ErrorPattern = @"Error_Unknown|ERROR|exited with code 1";
@@ -112,8 +112,8 @@ namespace Unreal_Binary_Builder
                     Regex ErrorRgx = new Regex(ErrorPattern, RegexOptions.IgnoreCase);
                     if (StepRgx.IsMatch(InMessage))
                     {
-                        var captures = StepRgx.Match(InMessage).Captures;
-                        ChangeStepLabel(captures[0].Value, captures[1].Value);
+                        var captures = StepRgx.Match(InMessage).Groups;
+                        ChangeStepLabel(captures[1].Value, captures[2].Value);
                     }
                     if (WarningRgx.IsMatch(InMessage))
                     {
@@ -147,7 +147,9 @@ namespace Unreal_Binary_Builder
         }
         private void ChangeStepLabel(string current, string total)
         {
-            StepLabel.Content = $"Step: [{current}/{total}]";
+            this.Dispatcher.Invoke(() => {
+                StepLabel.Content = $"Step: [{current}/{total}]";
+            });
         }
         private string GetConditionalString(bool? bCondition)
         {
