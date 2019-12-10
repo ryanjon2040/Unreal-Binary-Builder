@@ -559,7 +559,7 @@ namespace Unreal_Binary_Builder
 		private void EngineVersionSelection_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
 			bWithServer.IsEnabled = bWithClient.IsEnabled = bWithServerLabel.IsEnabled = bWithClientLabel.IsEnabled = EngineVersionSelection.SelectedIndex > 1;
-			bWithHTML5.IsEnabled = bWithHTML5Label.IsEnabled = EngineVersionSelection.SelectedIndex < 3;
+			bWithHTML5.IsEnabled = bWithHTML5Label.IsEnabled = SupportHTML5();
 		}
 
 		private bool SupportHTML5()
