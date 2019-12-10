@@ -59,6 +59,9 @@
 					<Label Content ="Linux" Margin="0,138,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0"/>
 					<ToggleButton x:Name="bWithLinux" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="105,137,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
+					<Label Content ="LinuxAArch64" Margin="280,137,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0"/>
+					<ToggleButton x:Name="bWithLinuxAArch64" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="357,137,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
 					<Label Content ="Android" Margin="154,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" />
 					<ToggleButton x:Name="bWithAndroid" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="231,11,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
