@@ -23,7 +23,7 @@ namespace Unreal_Binary_Builder
 			
 			Settings DefaultSettings = Settings.Default;
 			bZipBuild.IsChecked = (bool)DefaultSettings.bZipBuild;
-			ZipFileName.Text = string.IsNullOrEmpty(DefaultSettings.ZipFileName) ? DateTime.Now.ToString().Replace(":", ".") : DefaultSettings.ZipFileName;
+			ZipFileName.Text = string.IsNullOrEmpty(DefaultSettings.ZipFileName) ? DateTime.Now.ToString("s").Replace(":", ".") : DefaultSettings.ZipFileName;
 			ZipPath.Text = DefaultSettings.ZipPath;
 			bIncludePDB.IsChecked = (bool)DefaultSettings.bIncludePDB;
 			bIncludeDEBUG.IsChecked = (bool)DefaultSettings.bIncludeDEBUG;
@@ -256,7 +256,7 @@ namespace Unreal_Binary_Builder
 
 					
 					zipFile.UseZip64WhenSaving = Zip64Option.Always;
-					string MyZipFileName = string.IsNullOrEmpty(InZipFileName) ? DateTime.Now.ToString().Replace(":", ".") : InZipFileName;
+					string MyZipFileName = string.IsNullOrEmpty(InZipFileName) ? DateTime.Now.ToString("s").Replace(":", ".") : InZipFileName;
 					zipFile.Save(string.Format("{0}\\{1}", ZipLocationToSave, MyZipFileName));
 					
 				}
