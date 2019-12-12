@@ -43,7 +43,7 @@ namespace Unreal_Binary_Builder
 
             if (File.Exists(AutomationExePath) && Path.GetFileNameWithoutExtension(AutomationExePath) == AUTOMATION_TOOL_NAME)
             {
-                BuildRocketUE.IsEnabled = true;
+                ActivateBuildButton();
             }
 
 			EngineVersionSelection.SelectedIndex = Settings.Default.EngineSelection;
@@ -314,9 +314,8 @@ namespace Unreal_Binary_Builder
                 AutomationToolPath.Text = AutomationExePath;				
                 if (Path.GetFileNameWithoutExtension(AutomationExePath) == AUTOMATION_TOOL_NAME)
                 {
-                    BuildRocketUE.IsEnabled = true;
+                    ActivateBuildButton();
                     ChangeStatusLabel("Idle.");
-					FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@"\Engine\Binaries\DotNET", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
 				}
                 else
                 {
@@ -328,6 +327,12 @@ namespace Unreal_Binary_Builder
             }
 
             ChangeStatusLabel("Idle.");
+        }
+
+        private void ActivateBuildButton()
+        {
+            BuildRocketUE.IsEnabled = true;
+            FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@"\Engine\Binaries\DotNET", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
         }
 
         private void CustomBuildXMLBrowse_Click(object sender, RoutedEventArgs e)
