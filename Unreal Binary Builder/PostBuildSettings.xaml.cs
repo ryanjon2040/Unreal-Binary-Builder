@@ -259,6 +259,7 @@ namespace Unreal_Binary_Builder
 					string MyZipFileName = string.IsNullOrEmpty(InZipFileName) ? DateTime.Now.ToString("s").Replace(":", ".") : InZipFileName;
 					zipFile.Save(string.Format("{0}\\{1}", ZipLocationToSave, MyZipFileName));
 					
+					Dispatcher.Invoke(() => { mainWindow.AddLogEntry("Done zipping."); });
 				}
 			});
 		}
