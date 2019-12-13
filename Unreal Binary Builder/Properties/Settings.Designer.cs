@@ -514,5 +514,17 @@ namespace Unreal_Binary_Builder.Properties {
                 this["EngineSelection"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool bWithLinuxAArch64 {
+            get {
+                return ((bool)(this["bWithLinuxAArch64"]));
+            }
+            set {
+                this["bWithLinuxAArch64"] = value;
+            }
+        }
     }
 }

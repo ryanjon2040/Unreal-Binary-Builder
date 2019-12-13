@@ -53,6 +53,7 @@ namespace Unreal_Binary_Builder
             bWithWin32.IsChecked = Settings.Default.bWithWin32;
             bWithMac.IsChecked = Settings.Default.bWithMac;
             bWithLinux.IsChecked = Settings.Default.bWithLinux;
+            bWithLinuxAArch64.IsChecked = Settings.Default.bWithLinuxAArch64;
             bWithHTML5.IsChecked = Settings.Default.bWithHTML5;
             bWithAndroid.IsChecked = Settings.Default.bWithAndroid;
             bWithIOS.IsChecked = Settings.Default.bWithIOS;
@@ -166,6 +167,7 @@ namespace Unreal_Binary_Builder
             Settings.Default.bWithWin32 = (bool)bWithWin32.IsChecked;
             Settings.Default.bWithMac = (bool)bWithMac.IsChecked;
             Settings.Default.bWithLinux = (bool)bWithLinux.IsChecked;
+            Settings.Default.bWithLinuxAArch64 = (bool)bWithLinuxAArch64.IsChecked;
             Settings.Default.bWithHTML5 = (bool)bWithHTML5.IsChecked;
             Settings.Default.bWithAndroid = (bool)bWithAndroid.IsChecked;
             Settings.Default.bWithIOS = (bool)bWithIOS.IsChecked;
@@ -481,6 +483,9 @@ namespace Unreal_Binary_Builder
 						GetConditionalString(bWithXboxOne.IsChecked),
 						GetConditionalString(bWithLumin.IsChecked));
 					}
+					if (SupportLinuxAArch64()) {
+						CommandLineArgs += string.Format(" -set:WithLinuxAArch64={0}", GetConditionalString(bWithLinuxAArch64.IsChecked));
+					}
                 }
 
 				if (EngineVersionSelection.SelectedIndex > 1)
@@ -567,6 +572,10 @@ namespace Unreal_Binary_Builder
 		private bool SupportHTML5()
 		{
 			return EngineVersionSelection.SelectedIndex < 3;
+		}
+
+		private bool SupportLinuxAArch64() {
+			return EngineVersionSelection.SelectedIndex >= 3;
 		}
 	}
 }

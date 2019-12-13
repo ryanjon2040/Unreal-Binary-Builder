@@ -59,6 +59,9 @@
 					<Label Content ="Linux" Margin="0,138,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0"/>
 					<ToggleButton x:Name="bWithLinux" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="105,137,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
+					<Label Content ="LinuxAArch64" Margin="280,137,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0"/>
+					<ToggleButton x:Name="bWithLinuxAArch64" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="357,137,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
 					<Label Content ="Android" Margin="154,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" />
 					<ToggleButton x:Name="bWithAndroid" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="231,11,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
@@ -160,7 +163,7 @@
 			<materialDesign:DialogHost x:Name="AboutDialog" IsOpen="False" CloseOnClickAway="True">
 				<materialDesign:DialogHost.DialogContent>
 					<Grid>
-						<Label x:Name="AboutMessageLabel" Content="A helper application designed to create binary version of Unreal Engine 4 from source.&#xA;&#xA;Created by Satheesh (ryanjon2040)&#xA;&#xA;Updated for 4.18 and PS4/Xbox Support by James Baxter (TheJamsh)&#xA;Updated for 4.21 and Lumin support by KarstenMaxim (AlphaSoftLLC)&#xA;Step counter added by Ben Vaccaro (freaksed)" />
+						<Label x:Name="AboutMessageLabel" Content="A helper application designed to create binary version of Unreal Engine 4 from source.&#xA;&#xA;Created by Satheesh (ryanjon2040)&#xA;&#xA;Updated for 4.18 and PS4/Xbox Support by James Baxter (TheJamsh)&#xA;Updated for 4.21 and Lumin support by KarstenMaxim (AlphaSoftLLC)&#xA;Step counter added by Ben Vaccaro (freaksed)&#xA;Some small updates for 4.24 by Christian Walde (wchristian)" />
 						<Button x:Name="AboutBtn_Ok" VerticalAlignment="Bottom" Margin="10,110,10,10" Content="Ok" Click="AboutBtn_Ok_Click"/>
 					</Grid>
 				</materialDesign:DialogHost.DialogContent>

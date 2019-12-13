@@ -20,6 +20,9 @@
     <Setting Name="bWithLinux" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="bWithLinuxAArch64" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
     <Setting Name="bWithHTML5" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
