@@ -83,9 +83,11 @@ namespace Unreal_Binary_Builder
 				mainWindow.FileSaveState.Content = "State: Preparing..."; 
 			});
 
+			CompressionLevel CL = (bool)bFastCompression.IsChecked ? CompressionLevel.BestSpeed : CompressionLevel.BestCompression;
+
 			await Task.Run(() => 
 			{
-				using (var zipFile = new ZipFile { CompressionLevel = (bool)bFastCompression.IsChecked ? CompressionLevel.BestSpeed : CompressionLevel.BestCompression })
+				using (var zipFile = new ZipFile { CompressionLevel = CL })
 				{
 					Dispatcher.Invoke(() => { mainWindow.FileSaveState.Content = "State: Finding files..."; });
 					string[] files = Directory.GetFiles(InBuildDirectory, "*", SearchOption.AllDirectories).ToArray();
@@ -118,7 +120,7 @@ namespace Unreal_Binary_Builder
 								bSkipFile = true;
 							}
 
-							if (bIncludeDocumentation.IsChecked == false && Path.GetFullPath(file).ToLower().Contains(@"\documentation\"))
+							if (bIncludeDocumentation.IsChecked == false && Path.GetFullPath(file).Contains(@"\source\") == false && Path.GetFullPath(file).ToLower().Contains(@"\documentation\"))
 							{
 								bSkipFile = true;
 							}
@@ -163,7 +165,7 @@ namespace Unreal_Binary_Builder
 								bSkipFile = true;
 							}
 
-							if (bIncludeTemplates.IsChecked == false && Path.GetFullPath(file).ToLower().Contains(@"\templates\"))
+							if (bIncludeTemplates.IsChecked == false && Path.GetFullPath(file).Contains(@"\source\") == false && Path.GetFullPath(file).ToLower().Contains(@"\templates\"))
 							{
 								bSkipFile = true;
 							}

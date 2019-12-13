@@ -14,7 +14,7 @@ namespace Unreal_Binary_Builder
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static readonly string PRODUCT_VERSION = "2.4";
+        private static readonly string PRODUCT_VERSION = "2.5";
 
         private static readonly string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
         private static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
@@ -113,7 +113,7 @@ namespace Unreal_Binary_Builder
                     Regex ErrorRgx = new Regex(ErrorPattern, RegexOptions.IgnoreCase);
                     if (StepRgx.IsMatch(InMessage))
                     {
-                        var captures = StepRgx.Match(InMessage).Groups;
+                        GroupCollection captures = StepRgx.Match(InMessage).Groups;
                         ChangeStepLabel(captures[1].Value, captures[2].Value);
                     }
                     if (WarningRgx.IsMatch(InMessage))
@@ -144,14 +144,14 @@ namespace Unreal_Binary_Builder
 
         private void ChangeStatusLabel(string InStatus)
         {
-            StatusLabel.Content = string.Format("Status: {0}", InStatus);
+            StatusLabel.Content = $"Status: {InStatus}";
         }
+
         private void ChangeStepLabel(string current, string total)
         {
-            this.Dispatcher.Invoke(() => {
-                StepLabel.Content = $"Step: [{current}/{total}]";
-            });
+            Dispatcher.Invoke(() => { StepLabel.Content = $"Step: [{current}/{total}]"; });
         }
+
         private string GetConditionalString(bool? bCondition)
         {
             return (bool)bCondition ? "true" : "false";
@@ -483,7 +483,9 @@ namespace Unreal_Binary_Builder
 						GetConditionalString(bWithXboxOne.IsChecked),
 						GetConditionalString(bWithLumin.IsChecked));
 					}
-					if (SupportLinuxAArch64()) {
+
+					if (SupportLinuxAArch64()) 
+                    {
 						CommandLineArgs += string.Format(" -set:WithLinuxAArch64={0}", GetConditionalString(bWithLinuxAArch64.IsChecked));
 					}
                 }
@@ -555,6 +557,8 @@ namespace Unreal_Binary_Builder
             }
 
             SaveAllSettings();
+
+            Application.Current.Shutdown();
         }
 
 		private void PostBuildSettings_Click(object sender, RoutedEventArgs e)
@@ -567,6 +571,7 @@ namespace Unreal_Binary_Builder
 		{
 			bWithServer.IsEnabled = bWithClient.IsEnabled = bWithServerLabel.IsEnabled = bWithClientLabel.IsEnabled = EngineVersionSelection.SelectedIndex > 1;
 			bWithHTML5.IsEnabled = bWithHTML5Label.IsEnabled = SupportHTML5();
+            bWithLinuxAArch64.IsEnabled = bWithLinuxAArch64Label.IsEnabled = SupportLinuxAArch64();
 		}
 
 		private bool SupportHTML5()
@@ -574,7 +579,8 @@ namespace Unreal_Binary_Builder
 			return EngineVersionSelection.SelectedIndex < 3;
 		}
 
-		private bool SupportLinuxAArch64() {
+		private bool SupportLinuxAArch64()
+        {
 			return EngineVersionSelection.SelectedIndex >= 3;
 		}
 	}

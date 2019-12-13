@@ -35,14 +35,14 @@
 			</MenuItem>
 		</Menu>
 		<Grid>
-			<TextBox x:Name="AutomationToolPath" Margin="9,47,0,0" materialDesign:HintAssist.Hint="Automation Tool Launcher Path" materialDesign:HintAssist.IsFloating="True" HorizontalAlignment="Left" VerticalAlignment="Top" Width="353" />
-			<Button x:Name="AutomationToolBrowse" Content="{materialDesign:PackIcon OpenInBrowser}" ToolTip="Browse and select AutomationToolLauncher.exe" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="368,53,0,0" Click="AutomationToolBrowse_Click"/>
+			<TextBox x:Name="AutomationToolPath" Margin="9,47,0,0" materialDesign:HintAssist.Hint="Automation Tool Launcher Path" materialDesign:HintAssist.IsFloating="True" HorizontalAlignment="Left" VerticalAlignment="Top" Width="404" />
+			<Button x:Name="AutomationToolBrowse" Content="{materialDesign:PackIcon OpenInBrowser}" ToolTip="Browse and select AutomationToolLauncher.exe" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="418,53,0,0" Click="AutomationToolBrowse_Click"/>
 
-			<TextBox x:Name="CustomBuildXMLFile" Margin="9,90,0,0" materialDesign:HintAssist.Hint="Installed Engine Build XML File" materialDesign:HintAssist.IsFloating="True" HorizontalAlignment="Left" VerticalAlignment="Top" Width="300" />
-			<Button x:Name="CustomBuildXMLBrowse" Content="{materialDesign:PackIcon OpenInBrowser}" ToolTip="(Optional) Browse and select InstalledEngineBuild.xml" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="315,96,0,0" Click="CustomBuildXMLBrowse_Click"/>
-			<Button x:Name="ResetDefaultBuildXML" Content="{materialDesign:PackIcon Xml}" ToolTip="Reset to default InstalledEngineBuild.xml" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="368,96,0,0" Click="ResetDefaultBuildXML_Click"/>
+			<TextBox x:Name="CustomBuildXMLFile" Margin="9,90,0,0" materialDesign:HintAssist.Hint="Installed Engine Build XML File" materialDesign:HintAssist.IsFloating="True" HorizontalAlignment="Left" VerticalAlignment="Top" Width="351" />
+			<Button x:Name="CustomBuildXMLBrowse" Content="{materialDesign:PackIcon OpenInBrowser}" ToolTip="(Optional) Browse and select InstalledEngineBuild.xml" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="365,94,0,0" Click="CustomBuildXMLBrowse_Click"/>
+			<Button x:Name="ResetDefaultBuildXML" Content="{materialDesign:PackIcon Xml}" ToolTip="Reset to default InstalledEngineBuild.xml" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="418,96,0,0" Click="ResetDefaultBuildXML_Click"/>
 
-			<GroupBox Header="Platforms" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,133,0,0">
+			<GroupBox Header="Platforms" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,133,0,0" Width="456">
 				<Grid>
 					<Label Content ="Host Only" Margin="0,11,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" ToolTip="A helper option to make an installed build for your host platform only, so that you don't have to disable each platform individually"/>
 					<ToggleButton x:Name="bHostPlatformOnly" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="105,11,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -59,8 +59,8 @@
 					<Label Content ="Linux" Margin="0,138,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0"/>
 					<ToggleButton x:Name="bWithLinux" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="105,137,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-					<Label Content ="LinuxAArch64" Margin="280,137,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0"/>
-					<ToggleButton x:Name="bWithLinuxAArch64" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="357,137,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+					<Label x:Name="bWithLinuxAArch64Label" Content ="LinuxAArch64" Margin="280,137,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0"/>
+					<ToggleButton x:Name="bWithLinuxAArch64" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="390,137,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
 					<Label Content ="Android" Margin="154,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" />
 					<ToggleButton x:Name="bWithAndroid" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="231,11,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -78,13 +78,13 @@
 					<ToggleButton x:Name="bWithSwitch" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="231,137,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
 					<Label Content ="PS4" Margin="280,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" />
-					<ToggleButton x:Name="bWithPS4" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="357,11,-23,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+					<ToggleButton x:Name="bWithPS4" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="390,11,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
 					<Label Content ="XBox One" Margin="280,41,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" />
-					<ToggleButton x:Name="bWithXboxOne" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="357,40,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+					<ToggleButton x:Name="bWithXboxOne" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="390,40,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
 					<Label Content ="Lumin" Margin="280,73,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0" />
-					<ToggleButton x:Name="bWithLumin" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="357,72,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+					<ToggleButton x:Name="bWithLumin" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="390,72,0,0" IsEnabled="{Binding IsChecked, Converter={StaticResource NotConverter}, ElementName=bHostPlatformOnly}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
 					<Label Content ="HoloLens" Margin="280,105,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="0">
 						<Label.IsEnabled>
@@ -94,7 +94,7 @@
 							</MultiBinding>
 						</Label.IsEnabled>
 					</Label>
-					<ToggleButton x:Name="bWithHoloLens" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="357,104,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+					<ToggleButton x:Name="bWithHoloLens" Style="{DynamicResource MaterialDesignSwitchToggleButton}" Margin="390,104,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
 						<ToggleButton.IsEnabled>
 							<MultiBinding Converter="{StaticResource booleanAndNotConverter}">
 								<Binding ElementName="bHostPlatformOnly" Path="IsChecked" Mode="OneWay" />
@@ -105,7 +105,7 @@
 				</Grid>
 			</GroupBox>
 
-			<GroupBox Header="Options" VerticalAlignment="Top" Margin="424,54,0,0" Height="287" Width="760" HorizontalAlignment="Left">
+			<GroupBox Header="Options" VerticalAlignment="Top" Margin="471,54,0,0" Height="287" Width="713" HorizontalAlignment="Left">
 				<Grid>
 					<ToggleButton x:Name="bWithDDC" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" IsChecked="True"/>
 					<Label Content="Include Derived Data Cache (DDC)" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="45,5,0,0" ToolTip="Build a standalone derived-data cache for the engine content and templates.
@@ -133,7 +133,7 @@
 					<ToggleButton x:Name="bWithClient" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="285,43,0,0"/>
 					<Label x:Name="bWithClientLabel" Content="With Client" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="324,37,0,0" ToolTip="Create client target."/>
 
-					<GroupBox Header="Shutdown Settings"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="475,6,0,0" Height="178">
+					<GroupBox Header="Shutdown Settings"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="410,6,0,0" Height="178" Width="285">
 						<Grid>
 							<CheckBox x:Name="bShutdownWindows" Content="Shutdown Computer after build" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Shuts down your computer after building."/>
 							<CheckBox x:Name="bShutdownIfSuccess" Content="Shutdown only if build is successful" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,24,0,0" IsEnabled="{Binding IsChecked, ElementName=bShutdownWindows}" ToolTip="Shuts down your computer after building only if the build is successful."/>
@@ -154,7 +154,7 @@
 			</ComboBox>
 
 			<local:LogViewer x:Name="LogControl" Margin="10,377,7.6,47.4" Height="Auto" Width="Auto"/>
-			
+
 			<Label x:Name="StepLabel" Content="Step: " VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,17" Padding="0"/>
 			<Label x:Name="StatusLabel" Content="Status: " VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="80,0,0,17" Padding="0"/>
 			<Button x:Name="PostBuildSettings" Style="{DynamicResource MaterialDesignFlatButton}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Post-Build Settings" Margin="0,0,100,10" Click="PostBuildSettings_Click" />
