@@ -22,18 +22,18 @@ namespace Unreal_Binary_Builder
 			InitializeComponent();
 			
 			Settings DefaultSettings = Settings.Default;
-			bZipBuild.IsChecked = (bool)DefaultSettings.bZipBuild;
+			bZipBuild.IsChecked = DefaultSettings.bZipBuild;
 			ZipFileName.Text = string.IsNullOrEmpty(DefaultSettings.ZipFileName) ? DateTime.Now.ToString().Replace(":", ".") : DefaultSettings.ZipFileName;
 			ZipPath.Text = DefaultSettings.ZipPath;
-			bIncludePDB.IsChecked = (bool)DefaultSettings.bIncludePDB;
-			bIncludeDEBUG.IsChecked = (bool)DefaultSettings.bIncludeDEBUG;
-			bIncludeDocumentation.IsChecked = (bool)DefaultSettings.bIncludeDocumentation;
-			bIncludeExtras.IsChecked = (bool)DefaultSettings.bIncludeExtras;
-			bIncludeSource.IsChecked = (bool)DefaultSettings.bIncludeSource;
-			bIncludeFeaturePacks.IsChecked = (bool)DefaultSettings.bIncludeFeaturePacks;
-			bIncludeSamples.IsChecked = (bool)DefaultSettings.bIncludeSamples;
-			bIncludeTemplates.IsChecked = (bool)DefaultSettings.bIncludeTemplates;
-			bFastCompression.IsChecked = (bool)DefaultSettings.bFastCompression;
+			bIncludePDB.IsChecked = DefaultSettings.bIncludePDB;
+			bIncludeDEBUG.IsChecked = DefaultSettings.bIncludeDEBUG;
+			bIncludeDocumentation.IsChecked = DefaultSettings.bIncludeDocumentation;
+			bIncludeExtras.IsChecked = DefaultSettings.bIncludeExtras;
+			bIncludeSource.IsChecked = DefaultSettings.bIncludeSource;
+			bIncludeFeaturePacks.IsChecked = DefaultSettings.bIncludeFeaturePacks;
+			bIncludeSamples.IsChecked = DefaultSettings.bIncludeSamples;
+			bIncludeTemplates.IsChecked = DefaultSettings.bIncludeTemplates;
+			bFastCompression.IsChecked = DefaultSettings.bFastCompression;
 		}
 
 		public bool CanSaveToZip()
@@ -110,6 +110,7 @@ namespace Unreal_Binary_Builder
 						bool bSkipFile = false;
 						Dispatcher.Invoke(() =>
 						{
+							string CurrentFilePath = Path.GetFullPath(file).ToLower();
 							if (bIncludePDB.IsChecked == false && Path.GetExtension(file).ToLower() == ".pdb")
 							{
 								bSkipFile = true;							
@@ -120,52 +121,52 @@ namespace Unreal_Binary_Builder
 								bSkipFile = true;
 							}
 
-							if (bIncludeDocumentation.IsChecked == false && Path.GetFullPath(file).Contains(@"\source\") == false && Path.GetFullPath(file).ToLower().Contains(@"\documentation\"))
+							if (bIncludeDocumentation.IsChecked == false && CurrentFilePath.Contains(@"\source\") == false && CurrentFilePath.Contains(@"\documentation\"))
 							{
 								bSkipFile = true;
 							}
 
-							if (bIncludeExtras.IsChecked == false && Path.GetFullPath(file).ToLower().Contains(@"\extras\"))
+							if (bIncludeExtras.IsChecked == false && CurrentFilePath.Contains(@"\extras\"))
 							{
 								bSkipFile = true;
 							}
 
-							if (bIncludeSource.IsChecked == false && Path.GetFullPath(file).ToLower().Contains(@"\source\developer\"))
+							if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\developer\"))
 							{
 								bSkipFile = true;
 							}
 
-							if (bIncludeSource.IsChecked == false && Path.GetFullPath(file).ToLower().Contains(@"\source\editor\"))
+							if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\editor\"))
 							{
 								bSkipFile = true;
 							}
 
-							if (bIncludeSource.IsChecked == false && Path.GetFullPath(file).ToLower().Contains(@"\source\programs\"))
+							if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\programs\"))
 							{
 								bSkipFile = true;
 							}
 
-							if (bIncludeSource.IsChecked == false && Path.GetFullPath(file).ToLower().Contains(@"\source\runtime\"))
+							if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\runtime\"))
 							{
 								bSkipFile = true;
 							}
 
-							if (bIncludeSource.IsChecked == false && Path.GetFullPath(file).ToLower().Contains(@"\source\thirdparty\"))
+							if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\thirdparty\"))
 							{
 								bSkipFile = true;
 							}
 
-							if (bIncludeFeaturePacks.IsChecked == false && Path.GetFullPath(file).ToLower().Contains(@"\featurepacks\"))
+							if (bIncludeFeaturePacks.IsChecked == false && CurrentFilePath.Contains(@"\featurepacks\"))
 							{
 								bSkipFile = true;
 							}
 
-							if (bIncludeSamples.IsChecked == false && Path.GetFullPath(file).ToLower().Contains(@"\samples\"))
+							if (bIncludeSamples.IsChecked == false && CurrentFilePath.Contains(@"\samples\"))
 							{
 								bSkipFile = true;
 							}
 
-							if (bIncludeTemplates.IsChecked == false && Path.GetFullPath(file).Contains(@"\source\") == false && Path.GetFullPath(file).ToLower().Contains(@"\templates\"))
+							if (bIncludeTemplates.IsChecked == false && CurrentFilePath.Contains(@"\source\") == false && CurrentFilePath.Contains(@"\templates\"))
 							{
 								bSkipFile = true;
 							}
