@@ -23,7 +23,6 @@ namespace Unreal_Binary_Builder
 			
 			Settings DefaultSettings = Settings.Default;
 			bZipBuild.IsChecked = DefaultSettings.bZipBuild;
-			ZipFileName.Text = string.IsNullOrEmpty(DefaultSettings.ZipFileName) ? DateTime.Now.ToString().Replace(":", ".") : DefaultSettings.ZipFileName;
 			ZipPath.Text = DefaultSettings.ZipPath;
 			bIncludePDB.IsChecked = DefaultSettings.bIncludePDB;
 			bIncludeDEBUG.IsChecked = DefaultSettings.bIncludeDEBUG;
@@ -43,7 +42,7 @@ namespace Unreal_Binary_Builder
 
 		public bool ShouldSaveToZip()
 		{
-			return (bool)bZipBuild.IsChecked && !string.IsNullOrEmpty(ZipPath.Text) && !string.IsNullOrEmpty(ZipFileName.Text);
+			return (bool)bZipBuild.IsChecked && !string.IsNullOrEmpty(ZipPath.Text);
 		}
 
 		public bool DirectoryIsWritable()
@@ -73,7 +72,7 @@ namespace Unreal_Binary_Builder
 			return bDirectoryExists && bHasWriteAccess;
 		}
 
-		public async void SaveToZip(MainWindow mainWindow, string InBuildDirectory, string ZipLocationToSave, string InZipFileName)
+		public async void SaveToZip(MainWindow mainWindow, string InBuildDirectory, string ZipLocationToSave)
 		{
 			Dispatcher.Invoke(() => 
 			{
@@ -257,8 +256,7 @@ namespace Unreal_Binary_Builder
 
 					
 					zipFile.UseZip64WhenSaving = Zip64Option.Always;
-					string MyZipFileName = string.IsNullOrEmpty(InZipFileName) ? DateTime.Now.ToString().Replace(":", ".") : InZipFileName;
-					zipFile.Save(string.Format("{0}\\{1}", ZipLocationToSave, MyZipFileName));
+					zipFile.Save(ZipLocationToSave);
 					
 				}
 			});
@@ -279,13 +277,13 @@ namespace Unreal_Binary_Builder
 
 		private void SetZipPathLocation_Click(object sender, RoutedEventArgs e)
 		{
-			using (var fbd = new FolderBrowserDialog())
+			SaveFileDialog SFD = new SaveFileDialog();
+			SFD.DefaultExt = ".zip";
+			SFD.Filter = "Zip File (.zip)|*.zip";
+			DialogResult SaveDialogResult = SFD.ShowDialog();
+			if (SaveDialogResult == System.Windows.Forms.DialogResult.OK)
 			{
-				DialogResult result = fbd.ShowDialog();
-				if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-				{
-					ZipPath.Text = fbd.SelectedPath;
-				}
+				ZipPath.Text = SFD.FileName;
 			}
 		}
 
@@ -304,9 +302,6 @@ namespace Unreal_Binary_Builder
 			DefaultSettings.bIncludeTemplates = (bool)bIncludeTemplates.IsChecked;
 			DefaultSettings.bFastCompression = (bool)bFastCompression.IsChecked;
 
-			DateTime OutTime;
-			bool bNameIsDate = DateTime.TryParse(ZipFileName.Text, out OutTime);
-			DefaultSettings.ZipFileName = bNameIsDate ? string.Empty : ZipFileName.Text;
 			DefaultSettings.Save();
 
 			e.Cancel = true;

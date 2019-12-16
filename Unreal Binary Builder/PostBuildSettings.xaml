@@ -16,8 +16,7 @@
 		Title="Post Build Settings" Height="340" Width="550" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Closing="PostBuildSettingsWindow_Closing">
 	<Grid Margin="10">
 		<CheckBox x:Name="bZipBuild" Content="Zip final build." VerticalAlignment="Top" HorizontalAlignment="Left"/>
-		<TextBox x:Name="ZipFileName" materialDesign:HintAssist.Hint="Zip file name" materialDesign:HintAssist.IsFloating="True" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,30,0,0" IsEnabled="{Binding IsChecked, ElementName=bZipBuild}" Width="216"/>
-		<TextBox x:Name="ZipPath" materialDesign:HintAssist.Hint="Zip location" materialDesign:HintAssist.IsFloating="True" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="221,30,0,0" IsEnabled="{Binding IsChecked, ElementName=bZipBuild}" Width="237"/>
+		<TextBox x:Name="ZipPath" materialDesign:HintAssist.Hint="Zip location" materialDesign:HintAssist.IsFloating="True" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,30,0,0" IsEnabled="{Binding IsChecked, ElementName=bZipBuild}" Width="458"/>
 		<Button x:Name="SetZipPathLocation" Content="{materialDesign:PackIcon OpenInBrowser}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0 40" ToolTip="Browse and select the folder where you want to move the zip file after Engine build." IsEnabled="{Binding IsChecked, ElementName=bZipBuild}" Click="SetZipPathLocation_Click" />
 		<GroupBox Header="Contents to zip" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,90,0,0" IsEnabled="{Binding IsChecked, ElementName=bZipBuild}" Height="155">
 			<Grid>

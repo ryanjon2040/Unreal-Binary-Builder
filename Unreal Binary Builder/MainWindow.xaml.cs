@@ -265,7 +265,7 @@ namespace Unreal_Binary_Builder
 			{
 				if (postBuildSettings.CanSaveToZip())
 				{
-					postBuildSettings.SaveToZip(this, FinalBuildPath, postBuildSettings.ZipPath.Text, postBuildSettings.ZipFileName.Text);
+					postBuildSettings.SaveToZip(this, FinalBuildPath, postBuildSettings.ZipPath.Text);
 					AddLogEntry("Saving zip file to " + postBuildSettings.ZipPath.Text);
 					WriteToLogFile();
 					return;
@@ -558,6 +558,8 @@ namespace Unreal_Binary_Builder
 
             SaveAllSettings();
 
+            postBuildSettings.Close();
+            postBuildSettings = null;
             Application.Current.Shutdown();
         }
 
