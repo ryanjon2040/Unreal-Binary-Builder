@@ -90,7 +90,7 @@ namespace Unreal_Binary_Builder
             CustomOptions.IsEnabled = CustomBuildXMLFile.Text != DEFAULT_BUILD_XML_FILE && CustomBuildXMLFile.Text != string.Empty;
         }
 
-        private void AddLogEntry(string InMessage, bool bIsError = false)
+        public void AddLogEntry(string InMessage, bool bIsError = false)
         {
             if (InMessage != null)
             {

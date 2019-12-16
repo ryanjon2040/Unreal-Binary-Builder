@@ -125,7 +125,7 @@ namespace Unreal_Binary_Builder
 								bSkipFile = true;
 							}
 
-							if (bIncludeExtras.IsChecked == false && CurrentFilePath.Contains(@"\extras\"))
+							if (bIncludeExtras.IsChecked == false && CurrentFilePath.Contains(@"\extras\redist\") == false && CurrentFilePath.Contains(@"\extras\"))
 							{
 								bSkipFile = true;
 							}
@@ -257,7 +257,7 @@ namespace Unreal_Binary_Builder
 					
 					zipFile.UseZip64WhenSaving = Zip64Option.Always;
 					zipFile.Save(ZipLocationToSave);
-					
+					Dispatcher.Invoke(() => { mainWindow.AddLogEntry($"Done zipping. File location: {ZipLocationToSave}"); });
 				}
 			});
 		}
