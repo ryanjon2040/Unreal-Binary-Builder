@@ -12,6 +12,35 @@ This is a small app designed to create binary build of [Unreal Engine 4](https:/
 Through this app you can also zip the final rocket build for distribution.
 ![Screenshot](https://i.imgur.com/oOKw8uy.png)
 
+# How to use
+
+I/Prepare the UE4 source
+1. Clone the UE4 source from github
+2. Run Setup.bat/.sh from the cloned folder, follow the instruction and resolve any error at this step
+3. Run GenerateProjectFile.bat/.sh, make sure no error occured at this step
+4. Open UE4.sln with Visual Studio
+5. Rebuild these 2 project under Application group: AutomationTool and AutomationToolLauncher
+
+II/Build with UE4 Binary Builder
+1. Clone this git
+2. Open the sln file with Visual Studio, then build the application with Release configuration
+3. Copy the built binary to the UE4 source folder prepared above.
+4. Open UE4 Binary Builder, the path for AutomationTool will be automatically parsed, if not, try to get it from the UE4 folder (Engine\Binaries\DotNET\AutomationToolLauncher.exe & Engine\Build\InstalledEngineBuild.xml)  
+5. Choose what to build and press Start build. That's it
+
+# Troubleshoot
+
+**Access Denied on some files?**
+On Windows, just change the ownership to Users then try again. To change ownership on Windows, follow these steps
+ - Right click on the UE4 folder, choose Properties
+ - Switch to Security tab
+ - Click on Advanced
+ - Near the top, click on Change User
+ - A new dialog will open, in the text box at bottom, type in "Users", then click Check Names
+ - OK till the end.
+
+   
+
 # Credits
 
 [Material Design In XAML](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit) by [ButchersBoy](https://github.com/ButchersBoy)
