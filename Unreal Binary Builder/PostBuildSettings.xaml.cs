@@ -47,13 +47,14 @@ namespace Unreal_Binary_Builder
 
 		public bool DirectoryIsWritable()
 		{
-			bool bDirectoryExists = Directory.Exists(ZipPath.Text);
+			DirectoryInfo ZipDirectory = new FileInfo(ZipPath.Text).Directory;
+			bool bDirectoryExists = (ZipDirectory != null) && ZipDirectory.Exists;
 			bool bHasWriteAccess = false;
 			if(bDirectoryExists)
 			{
 				try
 				{
-					AuthorizationRuleCollection collection = Directory.GetAccessControl(ZipPath.Text).GetAccessRules(true, true, typeof(System.Security.Principal.NTAccount));
+					AuthorizationRuleCollection collection = Directory.GetAccessControl(ZipDirectory.FullName).GetAccessRules(true, true, typeof(System.Security.Principal.NTAccount));
 					foreach (FileSystemAccessRule rule in collection)
 					{
 						if (rule.AccessControlType == AccessControlType.Allow)
