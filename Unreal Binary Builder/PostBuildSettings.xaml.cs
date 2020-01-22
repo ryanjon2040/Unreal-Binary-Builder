@@ -166,7 +166,7 @@ namespace Unreal_Binary_Builder
 								bSkipFile = true;
 							}
 
-							if (bIncludeTemplates.IsChecked == false && CurrentFilePath.Contains(@"\source\") == false && CurrentFilePath.Contains(@"\templates\"))
+							if (bIncludeTemplates.IsChecked == false && CurrentFilePath.Contains(@"\source\") == false && CurrentFilePath.Contains(@"\content\editor") == false && CurrentFilePath.Contains(@"\templates\"))
 							{
 								bSkipFile = true;
 							}
