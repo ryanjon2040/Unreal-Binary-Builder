@@ -20,11 +20,11 @@ namespace Unreal_Binary_Builder
         private static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
         private string AutomationExePath = Settings.Default.AutomationPath;
         private Process AutomationToolProcess;
+        private bool IsBuilding => AutomationToolProcess != null;
 
         private int NumErrors = 0;
         private int NumWarnings = 0;
 
-        private bool bIsBuilding = false;
         private bool bLastBuildSuccess = false;
 
         private readonly Stopwatch StopwatchTimer = new Stopwatch();
@@ -231,16 +231,8 @@ namespace Unreal_Binary_Builder
             bLastBuildSuccess = AutomationToolProcess.ExitCode == 0;
             AddLogEntry(string.Format("AutomationToolProcess exited with code {0}\n", AutomationToolProcess.ExitCode.ToString()));
 
-            Dispatcher.Invoke(() =>
-            {
-                BuildRocketUE.Content = "Start Build";
-                ChangeStatusLabel(string.Format("Build finished with code {0}. {1} errors, {2} warnings. Time elapsed: {3:hh\\:mm\\:ss}", AutomationToolProcess.ExitCode, NumErrors, NumWarnings, StopwatchTimer.Elapsed));
-            });
+            SetBuildStopped(string.Format("Build finished with code {0}. {1} errors, {2} warnings. Time elapsed: {3:hh\\:mm\\:ss}", AutomationToolProcess.ExitCode, NumErrors, NumWarnings, StopwatchTimer.Elapsed));
 
-            bIsBuilding = false;
-            AutomationToolProcess.Close();
-            AutomationToolProcess.Dispose();
-            AutomationToolProcess = null;
             NumErrors = 0;
             NumWarnings = 0;
             AddLogEntry("==========================BUILD FINISHED==========================");
@@ -251,6 +243,38 @@ namespace Unreal_Binary_Builder
             {
 				OnBuildFinished(bLastBuildSuccess);
             });
+        }
+
+        private void SetBuildStarted()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                BuildRocketUE.Content = "Stop Build";
+                ChangeStatusLabel("Building...");
+            });
+        }
+
+        private void SetBuildStopped(string outCome)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                BuildRocketUE.Content = "Start Build";
+                ChangeStatusLabel(outCome);
+
+            });
+
+            if (AutomationToolProcess != null)
+            {
+                try
+                {
+                    AutomationToolProcess.Close();
+                    AutomationToolProcess.Dispose();
+                }
+                finally
+                {
+                    AutomationToolProcess = null;
+                }
+            }
         }
 
         private void WriteToLogFile()
@@ -357,7 +381,7 @@ namespace Unreal_Binary_Builder
         {
             bLastBuildSuccess = false;
 
-            if (bIsBuilding)
+            if (IsBuilding)
             {
                 AutomationToolProcess.Kill();
                 return;
@@ -420,7 +444,6 @@ namespace Unreal_Binary_Builder
 
                 LogControl.ClearAllLogs();                
                 AddLogEntry(string.Format("Welcome to UE4 Binary Builder v{0}", PRODUCT_VERSION));
-                BuildRocketUE.Content = "Stop Build";
 
                 if (GameConfigurations.Text == "")
                 {
@@ -522,32 +545,34 @@ namespace Unreal_Binary_Builder
 
                 DispatchTimer.Start();
                 StopwatchTimer.Start();
-
                 AutomationToolProcess = new Process();
                 AutomationToolProcess.StartInfo = AutomationStartInfo;
                 AutomationToolProcess.EnableRaisingEvents = true;
                 AutomationToolProcess.OutputDataReceived += new DataReceivedEventHandler(AutomationToolProcess_OutputDataReceived);
                 AutomationToolProcess.ErrorDataReceived += new DataReceivedEventHandler(AutomationToolProcess_ErrorDataReceived);
                 AutomationToolProcess.Exited += new EventHandler(AutomationToolProcess_Exited);
-                AutomationToolProcess.Start();
-                AutomationToolProcess.BeginErrorReadLine();
-                AutomationToolProcess.BeginOutputReadLine();
 
-                bIsBuilding = true;
-                ChangeStatusLabel("Building...");
+                try
+                {
+                    AutomationToolProcess.Start();
+                    AutomationToolProcess.BeginErrorReadLine();
+                    AutomationToolProcess.BeginOutputReadLine();
+                    SetBuildStarted();
+                }
+                catch (Exception exception)
+                {
+                    SetBuildStopped("Build could not start: " + exception.ToString());
+                }
             }
         }
 
         private void UnrealBinaryBuilderWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (bIsBuilding)
+            if (IsBuilding)
             {
                 if (MessageBox.Show("AutomationTool is still running. Would you like to stop it and exit?", "Build in progress", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    if (AutomationToolProcess != null)
-                    {
-                        AutomationToolProcess.Kill();
-                    }
+                    AutomationToolProcess.Kill();
                 }
                 else
                 {

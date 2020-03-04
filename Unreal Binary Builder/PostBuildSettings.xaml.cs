@@ -85,182 +85,190 @@ namespace Unreal_Binary_Builder
 
 			CompressionLevel CL = (bool)bFastCompression.IsChecked ? CompressionLevel.BestSpeed : CompressionLevel.BestCompression;
 
-			await Task.Run(() => 
+			try
 			{
-				using (var zipFile = new ZipFile { CompressionLevel = CL })
+				await Task.Run(() => 
 				{
-					Dispatcher.Invoke(() => { mainWindow.FileSaveState.Content = "State: Finding files..."; });
-					string[] files = Directory.GetFiles(InBuildDirectory, "*", SearchOption.AllDirectories).ToArray();
+					using (var zipFile = new ZipFile { CompressionLevel = CL })
+					{
+						Dispatcher.Invoke(() => { mainWindow.FileSaveState.Content = "State: Finding files..."; });
+						string[] files = Directory.GetFiles(InBuildDirectory, "*", SearchOption.AllDirectories).ToArray();
 
-					List<string> filesToAdd = new List<string>();
+						List<string> filesToAdd = new List<string>();
 
-					int SkippedFiles = 0;
-					int AddedFiles = 0;
-					int TotalFiles = files.Length;
+						int SkippedFiles = 0;
+						int AddedFiles = 0;
+						int TotalFiles = files.Length;
 
-					long TotalSize = 0;
-					long TotalSizeToZip = 0;
-					long SkippedSize = 0;
-					string TotalSizeInString = "0B";
-					string TotalSizeToZipInString = "0B";
-					string SkippedSizeToZipInString = "0B";
-					Dispatcher.Invoke(() => { mainWindow.FileSaveState.Content = "State: Preparing files for zipping..."; });
-					foreach (string file in files)
-					{						
-						bool bSkipFile = false;
-						Dispatcher.Invoke(() =>
+						long TotalSize = 0;
+						long TotalSizeToZip = 0;
+						long SkippedSize = 0;
+						string TotalSizeInString = "0B";
+						string TotalSizeToZipInString = "0B";
+						string SkippedSizeToZipInString = "0B";
+						Dispatcher.Invoke(() => { mainWindow.FileSaveState.Content = "State: Preparing files for zipping..."; });
+						foreach (string file in files)
+						{						
+							bool bSkipFile = false;
+							Dispatcher.Invoke(() =>
+							{
+								string CurrentFilePath = Path.GetFullPath(file).ToLower();
+								if (bIncludePDB.IsChecked == false && Path.GetExtension(file).ToLower() == ".pdb")
+								{
+									bSkipFile = true;							
+								}
+
+								if (bIncludeDEBUG.IsChecked == false && Path.GetExtension(file).ToLower() == ".debug")
+								{
+									bSkipFile = true;
+								}
+
+								if (bIncludeDocumentation.IsChecked == false && CurrentFilePath.Contains(@"\source\") == false && CurrentFilePath.Contains(@"\documentation\"))
+								{
+									bSkipFile = true;
+								}
+
+								if (bIncludeExtras.IsChecked == false && CurrentFilePath.Contains(@"\extras\redist\") == false && CurrentFilePath.Contains(@"\extras\"))
+								{
+									bSkipFile = true;
+								}
+
+								if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\developer\"))
+								{
+									bSkipFile = true;
+								}
+
+								if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\editor\"))
+								{
+									bSkipFile = true;
+								}
+
+								if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\programs\"))
+								{
+									bSkipFile = true;
+								}
+
+								if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\runtime\"))
+								{
+									bSkipFile = true;
+								}
+
+								if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\thirdparty\"))
+								{
+									bSkipFile = true;
+								}
+
+								if (bIncludeFeaturePacks.IsChecked == false && CurrentFilePath.Contains(@"\featurepacks\"))
+								{
+									bSkipFile = true;
+								}
+
+								if (bIncludeSamples.IsChecked == false && CurrentFilePath.Contains(@"\samples\"))
+								{
+									bSkipFile = true;
+								}
+
+								if (bIncludeTemplates.IsChecked == false && CurrentFilePath.Contains(@"\source\") == false && CurrentFilePath.Contains(@"\content\editor") == false && CurrentFilePath.Contains(@"\templates\"))
+								{
+									bSkipFile = true;
+								}
+							});
+
+							TotalSize += new FileInfo(file).Length;
+							TotalSizeInString = BytesToString(TotalSize);
+							if (bSkipFile)
+							{
+								SkippedFiles++;
+								SkippedSize += new FileInfo(file).Length;
+								SkippedSizeToZipInString = BytesToString(SkippedSize);
+							}
+							else
+							{
+								filesToAdd.Add(file);
+								AddedFiles++;
+								TotalSizeToZip += new FileInfo(file).Length;
+								TotalSizeToZipInString = BytesToString(TotalSizeToZip);							
+							}
+						
+							Dispatcher.Invoke(() => { mainWindow.CurrentFileSaving.Content = string.Format("Total: {0}. Added: {1}. Skipped: {2}", TotalFiles, AddedFiles, SkippedFiles); });
+						}
+
+						Dispatcher.Invoke(() => 
 						{
-							string CurrentFilePath = Path.GetFullPath(file).ToLower();
-							if (bIncludePDB.IsChecked == false && Path.GetExtension(file).ToLower() == ".pdb")
-							{
-								bSkipFile = true;							
-							}
-
-							if (bIncludeDEBUG.IsChecked == false && Path.GetExtension(file).ToLower() == ".debug")
-							{
-								bSkipFile = true;
-							}
-
-							if (bIncludeDocumentation.IsChecked == false && CurrentFilePath.Contains(@"\source\") == false && CurrentFilePath.Contains(@"\documentation\"))
-							{
-								bSkipFile = true;
-							}
-
-							if (bIncludeExtras.IsChecked == false && CurrentFilePath.Contains(@"\extras\redist\") == false && CurrentFilePath.Contains(@"\extras\"))
-							{
-								bSkipFile = true;
-							}
-
-							if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\developer\"))
-							{
-								bSkipFile = true;
-							}
-
-							if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\editor\"))
-							{
-								bSkipFile = true;
-							}
-
-							if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\programs\"))
-							{
-								bSkipFile = true;
-							}
-
-							if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\runtime\"))
-							{
-								bSkipFile = true;
-							}
-
-							if (bIncludeSource.IsChecked == false && CurrentFilePath.Contains(@"\source\thirdparty\"))
-							{
-								bSkipFile = true;
-							}
-
-							if (bIncludeFeaturePacks.IsChecked == false && CurrentFilePath.Contains(@"\featurepacks\"))
-							{
-								bSkipFile = true;
-							}
-
-							if (bIncludeSamples.IsChecked == false && CurrentFilePath.Contains(@"\samples\"))
-							{
-								bSkipFile = true;
-							}
-
-							if (bIncludeTemplates.IsChecked == false && CurrentFilePath.Contains(@"\source\") == false && CurrentFilePath.Contains(@"\content\editor") == false && CurrentFilePath.Contains(@"\templates\"))
-							{
-								bSkipFile = true;
-							}
+							mainWindow.TotalResult.Content = string.Format("Total Size: {0}. To Zip: {1}. Skipped: {2}", TotalSizeInString, TotalSizeToZipInString, SkippedSizeToZipInString);
+							mainWindow.FileSaveState.Content = "State: Verifying...";
+							mainWindow.OverallProgressbar.Maximum = filesToAdd.Count;
 						});
 
-						TotalSize += new FileInfo(file).Length;
-						TotalSizeInString = BytesToString(TotalSize);
-						if (bSkipFile)
+						foreach (string file in filesToAdd)
 						{
-							SkippedFiles++;
-							SkippedSize += new FileInfo(file).Length;
-							SkippedSizeToZipInString = BytesToString(SkippedSize);
+							zipFile.AddFile(file, Path.GetDirectoryName(file).Replace(InBuildDirectory, string.Empty));
 						}
-						else
-						{
-							filesToAdd.Add(file);
-							AddedFiles++;
-							TotalSizeToZip += new FileInfo(file).Length;
-							TotalSizeToZipInString = BytesToString(TotalSizeToZip);							
-						}
-						
-						Dispatcher.Invoke(() => { mainWindow.CurrentFileSaving.Content = string.Format("Total: {0}. Added: {1}. Skipped: {2}", TotalFiles, AddedFiles, SkippedFiles); });
-					}
 
-					Dispatcher.Invoke(() => 
-					{
-						mainWindow.TotalResult.Content = string.Format("Total Size: {0}. To Zip: {1}. Skipped: {2}", TotalSizeInString, TotalSizeToZipInString, SkippedSizeToZipInString);
-						mainWindow.FileSaveState.Content = "State: Verifying...";
-						mainWindow.OverallProgressbar.Maximum = filesToAdd.Count;
-					});
-
-					foreach (string file in filesToAdd)
-					{
-						zipFile.AddFile(file, Path.GetDirectoryName(file).Replace(InBuildDirectory, string.Empty));
-					}
-
-					long ProcessedSize = 0;
-					string ProcessSizeInString = "0B";
+						long ProcessedSize = 0;
+						string ProcessSizeInString = "0B";
 					
-					Dispatcher.Invoke(() => 
-					{
-						mainWindow.OverallProgressbar.IsIndeterminate = false;
-						mainWindow.FileProgressbar.IsIndeterminate = false; 
-					});
+						Dispatcher.Invoke(() => 
+						{
+							mainWindow.OverallProgressbar.IsIndeterminate = false;
+							mainWindow.FileProgressbar.IsIndeterminate = false; 
+						});
 
-					zipFile.SaveProgress += (o, args) =>
-					{
-						if (args.EventType == ZipProgressEventType.Saving_BeforeWriteEntry)
-						{							
-							Dispatcher.Invoke(() => 
-							{
-								mainWindow.FileSaveState.Content = "State: Begin Writing...";
-								mainWindow.CurrentFileSaving.Content = string.Format("Saving File: {0} ({1}/{2})", Path.GetFileName(args.CurrentEntry.FileName), (args.EntriesSaved + 1), (args.EntriesTotal));
-								mainWindow.OverallProgressbar.Value = args.EntriesSaved + 1; 
-							});
-						}
-						else if (args.EventType == ZipProgressEventType.Saving_EntryBytesRead)
-						{							
-							Dispatcher.Invoke(() => 
-							{
-								mainWindow.FileSaveState.Content = "State: Writing...";
-								mainWindow.FileProgressbar.Value = (int)((args.BytesTransferred * 100) / args.TotalBytesToTransfer);
-							});
-						}
-						else if (args.EventType == ZipProgressEventType.Saving_AfterWriteEntry)
+						zipFile.SaveProgress += (o, args) =>
 						{
-							ProcessedSize += new FileInfo(Path.Combine(InBuildDirectory, args.CurrentEntry.FileName)).Length;
-							ProcessSizeInString = BytesToString(ProcessedSize);
-							Dispatcher.Invoke(() => { mainWindow.TotalResult.Content = string.Format("Total Size: {0}. To Zip: {1}. Skipped: {2}. Processed: {3}", TotalSizeInString, TotalSizeToZipInString, SkippedSizeToZipInString, ProcessSizeInString); });
-						}
-						else if (args.EventType == ZipProgressEventType.Saving_Started)
-						{
-							Dispatcher.Invoke(() => 
+							if (args.EventType == ZipProgressEventType.Saving_BeforeWriteEntry)
+							{							
+								Dispatcher.Invoke(() => 
+								{
+									mainWindow.FileSaveState.Content = "State: Begin Writing...";
+									mainWindow.CurrentFileSaving.Content = string.Format("Saving File: {0} ({1}/{2})", Path.GetFileName(args.CurrentEntry.FileName), (args.EntriesSaved + 1), (args.EntriesTotal));
+									mainWindow.OverallProgressbar.Value = args.EntriesSaved + 1; 
+								});
+							}
+							else if (args.EventType == ZipProgressEventType.Saving_EntryBytesRead)
+							{							
+								Dispatcher.Invoke(() => 
+								{
+									mainWindow.FileSaveState.Content = "State: Writing...";
+									mainWindow.FileProgressbar.Value = (int)((args.BytesTransferred * 100) / args.TotalBytesToTransfer);
+								});
+							}
+							else if (args.EventType == ZipProgressEventType.Saving_AfterWriteEntry)
 							{
-								mainWindow.CurrentFileSaving.Content = "";
-								mainWindow.FileSaveState.Content = string.Format("State: Saving zip file to LOCATION_HERE", TotalFiles); 
-							});
-						}
-						else if (args.EventType == ZipProgressEventType.Saving_Completed)
-						{
-							Dispatcher.Invoke(() => 
-							{								
-								mainWindow.ZipProgressDialog.IsOpen = false;
-								mainWindow.TryShutdown();
-							});
-						}
-					};
-
+								ProcessedSize += new FileInfo(Path.Combine(InBuildDirectory, args.CurrentEntry.FileName)).Length;
+								ProcessSizeInString = BytesToString(ProcessedSize);
+								Dispatcher.Invoke(() => { mainWindow.TotalResult.Content = string.Format("Total Size: {0}. To Zip: {1}. Skipped: {2}. Processed: {3}", TotalSizeInString, TotalSizeToZipInString, SkippedSizeToZipInString, ProcessSizeInString); });
+							}
+							else if (args.EventType == ZipProgressEventType.Saving_Started)
+							{
+								Dispatcher.Invoke(() => 
+								{
+									mainWindow.CurrentFileSaving.Content = "";
+									mainWindow.FileSaveState.Content = string.Format("State: Saving zip file to LOCATION_HERE", TotalFiles); 
+								});
+							}
+							else if (args.EventType == ZipProgressEventType.Saving_Completed)
+							{
+								Dispatcher.Invoke(() =>
+								{
+									mainWindow.TryShutdown();
+								});
+							}
+						};
 					
-					zipFile.UseZip64WhenSaving = Zip64Option.Always;
-					zipFile.Save(ZipLocationToSave);
-					Dispatcher.Invoke(() => { mainWindow.AddLogEntry($"Done zipping. File location: {ZipLocationToSave}"); });
-				}
-			});
+						zipFile.UseZip64WhenSaving = Zip64Option.Always;
+						zipFile.Save(ZipLocationToSave);
+						Dispatcher.Invoke(() => { mainWindow.AddLogEntry($"Done zipping. File location: {ZipLocationToSave}"); });
+					}
+				});
+			}
+			finally
+			{
+				Dispatcher.Invoke(() =>
+				{
+					mainWindow.ZipProgressDialog.IsOpen = false;
+				});
+			}
 		}
 
 		static string BytesToString(long byteCount)
