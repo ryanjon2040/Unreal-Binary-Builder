@@ -14,7 +14,7 @@ namespace Unreal_Binary_Builder
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static readonly string PRODUCT_VERSION = "2.5.1";
+        private static readonly string PRODUCT_VERSION = "2.6";
 
         private static readonly string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
         private static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
