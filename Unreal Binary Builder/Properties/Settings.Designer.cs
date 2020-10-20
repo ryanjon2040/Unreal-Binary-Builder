@@ -12,7 +12,7 @@ namespace Unreal_Binary_Builder.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.7.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -512,6 +512,54 @@ namespace Unreal_Binary_Builder.Properties {
             }
             set {
                 this["EngineSelection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CompileDatasmithPlugin {
+            get {
+                return ((bool)(this["CompileDatasmithPlugin"]));
+            }
+            set {
+                this["CompileDatasmithPlugin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool VS2019 {
+            get {
+                return ((bool)(this["VS2019"]));
+            }
+            set {
+                this["VS2019"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AnalyticsType {
+            get {
+                return ((string)(this["AnalyticsType"]));
+            }
+            set {
+                this["AnalyticsType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingHostPlatformEditorOnly {
+            get {
+                return ((bool)(this["SettingHostPlatformEditorOnly"]));
+            }
+            set {
+                this["SettingHostPlatformEditorOnly"] = value;
             }
         }
     }
