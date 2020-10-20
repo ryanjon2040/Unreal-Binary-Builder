@@ -49,6 +49,7 @@ namespace Unreal_Binary_Builder
 			EngineVersionSelection.SelectedIndex = Settings.Default.EngineSelection;
 
             bHostPlatformOnly.IsChecked = Settings.Default.SettingHostPlatformOnly;
+            bHostPlatformEditorOnly.IsChecked = Settings.Default.SettingHostPlatformEditorOnly;
             bWithWin64.IsChecked = Settings.Default.bWithWin64;
             bWithWin32.IsChecked = Settings.Default.bWithWin32;
             bWithMac.IsChecked = Settings.Default.bWithMac;
@@ -72,6 +73,8 @@ namespace Unreal_Binary_Builder
 			bWithServer.IsChecked = Settings.Default.bWithServer;
 			bWithClient.IsChecked = Settings.Default.bWithClient;
 			bWithHoloLens.IsChecked = Settings.Default.bWithHoloLens;
+            bCompileDatasmithPlugins.IsChecked = Settings.Default.CompileDatasmithPlugin;
+            bVS2019.IsChecked = Settings.Default.VS2019;
 
             GameConfigurations.Text = Settings.Default.GameConfigurations;
             CustomBuildXMLFile.Text = Settings.Default.CustomBuildXML;
@@ -80,6 +83,7 @@ namespace Unreal_Binary_Builder
             bShutdownIfSuccess.IsChecked = Settings.Default.bShutdownIfSuccess;
 
             CustomOptions.Text = Settings.Default.CustomOptions;
+            AnalyticsOverride.Text = Settings.Default.AnalyticsType;
 
             ChangeStatusLabel("Idle.");
             AddLogEntry(string.Format("Welcome to UE4 Binary Builder v{0}", PRODUCT_VERSION));
@@ -163,6 +167,7 @@ namespace Unreal_Binary_Builder
 
 			Settings.Default.EngineSelection = EngineVersionSelection.SelectedIndex;
             Settings.Default.SettingHostPlatformOnly = (bool)bHostPlatformOnly.IsChecked;
+            Settings.Default.SettingHostPlatformEditorOnly = (bool)bHostPlatformEditorOnly.IsChecked;
             Settings.Default.bWithWin64 = (bool)bWithWin64.IsChecked;
             Settings.Default.bWithWin32 = (bool)bWithWin32.IsChecked;
             Settings.Default.bWithMac = (bool)bWithMac.IsChecked;
@@ -186,6 +191,8 @@ namespace Unreal_Binary_Builder
 			Settings.Default.bWithServer = (bool)bWithServer.IsChecked;
 			Settings.Default.bWithClient = (bool)bWithClient.IsChecked;
 			Settings.Default.bWithHoloLens = (bool)bWithHoloLens.IsChecked;
+            Settings.Default.CompileDatasmithPlugin = (bool)bCompileDatasmithPlugins.IsChecked;
+            Settings.Default.VS2019 = (bool)bVS2019.IsChecked;
 
             Settings.Default.GameConfigurations = GameConfigurations.Text;
             Settings.Default.CustomBuildXML = CustomBuildXMLFile.Text;
@@ -194,6 +201,7 @@ namespace Unreal_Binary_Builder
             Settings.Default.bShutdownIfSuccess = (bool)bShutdownIfSuccess.IsChecked;
 
             Settings.Default.CustomOptions = CustomOptions.Text;
+            Settings.Default.AnalyticsType = AnalyticsOverride.Text;
 
             Settings.Default.Save();
         }
