@@ -153,7 +153,7 @@ namespace Unreal_Binary_Builder
 
         private void ChangeStepLabel(string current, string total)
         {
-            Dispatcher.Invoke(() => { StepLabel.Content = $"Step: [{current}/{total}]"; });
+            Dispatcher.Invoke(() => { StepLabel.Content = $"Step: [{current}/{total}] "; });
         }
 
         private string GetConditionalString(bool? bCondition)
@@ -361,6 +361,114 @@ namespace Unreal_Binary_Builder
             CustomOptions.IsEnabled = false;
         }
 
+        private string PrepareCommandline()
+        {
+            string BuildXMLFile = CustomBuildXMLFile.Text;
+            if (BuildXMLFile != DEFAULT_BUILD_XML_FILE)
+            {
+                BuildXMLFile = string.Format("\"{0}\"", CustomBuildXMLFile.Text);
+            }
+
+            string CommandLineArgs = string.Format("BuildGraph -target=\"Make Installed Build Win64\" -script={0} -set:WithDDC={1} -set:SignExecutables={2} -set:EmbedSrcSrvInfo={3} -set:GameConfigurations={4} -set:WithFullDebugInfo={5} -set:HostPlatformEditorOnly={6} -set:AnalyticsTypeOverride={7}",
+                    BuildXMLFile,
+                    GetConditionalString(bWithDDC.IsChecked),
+                    GetConditionalString(bSignExecutables.IsChecked),
+                    GetConditionalString(bEnableSymStore.IsChecked),
+                    GameConfigurations.Text,
+                    GetConditionalString(bWithFullDebugInfo.IsChecked),
+                    GetConditionalString(bHostPlatformEditorOnly.IsChecked),
+                    AnalyticsOverride.Text);
+
+            if (bWithDDC.IsChecked == true && bHostPlatformDDCOnly.IsChecked == true)
+            {
+                CommandLineArgs += " -set:HostPlatformDDCOnly=true";
+            }
+
+            if (bHostPlatformOnly.IsChecked == true)
+            {
+                CommandLineArgs += " -set:HostPlatformOnly=true";
+            }
+            else
+            {
+                if (SupportHTML5())
+                {
+                    CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithHTML5={7} -set:WithSwitch={8} -set:WithPS4={9} -set:WithXboxOne={10} -set:WithLumin={11}",
+                    GetConditionalString(bWithWin64.IsChecked),
+                    GetConditionalString(bWithWin32.IsChecked),
+                    GetConditionalString(bWithMac.IsChecked),
+                    GetConditionalString(bWithAndroid.IsChecked),
+                    GetConditionalString(bWithIOS.IsChecked),
+                    GetConditionalString(bWithTVOS.IsChecked),
+                    GetConditionalString(bWithLinux.IsChecked),
+                    GetConditionalString(bWithHTML5.IsChecked),
+                    GetConditionalString(bWithSwitch.IsChecked),
+                    GetConditionalString(bWithPS4.IsChecked),
+                    GetConditionalString(bWithXboxOne.IsChecked),
+                    GetConditionalString(bWithLumin.IsChecked));
+                }
+                else if (SupportConsoles())
+                {
+                    CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithSwitch={7} -set:WithPS4={8} -set:WithXboxOne={9} -set:WithLumin={10}",
+                    GetConditionalString(bWithWin64.IsChecked),
+                    GetConditionalString(bWithWin32.IsChecked),
+                    GetConditionalString(bWithMac.IsChecked),
+                    GetConditionalString(bWithAndroid.IsChecked),
+                    GetConditionalString(bWithIOS.IsChecked),
+                    GetConditionalString(bWithTVOS.IsChecked),
+                    GetConditionalString(bWithLinux.IsChecked),
+                    GetConditionalString(bWithSwitch.IsChecked),
+                    GetConditionalString(bWithPS4.IsChecked),
+                    GetConditionalString(bWithXboxOne.IsChecked),
+                    GetConditionalString(bWithLumin.IsChecked));
+                }
+                else
+                {
+                    CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithLumin={7}",
+                    GetConditionalString(bWithWin64.IsChecked),
+                    GetConditionalString(bWithWin32.IsChecked),
+                    GetConditionalString(bWithMac.IsChecked),
+                    GetConditionalString(bWithAndroid.IsChecked),
+                    GetConditionalString(bWithIOS.IsChecked),
+                    GetConditionalString(bWithTVOS.IsChecked),
+                    GetConditionalString(bWithLinux.IsChecked),
+                    GetConditionalString(bWithLumin.IsChecked));
+                }
+
+                if (SupportLinuxAArch64())
+                {
+                    CommandLineArgs += string.Format(" -set:WithLinuxAArch64={0}", GetConditionalString(bWithLinuxAArch64.IsChecked));
+                }
+            }
+
+            if (IsEngineSelection425OrAbove())
+            {
+                CommandLineArgs += string.Format(" -set:CompileDatasmithPlugins={0} -set:VS2019={1}",
+                    GetConditionalString(bCompileDatasmithPlugins.IsChecked),
+                    GetConditionalString(bVS2019.IsChecked));
+            }
+
+            if (EngineVersionSelection.SelectedIndex > 1)
+            {
+                CommandLineArgs += string.Format(" -set:WithServer={0} -set:WithClient={1} -set:WithHoloLens={2}",
+                    GetConditionalString(bWithServer.IsChecked),
+                    GetConditionalString(bWithClient.IsChecked),
+                    GetConditionalString(bWithHoloLens.IsChecked));
+            }
+
+            if (BuildXMLFile != DEFAULT_BUILD_XML_FILE && CustomOptions.Text != string.Empty)
+            {
+                CommandLineArgs += string.Format(" {0}", CustomOptions.Text);
+                AddLogEntry("Using custom options...");
+            }
+
+            if (bCleanBuild.IsChecked == true)
+            {
+                CommandLineArgs += " -Clean";
+            }
+
+            return CommandLineArgs;
+        }
+
         private void BuildRocketUE_Click(object sender, RoutedEventArgs e)
         {
             bLastBuildSuccess = false;
@@ -408,6 +516,12 @@ namespace Unreal_Binary_Builder
 				MessageBox.Show("HTML5 support was removed from Unreal Engine 4.24 and higher. You had it enabled but since it is of no use, I disabled it.");
 			}
 
+            if (SupportConsoles() == false && (bWithSwitch.IsChecked == true || bWithPS4.IsChecked == true || bWithXboxOne.IsChecked == true))
+            {
+                bWithSwitch.IsChecked = bWithPS4.IsChecked = bWithXboxOne.IsChecked = false;
+                MessageBox.Show("Console support was removed from Unreal Engine 4.25 and higher. You had it enabled but since it is of no use, I disabled it.");
+            }
+
             if (MessageBox.Show("You are going to build a binary version of Unreal Engine 4. This is a long process and might take time to finish. Are you sure you want to continue? ", "Build Binary Version", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 if (bWithDDC.IsChecked == true)
@@ -426,7 +540,7 @@ namespace Unreal_Binary_Builder
                     }
                 }
 
-                LogControl.ClearAllLogs();                
+                LogControl.ClearAllLogs();
                 AddLogEntry(string.Format("Welcome to UE4 Binary Builder v{0}", PRODUCT_VERSION));
                 BuildRocketUE.Content = "Stop Build";
 
@@ -435,89 +549,8 @@ namespace Unreal_Binary_Builder
                     GameConfigurations.Text = "Development;Shipping";
                 }
 
-                string BuildXMLFile = CustomBuildXMLFile.Text;
-                if (BuildXMLFile != DEFAULT_BUILD_XML_FILE)
-                {
-                    BuildXMLFile = string.Format("\"{0}\"", CustomBuildXMLFile.Text);
-                }
+                string CommandLineArgs = PrepareCommandline();
 
-                string CommandLineArgs = string.Format("BuildGraph -target=\"Make Installed Build Win64\" -script={0} -set:WithDDC={1} -set:SignExecutables={2} -set:EmbedSrcSrvInfo={3} -set:GameConfigurations={4} -set:WithFullDebugInfo={5}",
-                    BuildXMLFile,
-                    GetConditionalString(bWithDDC.IsChecked),
-                    GetConditionalString(bSignExecutables.IsChecked),
-                    GetConditionalString(bEnableSymStore.IsChecked),
-                    GameConfigurations.Text,
-                    GetConditionalString(bWithFullDebugInfo.IsChecked));
-
-                if (bWithDDC.IsChecked == true && bHostPlatformDDCOnly.IsChecked == true)
-                {
-                    CommandLineArgs += " -set:HostPlatformDDCOnly=true";
-                }
-
-                if (bHostPlatformOnly.IsChecked == true)
-                {
-                    CommandLineArgs += " -set:HostPlatformOnly=true";
-                }
-                else
-                {
-                    if (SupportHTML5())
-					{
-						CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithHTML5={7} -set:WithSwitch={8} -set:WithPS4={9} -set:WithXboxOne={10} -set:WithLumin={11}",
-						GetConditionalString(bWithWin64.IsChecked),
-						GetConditionalString(bWithWin32.IsChecked),
-						GetConditionalString(bWithMac.IsChecked),
-						GetConditionalString(bWithAndroid.IsChecked),
-						GetConditionalString(bWithIOS.IsChecked),
-						GetConditionalString(bWithTVOS.IsChecked),
-						GetConditionalString(bWithLinux.IsChecked),
-						GetConditionalString(bWithHTML5.IsChecked),
-						GetConditionalString(bWithSwitch.IsChecked),
-						GetConditionalString(bWithPS4.IsChecked),
-						GetConditionalString(bWithXboxOne.IsChecked),
-						GetConditionalString(bWithLumin.IsChecked));
-					}
-					else
-					{
-						CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithSwitch={7} -set:WithPS4={8} -set:WithXboxOne={9} -set:WithLumin={10}",
-						GetConditionalString(bWithWin64.IsChecked),
-						GetConditionalString(bWithWin32.IsChecked),
-						GetConditionalString(bWithMac.IsChecked),
-						GetConditionalString(bWithAndroid.IsChecked),
-						GetConditionalString(bWithIOS.IsChecked),
-						GetConditionalString(bWithTVOS.IsChecked),
-						GetConditionalString(bWithLinux.IsChecked),
-						GetConditionalString(bWithSwitch.IsChecked),
-						GetConditionalString(bWithPS4.IsChecked),
-						GetConditionalString(bWithXboxOne.IsChecked),
-						GetConditionalString(bWithLumin.IsChecked));
-					}
-
-					if (SupportLinuxAArch64()) 
-                    {
-						CommandLineArgs += string.Format(" -set:WithLinuxAArch64={0}", GetConditionalString(bWithLinuxAArch64.IsChecked));
-					}
-                }
-
-				if (EngineVersionSelection.SelectedIndex > 1)
-				{
-					CommandLineArgs += string.Format(" -set:WithServer={0} -set:WithClient={1} -set:WithHoloLens={2}", 
-						GetConditionalString(bWithServer.IsChecked), 
-						GetConditionalString(bWithClient.IsChecked),
-						GetConditionalString(bWithHoloLens.IsChecked));
-				}
-
-                if (BuildXMLFile != DEFAULT_BUILD_XML_FILE && CustomOptions.Text != string.Empty)
-                {
-                    CommandLineArgs += string.Format(" {0}", CustomOptions.Text);
-                    AddLogEntry("Using custom options...");
-                }
-
-                if (bCleanBuild.IsChecked == true)
-                {
-                    CommandLineArgs += " -Clean";
-                }
-
-                AddLogEntry(string.Format("Commandline: {0}\n", CommandLineArgs));
                 ProcessStartInfo AutomationStartInfo = new ProcessStartInfo
                 {
                     FileName = AutomationExePath,
@@ -582,6 +615,8 @@ namespace Unreal_Binary_Builder
 			bWithServer.IsEnabled = bWithClient.IsEnabled = bWithServerLabel.IsEnabled = bWithClientLabel.IsEnabled = EngineVersionSelection.SelectedIndex > 1;
 			bWithHTML5.IsEnabled = bWithHTML5Label.IsEnabled = SupportHTML5();
             bWithLinuxAArch64.IsEnabled = bWithLinuxAArch64Label.IsEnabled = SupportLinuxAArch64();
+            bWithSwitch.IsEnabled = bWithSwitchLabel.IsEnabled = bWithPS4.IsEnabled = bWithPS4Label.IsEnabled = bWithXboxOne.IsEnabled = bWithXboxOneLabel.IsEnabled = SupportConsoles();
+            bCompileDatasmithPlugins.IsEnabled = bCompileDatasmithPluginsLabel.IsEnabled = bVS2019.IsEnabled = bVS2019Label.IsEnabled = IsEngineSelection425OrAbove();
 		}
 
 		private bool SupportHTML5()
@@ -592,6 +627,22 @@ namespace Unreal_Binary_Builder
 		private bool SupportLinuxAArch64()
         {
 			return EngineVersionSelection.SelectedIndex >= 3;
+		}
+
+        private bool SupportConsoles()
+        {
+            return EngineVersionSelection.SelectedIndex <= 3;
+		}
+
+        private bool IsEngineSelection425OrAbove()
+        {
+            return EngineVersionSelection.SelectedIndex >= 4;
+		}
+
+		private void CopyCommandLine_Click(object sender, RoutedEventArgs e)
+		{
+            Clipboard.SetText(PrepareCommandline());
+            MessageBox.Show("Commandline copied to clipboard!");
 		}
 	}
 }
