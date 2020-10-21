@@ -395,48 +395,28 @@ namespace Unreal_Binary_Builder
             }
             else
             {
+                CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithLumin={7}",
+                        GetConditionalString(bWithWin64.IsChecked),
+                        GetConditionalString(bWithWin32.IsChecked),
+                        GetConditionalString(bWithMac.IsChecked),
+                        GetConditionalString(bWithAndroid.IsChecked),
+                        GetConditionalString(bWithIOS.IsChecked),
+                        GetConditionalString(bWithTVOS.IsChecked),
+                        GetConditionalString(bWithLinux.IsChecked),
+                        GetConditionalString(bWithLumin.IsChecked));
+
                 if (SupportHTML5())
                 {
-                    CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithHTML5={7} -set:WithSwitch={8} -set:WithPS4={9} -set:WithXboxOne={10} -set:WithLumin={11}",
-                    GetConditionalString(bWithWin64.IsChecked),
-                    GetConditionalString(bWithWin32.IsChecked),
-                    GetConditionalString(bWithMac.IsChecked),
-                    GetConditionalString(bWithAndroid.IsChecked),
-                    GetConditionalString(bWithIOS.IsChecked),
-                    GetConditionalString(bWithTVOS.IsChecked),
-                    GetConditionalString(bWithLinux.IsChecked),
-                    GetConditionalString(bWithHTML5.IsChecked),
+                    CommandLineArgs += string.Format(" -set:WithHTML5={0}",
+                    GetConditionalString(bWithHTML5.IsChecked));
+                }
+                
+                if (SupportConsoles())
+                {
+                    CommandLineArgs += string.Format(" -set:WithSwitch={0} -set:WithPS4={1} -set:WithXboxOne={2}",
                     GetConditionalString(bWithSwitch.IsChecked),
                     GetConditionalString(bWithPS4.IsChecked),
-                    GetConditionalString(bWithXboxOne.IsChecked),
-                    GetConditionalString(bWithLumin.IsChecked));
-                }
-                else if (SupportConsoles())
-                {
-                    CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithSwitch={7} -set:WithPS4={8} -set:WithXboxOne={9} -set:WithLumin={10}",
-                    GetConditionalString(bWithWin64.IsChecked),
-                    GetConditionalString(bWithWin32.IsChecked),
-                    GetConditionalString(bWithMac.IsChecked),
-                    GetConditionalString(bWithAndroid.IsChecked),
-                    GetConditionalString(bWithIOS.IsChecked),
-                    GetConditionalString(bWithTVOS.IsChecked),
-                    GetConditionalString(bWithLinux.IsChecked),
-                    GetConditionalString(bWithSwitch.IsChecked),
-                    GetConditionalString(bWithPS4.IsChecked),
-                    GetConditionalString(bWithXboxOne.IsChecked),
-                    GetConditionalString(bWithLumin.IsChecked));
-                }
-                else
-                {
-                    CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithLumin={7}",
-                    GetConditionalString(bWithWin64.IsChecked),
-                    GetConditionalString(bWithWin32.IsChecked),
-                    GetConditionalString(bWithMac.IsChecked),
-                    GetConditionalString(bWithAndroid.IsChecked),
-                    GetConditionalString(bWithIOS.IsChecked),
-                    GetConditionalString(bWithTVOS.IsChecked),
-                    GetConditionalString(bWithLinux.IsChecked),
-                    GetConditionalString(bWithLumin.IsChecked));
+                    GetConditionalString(bWithXboxOne.IsChecked));
                 }
 
                 if (SupportLinuxAArch64())
