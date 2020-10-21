@@ -369,6 +369,11 @@ namespace Unreal_Binary_Builder
                 BuildXMLFile = string.Format("\"{0}\"", CustomBuildXMLFile.Text);
             }
 
+            if (GameConfigurations.Text == "")
+            {
+                GameConfigurations.Text = "Development;Shipping";
+            }
+
             string CommandLineArgs = string.Format("BuildGraph -target=\"Make Installed Build Win64\" -script={0} -set:WithDDC={1} -set:SignExecutables={2} -set:EmbedSrcSrvInfo={3} -set:GameConfigurations={4} -set:WithFullDebugInfo={5} -set:HostPlatformEditorOnly={6} -set:AnalyticsTypeOverride={7}",
                     BuildXMLFile,
                     GetConditionalString(bWithDDC.IsChecked),
@@ -543,11 +548,6 @@ namespace Unreal_Binary_Builder
                 LogControl.ClearAllLogs();
                 AddLogEntry(string.Format("Welcome to UE4 Binary Builder v{0}", PRODUCT_VERSION));
                 BuildRocketUE.Content = "Stop Build";
-
-                if (GameConfigurations.Text == "")
-                {
-                    GameConfigurations.Text = "Development;Shipping";
-                }
 
                 string CommandLineArgs = PrepareCommandline();
 
