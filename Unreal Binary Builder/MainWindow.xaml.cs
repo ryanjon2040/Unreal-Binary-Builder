@@ -348,6 +348,7 @@ namespace Unreal_Binary_Builder
                     BuildRocketUE.IsEnabled = true;
                     ChangeStatusLabel("Idle.");
 					FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@"\Engine\Binaries\DotNET", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
+                    AddLogEntry(string.Format("Binary build can be found at: {0}", FinalBuildPath));
 				}
                 else
                 {
@@ -487,7 +488,31 @@ namespace Unreal_Binary_Builder
                 return;
             }
 
-			if (EngineVersionSelection.SelectedIndex == 0)
+            if (FinalBuildPath == null && string.IsNullOrWhiteSpace(AutomationExePath) == false)
+            {
+                FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@"\Engine\Binaries\DotNET", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
+            }
+
+            if (Directory.Exists(FinalBuildPath))
+            {
+                MessageBoxResult MessageResult = MessageBox.Show($"Looks like an Engine build is already available at {FinalBuildPath}. Would you like to skip compiling the Engine and start zipping the existing build?\n\nPress Yes to Skip Engine build and start zipping (if enabled).\nPress No to continue with Engine Build.\nPress Cancel to do nothing.", "Zip Binary Version", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                switch (MessageResult)
+                {
+                    case MessageBoxResult.Yes:
+                        // We don't want the system to shutdown since user is interacting.
+                        bool? bOriginalShutdownState = bShutdownWindows.IsChecked;
+                        bShutdownWindows.IsChecked = false;
+                        OnBuildFinished(true);
+                        bShutdownWindows.IsChecked = bOriginalShutdownState;
+                        return;
+                    case MessageBoxResult.Cancel:
+                        return;
+                    default:
+                        break;
+                }
+            }
+
+            if (EngineVersionSelection.SelectedIndex == 0)
 			{
 				MessageBox.Show("Please select your Engine version to build. If you are unsure about the version number look into the following file:\n\n/Engine/Source/Runtime/Launch/Resources/Version.h\n\nAnd check ENGINE_MAJOR_VERSION and ENGINE_MINOR_VERSION.", "Select Engine Version.", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				return;
