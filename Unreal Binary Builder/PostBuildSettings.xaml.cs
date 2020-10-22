@@ -89,6 +89,7 @@ namespace Unreal_Binary_Builder
 		{		
 			Dispatcher.Invoke(() => 
 			{
+				GameAnalyticsCSharp.AddProgressStart("Zip", "Progress");
 				mainWindow.ZipProgressDialog.IsOpen = true;
 				mainWindow.TotalResult.Content = "";
 				mainWindow.CurrentFileSaving.Content = "Waiting...";
@@ -265,7 +266,8 @@ namespace Unreal_Binary_Builder
 						else if (args.EventType == ZipProgressEventType.Saving_Completed)
 						{
 							Dispatcher.Invoke(() => 
-							{								
+							{
+								GameAnalyticsCSharp.AddProgressEnd("Zip", "Progress");
 								mainWindow.ZipProgressDialog.IsOpen = false;
 								mainWindow.TryShutdown();
 							});
@@ -305,6 +307,7 @@ namespace Unreal_Binary_Builder
 
 		public void CancelTask(MainWindow mainWindow)
 		{
+			GameAnalyticsCSharp.AddProgressEnd("Zip", "Progress", true);
 			mainWindow.CancelZipping.Content = "Canceling. Please wait...";
 			mainWindow.CancelZipping.IsEnabled = false;
 			ZipCancelTokenSource.Cancel();

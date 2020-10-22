@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using GameAnalyticsSDK.Net;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -14,7 +15,7 @@ namespace Unreal_Binary_Builder
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static readonly string PRODUCT_VERSION = "2.6";
+        private static readonly string PRODUCT_VERSION = "2.6.1";
 
         private static readonly string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
         private static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
@@ -41,6 +42,7 @@ namespace Unreal_Binary_Builder
         public MainWindow()
         {
             InitializeComponent();
+            GameAnalyticsCSharp.InitializeGameAnalytics(PRODUCT_VERSION, this);
 
             AutomationToolPath.Text = AutomationExePath;
             ProcessedFilesLabel.Content = "[Compiled: 0. Total: 0]";
@@ -225,15 +227,18 @@ namespace Unreal_Binary_Builder
         private void AboutBtn_Ok_Click(object sender, RoutedEventArgs e)
         {
             AboutDialog.IsOpen = false;
+            GameAnalyticsCSharp.AddDesignEvent("AboutDialog:Close");
         }
 
         private void AboutMenu_Click(object sender, RoutedEventArgs e)
         {
             AboutDialog.IsOpen = true;
+            GameAnalyticsCSharp.AddDesignEvent("AboutDialog:Open");
         }
 
         private void GetSourceCodeMenu_Click(object sender, RoutedEventArgs e)
         {
+            GameAnalyticsCSharp.AddDesignEvent("GetSourceCode:Open");
             Process.Start("https://github.com/ryanjon2040/UE4-Binary-Builder");
         }
 
@@ -293,6 +298,7 @@ namespace Unreal_Binary_Builder
                     if (FinalBuildPath == null)
                     {
                         FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@"\Engine\Binaries\DotNET", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
+                        GameAnalyticsCSharp.LogEvent("Final Build Path was null. Fixed.", GameAnalyticsSDK.Net.EGAErrorSeverity.Info);
                     }
                     AddLogEntry(string.Format("Creating ZIP file. Target Engine Directory is {0}", FinalBuildPath));
                     postBuildSettings.PrepareToSave();
@@ -315,11 +321,17 @@ namespace Unreal_Binary_Builder
                 {
                     if (bLastBuildSuccess)
                     {
+                        GameAnalyticsCSharp.AddDesignEvent("Shutdown:BuildState:Success");
                         Internal_ShutdownWindows();
+                    }
+                    else
+					{
+                        GameAnalyticsCSharp.AddDesignEvent("Shutdown:BuildState:Failed");
                     }
                 }
                 else
                 {
+                    GameAnalyticsCSharp.AddDesignEvent("Shutdown:Started");
                     Internal_ShutdownWindows();
                 }
             }
@@ -352,6 +364,7 @@ namespace Unreal_Binary_Builder
 				}
                 else
                 {
+                    GameAnalyticsCSharp.AddDesignEvent($"AutomationTool:IncorrectName:{Path.GetFileNameWithoutExtension(AutomationExePath)}");
                     ChangeStatusLabel("Error. Invalid automation tool file selected.");
                     MessageBox.Show("This is not Automation Tool Launcher. Please select AutomationToolLauncher.exe", "", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
@@ -374,6 +387,7 @@ namespace Unreal_Binary_Builder
             {
                 CustomBuildXMLFile.Text = NewFileDialog.FileName;
                 CustomOptions.IsEnabled = true;
+                GameAnalyticsCSharp.AddDesignEvent($"BuildXML:Custom:{NewFileDialog.FileName}");
             }
 
             ChangeStatusLabel("Idle.");
@@ -383,6 +397,7 @@ namespace Unreal_Binary_Builder
         {
             CustomBuildXMLFile.Text = DEFAULT_BUILD_XML_FILE;
             CustomOptions.IsEnabled = false;
+            GameAnalyticsCSharp.AddDesignEvent("BuildXML:ResetToDefault");
         }
 
         private string PrepareCommandline()
@@ -396,6 +411,7 @@ namespace Unreal_Binary_Builder
             if (GameConfigurations.Text == "")
             {
                 GameConfigurations.Text = "Development;Shipping";
+                GameAnalyticsCSharp.AddDesignEvent("CommandLine:GameConfiguration:Reset");
             }
 
             string CommandLineArgs = string.Format("BuildGraph -target=\"Make Installed Build Win64\" -script={0} -set:WithDDC={1} -set:SignExecutables={2} -set:EmbedSrcSrvInfo={3} -set:GameConfigurations={4} -set:WithFullDebugInfo={5} -set:HostPlatformEditorOnly={6} -set:AnalyticsTypeOverride={7}",
@@ -416,6 +432,7 @@ namespace Unreal_Binary_Builder
             if (bHostPlatformOnly.IsChecked == true)
             {
                 CommandLineArgs += " -set:HostPlatformOnly=true";
+                GameAnalyticsCSharp.AddDesignEvent("CommandLine:HostOnly");
             }
             else
             {
@@ -468,11 +485,13 @@ namespace Unreal_Binary_Builder
             {
                 CommandLineArgs += string.Format(" {0}", CustomOptions.Text);
                 AddLogEntry("Using custom options...");
+                GameAnalyticsCSharp.AddDesignEvent("CommandLine:UsingCustomOptions");
             }
 
             if (bCleanBuild.IsChecked == true)
             {
                 CommandLineArgs += " -Clean";
+                GameAnalyticsCSharp.AddDesignEvent("CommandLine:CleanEnabled");
             }
 
             return CommandLineArgs;
@@ -484,6 +503,7 @@ namespace Unreal_Binary_Builder
 
             if (bIsBuilding)
             {
+                GameAnalyticsCSharp.AddDesignEvent("Build:AutomationTool:Killed");
                 AutomationToolProcess.Kill();
                 return;
             }
@@ -499,6 +519,7 @@ namespace Unreal_Binary_Builder
                 switch (MessageResult)
                 {
                     case MessageBoxResult.Yes:
+                        GameAnalyticsCSharp.AddDesignEvent("Build:EngineExists:FinishBuild");
                         // We don't want the system to shutdown since user is interacting.
                         bool? bOriginalShutdownState = bShutdownWindows.IsChecked;
                         bShutdownWindows.IsChecked = false;
@@ -506,8 +527,10 @@ namespace Unreal_Binary_Builder
                         bShutdownWindows.IsChecked = bOriginalShutdownState;
                         return;
                     case MessageBoxResult.Cancel:
+                        GameAnalyticsCSharp.AddDesignEvent("Build:EngineExists:Exit");
                         return;
                     default:
+                        GameAnalyticsCSharp.AddDesignEvent("Build:EngineExists:IgnoreAndContinue");
                         break;
                 }
             }
@@ -522,7 +545,8 @@ namespace Unreal_Binary_Builder
 
 			if (postBuildSettings.ShouldSaveToZip() && postBuildSettings.DirectoryIsWritable() == false)
 			{
-				MessageBox.Show(string.Format("You chose to save Engine build as a zip file but below directory is either not available or not writable.\n\n{0}", postBuildSettings.ZipPath.Text), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                GameAnalyticsCSharp.AddDesignEvent("Build:ZipEnabled:InvalidSetting");
+                MessageBox.Show(string.Format("You chose to save Engine build as a zip file but below directory is either not available or not writable.\n\n{0}", postBuildSettings.ZipPath.Text), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 				return;
 			}
 
@@ -530,6 +554,7 @@ namespace Unreal_Binary_Builder
             {
                 if (CustomBuildXMLFile.Text == string.Empty)
                 {
+                    GameAnalyticsCSharp.LogEvent("Empty Build XML.", GameAnalyticsSDK.Net.EGAErrorSeverity.Error);
                     ChangeStatusLabel("Error. Empty build xml file.");
                     MessageBox.Show(string.Format("Build XML cannot be empty.\n\nIf you don't have a custom build file, press \"Reset to default\" to use default InstalledEngineBuild.xml", CustomBuildXMLFile.Text), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
@@ -537,6 +562,7 @@ namespace Unreal_Binary_Builder
 
                 if (File.Exists(CustomBuildXMLFile.Text) == false)
                 {
+                    GameAnalyticsCSharp.LogEvent("BuildXML does not exist.", GameAnalyticsSDK.Net.EGAErrorSeverity.Error);
                     ChangeStatusLabel("Error. Build xml does not exist.");
                     MessageBox.Show(string.Format("Build XML {0} does not exist!", CustomBuildXMLFile.Text), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
@@ -545,12 +571,14 @@ namespace Unreal_Binary_Builder
 
 			if (SupportHTML5() == false && bWithHTML5.IsChecked == true)
 			{
-				bWithHTML5.IsChecked = false;
+                GameAnalyticsCSharp.AddDesignEvent($"Build:HTML5:IncorrectEngine:{GetEngineName()}");
+                bWithHTML5.IsChecked = false;
 				MessageBox.Show("HTML5 support was removed from Unreal Engine 4.24 and higher. You had it enabled but since it is of no use, I disabled it.");
 			}
 
             if (SupportConsoles() == false && (bWithSwitch.IsChecked == true || bWithPS4.IsChecked == true || bWithXboxOne.IsChecked == true))
             {
+                GameAnalyticsCSharp.AddDesignEvent($"Build:Console:IncorrectEngine:{GetEngineName()}");
                 bWithSwitch.IsChecked = bWithPS4.IsChecked = bWithXboxOne.IsChecked = false;
                 MessageBox.Show("Console support was removed from Unreal Engine 4.25 and higher. You had it enabled but since it is of no use, I disabled it.");
             }
@@ -565,10 +593,13 @@ namespace Unreal_Binary_Builder
                     {
                         case MessageBoxResult.No:
                             bWithDDC.IsChecked = false;
+                            GameAnalyticsCSharp.AddDesignEvent("Build:DDC:AutoDisabled");
                             break;
                         case MessageBoxResult.Cancel:
+                            GameAnalyticsCSharp.AddDesignEvent("Build:DDC:Exit");
                             return;
                         default:
+                            GameAnalyticsCSharp.AddDesignEvent("Build:DDC:IgnoreAndContinue");
                             break;
                     }
                 }
@@ -607,6 +638,7 @@ namespace Unreal_Binary_Builder
 
                 bIsBuilding = true;
                 ChangeStatusLabel("Building...");
+                GameAnalyticsCSharp.AddDesignEvent("Build:Started");
             }
         }
 
@@ -618,6 +650,7 @@ namespace Unreal_Binary_Builder
                 {
                     if (AutomationToolProcess != null)
                     {
+                        GameAnalyticsCSharp.AddDesignEvent("Build:AutomationTool:Killed:ExitProgram");
                         AutomationToolProcess.Kill();
                     }
                 }
@@ -628,6 +661,7 @@ namespace Unreal_Binary_Builder
                 }
             }
 
+            GameAnalyticsCSharp.EndSession();
             SaveAllSettings();
 
             postBuildSettings.Close();
@@ -637,7 +671,8 @@ namespace Unreal_Binary_Builder
 
 		private void PostBuildSettings_Click(object sender, RoutedEventArgs e)
 		{
-			postBuildSettings.Owner = this;
+            GameAnalyticsCSharp.AddDesignEvent("PostBuildSettings:Open");
+            postBuildSettings.Owner = this;
 			postBuildSettings.ShowDialog();
 		}
 
@@ -670,8 +705,31 @@ namespace Unreal_Binary_Builder
             return EngineVersionSelection.SelectedIndex >= 4;
 		}
 
+        private string GetEngineName()
+		{
+            string ReturnString = "Unknown";
+            switch (EngineVersionSelection.SelectedIndex)
+			{
+                case 1:
+                    ReturnString = "4.22";
+                    break;
+                case 2:
+                    ReturnString = "4.23";
+                    break;
+                case 3:
+                    ReturnString = "4.24";
+                    break;
+                case 4:
+                    ReturnString = "4.25";
+                    break;
+            }
+
+            return ReturnString;
+		}
+
 		private void CopyCommandLine_Click(object sender, RoutedEventArgs e)
 		{
+            GameAnalyticsCSharp.AddDesignEvent("CommandLine:CopyToClipboard");
             Clipboard.SetText(PrepareCommandline());
             MessageBox.Show("Commandline copied to clipboard!");
 		}
