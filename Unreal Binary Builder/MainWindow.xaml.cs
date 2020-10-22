@@ -24,6 +24,9 @@ namespace Unreal_Binary_Builder
         private int NumErrors = 0;
         private int NumWarnings = 0;
 
+        private int CompiledFiles = 0;
+        private int CompiledFilesTotal = 0;
+
         private bool bIsBuilding = false;
         private bool bLastBuildSuccess = false;
 
@@ -40,6 +43,7 @@ namespace Unreal_Binary_Builder
             InitializeComponent();
 
             AutomationToolPath.Text = AutomationExePath;
+            ProcessedFilesLabel.Content = "[Compiled: 0. Total: 0]";
 
             if (File.Exists(AutomationExePath) && Path.GetFileNameWithoutExtension(AutomationExePath) == AUTOMATION_TOOL_NAME)
             {
@@ -110,16 +114,28 @@ namespace Unreal_Binary_Builder
                     const string WarningPattern = @"warning|\*\*\* Unable to determine ";
                     const string DebugPattern = @".+\*\s\D\d\D\d\D\s\w+|.+\*\sFor\sUE4";
                     const string ErrorPattern = @"Error_Unknown|ERROR|exited with code 1";
+                    const string ProcessedFilesPattern = @"\w.+\.(cpp|cc|c|h|ispc)";
 
                     Regex StepRgx = new Regex(StepPattern, RegexOptions.IgnoreCase);
                     Regex WarningRgx = new Regex(WarningPattern, RegexOptions.IgnoreCase);
                     Regex DebugRgx = new Regex(DebugPattern, RegexOptions.IgnoreCase);
                     Regex ErrorRgx = new Regex(ErrorPattern, RegexOptions.IgnoreCase);
+                    Regex ProcessedFilesRgx = new Regex(ProcessedFilesPattern, RegexOptions.IgnoreCase);
+
                     if (StepRgx.IsMatch(InMessage))
                     {
                         GroupCollection captures = StepRgx.Match(InMessage).Groups;
                         ChangeStepLabel(captures[1].Value, captures[2].Value);
+                        CompiledFiles = 0;
                     }
+
+                    if (ProcessedFilesRgx.IsMatch(InMessage))
+                    {
+                        CompiledFiles++;
+                        CompiledFilesTotal++;
+                        Dispatcher.Invoke(() => { ProcessedFilesLabel.Content = $"[Compiled: {CompiledFiles}. Total: {CompiledFilesTotal}]"; });
+                    }
+
                     if (WarningRgx.IsMatch(InMessage))
                     {
                         NumWarnings++;
@@ -252,6 +268,7 @@ namespace Unreal_Binary_Builder
             NumErrors = 0;
             NumWarnings = 0;
             AddLogEntry("==========================BUILD FINISHED==========================");
+            AddLogEntry(string.Format("Compiled approximately {0} files.", CompiledFilesTotal));
             AddLogEntry(string.Format("Took {0:hh\\:mm\\:ss}", StopwatchTimer.Elapsed));
             AddLogEntry(string.Format("Build ended at {0}", DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")));
             StopwatchTimer.Reset();
@@ -529,6 +546,9 @@ namespace Unreal_Binary_Builder
                             break;
                     }
                 }
+
+                CompiledFiles = CompiledFilesTotal = 0;
+                ProcessedFilesLabel.Content = "[Compiled: 0. Total: 0]";
 
                 LogControl.ClearAllLogs();
                 AddLogEntry(string.Format("Welcome to UE4 Binary Builder v{0}", PRODUCT_VERSION));

@@ -172,7 +172,8 @@
 			<local:LogViewer x:Name="LogControl" Margin="10,391,8,47" Height="Auto" Width="Auto"/>
 
 			<Label x:Name="StepLabel" Content="Step: " VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,17" Padding="0"/>
-			<Label x:Name="StatusLabel" Content="Status: " VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="80,0,0,17" Padding="0"/>
+			<Label x:Name="StatusLabel" Content="Status: " VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="90,0,0,17" Padding="0"/>
+			<Label x:Name="ProcessedFilesLabel" Content="[Compiled: ]" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="355,0,0,17" Padding="0" />
 			<Button x:Name="PostBuildSettings" Style="{DynamicResource MaterialDesignFlatButton}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Post-Build Settings" Margin="0,0,100,10" Click="PostBuildSettings_Click" />
 			<Button x:Name="BuildRocketUE" Style="{DynamicResource MaterialDesignFlatButton}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Start Build" Margin="0,0,10,10" Click="BuildRocketUE_Click"/>
 
