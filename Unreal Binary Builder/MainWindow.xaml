@@ -192,8 +192,9 @@
 						<Label x:Name="CurrentFileSaving" Content="FileName" Margin="10"/>
 						<Label x:Name="FileSaveState" Content="State" Margin="10 35"/>
 						<Label x:Name="TotalResult" Content="File Size" Margin="10 60"/>
-						<ProgressBar x:Name="FileProgressbar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Value="20" Width="700" Height="30" Margin="10 10 10 50" IsIndeterminate="True"/>
-						<ProgressBar x:Name="OverallProgressbar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Value="50.3" Width="700" Height="30" Margin="10 140 10 10" IsIndeterminate="True"/>						
+						<ProgressBar x:Name="FileProgressbar" HorizontalAlignment="Stretch" Value="20" Width="700" Height="30" IsIndeterminate="True"/>
+						<ProgressBar x:Name="OverallProgressbar" HorizontalAlignment="Stretch" Value="50.3" Width="700" Height="30" Margin="10 80 10 10" IsIndeterminate="True"/>
+						<Button x:Name="CancelZipping" HorizontalAlignment="Stretch" Width="700" Height="30" Margin="10 170 10 10" Content="Cancel Zipping" Click="CancelZipping_Click"/>
 					</Grid>
 				</materialDesign:DialogHost.DialogContent>
 			</materialDesign:DialogHost>

@@ -295,6 +295,7 @@ namespace Unreal_Binary_Builder
                         FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@"\Engine\Binaries\DotNET", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
                     }
                     AddLogEntry(string.Format("Creating ZIP file. Target Engine Directory is {0}", FinalBuildPath));
+                    postBuildSettings.PrepareToSave();
 					postBuildSettings.SaveToZip(this, FinalBuildPath, postBuildSettings.ZipPath.Text);
 					AddLogEntry("Saving zip file to " + postBuildSettings.ZipPath.Text);
 					WriteToLogFile();
@@ -648,6 +649,11 @@ namespace Unreal_Binary_Builder
 		{
             Clipboard.SetText(PrepareCommandline());
             MessageBox.Show("Commandline copied to clipboard!");
+		}
+
+		private void CancelZipping_Click(object sender, RoutedEventArgs e)
+		{
+            postBuildSettings.CancelTask(this);
 		}
 	}
 }

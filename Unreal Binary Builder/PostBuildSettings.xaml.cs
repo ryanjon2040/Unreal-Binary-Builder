@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -17,6 +18,10 @@ namespace Unreal_Binary_Builder
 	/// </summary>
 	public partial class PostBuildSettings : Window
 	{
+		Task ZippingTask = null;
+		static CancellationTokenSource ZipCancelTokenSource = new CancellationTokenSource();
+		CancellationToken ZipCancelToken = ZipCancelTokenSource.Token;
+		
 		public PostBuildSettings()
 		{
 			InitializeComponent();
@@ -73,8 +78,15 @@ namespace Unreal_Binary_Builder
 			return bDirectoryExists && bHasWriteAccess;
 		}
 
-		public async void SaveToZip(MainWindow mainWindow, string InBuildDirectory, string ZipLocationToSave)
+		public void PrepareToSave()
 		{
+			ZipCancelTokenSource.Dispose();
+			ZipCancelTokenSource = new CancellationTokenSource();
+			ZipCancelToken = ZipCancelTokenSource.Token;
+		}
+
+		public async void SaveToZip(MainWindow mainWindow, string InBuildDirectory, string ZipLocationToSave)
+		{		
 			Dispatcher.Invoke(() => 
 			{
 				mainWindow.ZipProgressDialog.IsOpen = true;
@@ -85,12 +97,13 @@ namespace Unreal_Binary_Builder
 
 			CompressionLevel CL = (bool)bFastCompression.IsChecked ? CompressionLevel.BestSpeed : CompressionLevel.BestCompression;
 
-			await Task.Run(() => 
+			ZippingTask = Task.Run(() => 
 			{
 				using (var zipFile = new ZipFile { CompressionLevel = CL })
 				{
 					Dispatcher.Invoke(() => { mainWindow.FileSaveState.Content = "State: Finding files..."; });
 					string[] files = Directory.GetFiles(InBuildDirectory, "*", SearchOption.AllDirectories).ToArray();
+					ZipCancelToken.ThrowIfCancellationRequested();
 
 					List<string> filesToAdd = new List<string>();
 
@@ -170,6 +183,7 @@ namespace Unreal_Binary_Builder
 							{
 								bSkipFile = true;
 							}
+							
 						});
 
 						TotalSize += new FileInfo(file).Length;
@@ -186,9 +200,10 @@ namespace Unreal_Binary_Builder
 							AddedFiles++;
 							TotalSizeToZip += new FileInfo(file).Length;
 							TotalSizeToZipInString = BytesToString(TotalSizeToZip);							
-						}
-						
+						}					
+
 						Dispatcher.Invoke(() => { mainWindow.CurrentFileSaving.Content = string.Format("Total: {0}. Added: {1}. Skipped: {2}", TotalFiles, AddedFiles, SkippedFiles); });
+						ZipCancelToken.ThrowIfCancellationRequested();
 					}
 
 					Dispatcher.Invoke(() => 
@@ -197,9 +212,10 @@ namespace Unreal_Binary_Builder
 						mainWindow.FileSaveState.Content = "State: Verifying...";
 						mainWindow.OverallProgressbar.Maximum = filesToAdd.Count;
 					});
-
+					
 					foreach (string file in filesToAdd)
 					{
+						ZipCancelToken.ThrowIfCancellationRequested();
 						zipFile.AddFile(file, Path.GetDirectoryName(file).Replace(InBuildDirectory, string.Empty));
 					}
 
@@ -214,6 +230,7 @@ namespace Unreal_Binary_Builder
 
 					zipFile.SaveProgress += (o, args) =>
 					{
+						ZipCancelToken.ThrowIfCancellationRequested();
 						if (args.EventType == ZipProgressEventType.Saving_BeforeWriteEntry)
 						{							
 							Dispatcher.Invoke(() => 
@@ -260,7 +277,37 @@ namespace Unreal_Binary_Builder
 					zipFile.Save(ZipLocationToSave);
 					Dispatcher.Invoke(() => { mainWindow.AddLogEntry($"Done zipping. File location: {ZipLocationToSave}"); });
 				}
-			});
+			}, ZipCancelToken);
+
+			try
+			{
+				await ZippingTask;
+			}
+			catch (OperationCanceledException e)
+			{
+				Dispatcher.Invoke(() =>
+				{
+					mainWindow.CurrentFileSaving.Content = "";
+					mainWindow.FileSaveState.Content = "Operation canceled.";
+					mainWindow.AddLogEntry($"{nameof(OperationCanceledException)} with message: {e.Message}"); 
+					mainWindow.ZipProgressDialog.IsOpen = false;
+				});
+			}
+			finally
+			{
+				Dispatcher.Invoke(() => 
+				{ 
+					mainWindow.CancelZipping.Content = "Cancel Zipping";
+					mainWindow.CancelZipping.IsEnabled = true;
+				});
+			}
+		}
+
+		public void CancelTask(MainWindow mainWindow)
+		{
+			mainWindow.CancelZipping.Content = "Canceling. Please wait...";
+			mainWindow.CancelZipping.IsEnabled = false;
+			ZipCancelTokenSource.Cancel();
 		}
 
 		static string BytesToString(long byteCount)
