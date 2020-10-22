@@ -32,7 +32,7 @@ namespace Unreal_Binary_Builder
 
         private string LogMessage = "";
 
-		private string FinalBuildPath = "";
+		private string FinalBuildPath = null;
 		private PostBuildSettings postBuildSettings = new PostBuildSettings();
 
         public MainWindow()
@@ -273,6 +273,11 @@ namespace Unreal_Binary_Builder
 			{
 				if (postBuildSettings.CanSaveToZip())
 				{
+                    if (FinalBuildPath == null)
+                    {
+                        FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@"\Engine\Binaries\DotNET", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
+                    }
+                    AddLogEntry(string.Format("Creating ZIP file. Target Engine Directory is {0}", FinalBuildPath));
 					postBuildSettings.SaveToZip(this, FinalBuildPath, postBuildSettings.ZipPath.Text);
 					AddLogEntry("Saving zip file to " + postBuildSettings.ZipPath.Text);
 					WriteToLogFile();
