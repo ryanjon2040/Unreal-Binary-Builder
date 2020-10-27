@@ -30,7 +30,7 @@ Step II: (b) Build UE4 Binary Builder
 1. Clone this git.
 2. Open the sln file with Visual Studio, switch to Release configuration and press F5 to build and start or build the application and start manually from bin folder.
 
-III Build Engine
+Step III: Build Engine
 1. Select your target engine version.
 2. Choose AutomationToolLauncher.exe by browsing to Engine\Binaries\DotNET folder.
 3. (a) [Optional] Click Post Build Settings, choose a location to save the zip and enable your preferred options.
