@@ -22,6 +22,7 @@ Step I: Prepare the UE4 source
 5. Rebuild these 2 project under Application group: AutomationTool and AutomationToolLauncher
 
 Choose one of these options. Either download or build:
+
 Step II: (a) Download UE4 Binary Builder
 1. Download [latest release](https://github.com/ryanjon2040/UE4-Binary-Builder/releases/latest).
 2. Unzip to your preferred location and start `Unreal Binary Builder.exe`.
