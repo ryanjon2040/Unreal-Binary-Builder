@@ -14,19 +14,27 @@ Through this app you can also zip the final rocket build for distribution.
 
 # How to use
 
-I/Prepare the UE4 source
+Step I: Prepare the UE4 source
 1. Clone the UE4 source from github
 2. Run Setup.bat/.sh from the cloned folder, follow the instruction and resolve any error at this step
 3. Run GenerateProjectFile.bat/.sh, make sure no error occured at this step
 4. Open UE4.sln with Visual Studio
 5. Rebuild these 2 project under Application group: AutomationTool and AutomationToolLauncher
 
-II/Build with UE4 Binary Builder
-1. Clone this git
-2. Open the sln file with Visual Studio, then build the application with Release configuration
-3. Copy the built binary to the UE4 source folder prepared above.
-4. Open UE4 Binary Builder, the path for AutomationTool will be automatically parsed, if not, try to get it from the UE4 folder (Engine\Binaries\DotNET\AutomationToolLauncher.exe & Engine\Build\InstalledEngineBuild.xml)  
-5. Choose what to build and press Start build. That's it
+Choose one of these options. Either download or build:
+Step II: (a) Download UE4 Binary Builder
+1. Download [latest release](https://github.com/ryanjon2040/UE4-Binary-Builder/releases/latest).
+2. Unzip to your preferred location and start `Unreal Binary Builder.exe`.
+
+Step II: (b) Build UE4 Binary Builder
+1. Clone this git.
+2. Open the sln file with Visual Studio, switch to Release configuration and press F5 to build and start or build the application and start manually from bin folder.
+
+III Build Engine
+1. Select your target engine version.
+2. Choose AutomationToolLauncher.exe by browsing to Engine\Binaries\DotNET folder.
+3. (a) [Optional] Click Post Build Settings, choose a location to save the zip and enable your preferred options.
+3. (b) Choose your settings and build.
 
 # Troubleshoot
 
