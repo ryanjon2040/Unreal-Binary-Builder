@@ -39,7 +39,10 @@ Step III: Build Engine
 
 # Troubleshoot
 
-**Access Denied on some files?**
+**Bug with 4.25.4**</br>
+There is a known issue with 4.25.4 where it fails to build with an error message: `AutomationException: Attempt to add file to temp storage manifest that does not exist (<Path To Engine>\cpp.hint)` This issue has been fixed in 4.26 but if you need to use 4.25.4 see this workaround by Bernard Rouhi: https://github.com/ryanjon2040/UE4-Binary-Builder/issues/26#issuecomment-718204352
+
+**Access Denied on some files?**</br>
 On Windows, just change the ownership to Users then try again. To change ownership on Windows, follow these steps
  - Right click on the UE4 folder, choose Properties
  - Switch to Security tab
