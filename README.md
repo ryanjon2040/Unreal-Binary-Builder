@@ -53,10 +53,19 @@ On Windows, just change the ownership to Users then try again. To change ownersh
 #### Dependencies
 
 [HandyControl](https://github.com/HandyOrg/HandyControl) by [HandyOrg](https://github.com/HandyOrg)
+
 [DotNetZip](https://github.com/haf/DotNetZip.Semverd) by [Henrik](https://github.com/haf)/Dino Chiesa
+
 [GameAnalytics](https://github.com/GameAnalytics/GA-SDK-C-SHARP) by [Game Analytics](https://gameanalytics.com/)
+
 [Json.NET](https://github.com/JamesNK/Newtonsoft.Json) by [Newtonsoft](https://www.newtonsoft.com/json)
+
 [Sentry.NET](https://github.com/getsentry/sentry-dotnet) by [Sentry](https://sentry.io/)
+
 [AutoGrid](https://github.com/SpicyTaco/SpicyTaco.AutoGrid) by [SpicyTaco](https://github.com/SpicyTaco)
+
 [LogViewer](https://stackoverflow.com/a/16745054) by [Federico Berasategui](https://stackoverflow.com/users/643085/federico-berasategui)
-Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+
+[NetSparkle](https://github.com/NetSparkleUpdater/NetSparkle) by [NetSparkleUpdater](https://github.com/NetSparkleUpdater)
+
+Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>a
