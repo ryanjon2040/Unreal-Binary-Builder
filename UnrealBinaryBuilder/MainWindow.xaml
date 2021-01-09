@@ -1,0 +1,363 @@
+﻿<hc:GlowWindow	x:Name="UnrealBinaryBuilderWindow"
+				x:Class="UnrealBinaryBuilder.MainWindow"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				xmlns:hc="https://handyorg.github.io/handycontrol" 
+				xmlns:st="http://schemas.spicytaco.io/"
+				xmlns:local="clr-namespace:UnrealBinaryBuilder.UserControls"
+				xmlns:Classes="clr-namespace:UnrealBinaryBuilder.Classes" 
+				mc:Ignorable="d"
+				Background="{DynamicResource MainContentBackgroundBrush}"
+				WindowStartupLocation="CenterScreen"
+				Title="Unreal Binary Builder"
+				ActiveGlowColor="{DynamicResource PrimaryColor}"
+				InactiveGlowColor="{DynamicResource SecondaryBorderColor}"
+				Height="720" 
+				Width="1280" Closing="UnrealBinaryBuilderWindow_Closing">
+	<hc:GlowWindow.NonClientAreaContent>
+		<StackPanel VerticalAlignment="Stretch" Orientation="Horizontal">
+			<Separator Width="10" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
+			<Button x:Name="AboutBtn" Content="About" Style="{StaticResource ButtonBaseStyle}" Click="AboutBtn_Click"/>
+			<Button x:Name="GetSourceCode" Content="Source Code" Style="{StaticResource ButtonBaseStyle}" Click="GetSourceCode_Click"/>
+			<Menu>
+				<MenuItem Header="Support">
+					<MenuItem x:Name="SupportUnrealX" Header="Unreal Binary Builder" Click="SupportUnrealX_Click"/>
+					<MenuItem x:Name="SupportAgora" Header="Agora" Click="SupportAgora_Click"/>
+				</MenuItem>
+			</Menu>
+			<Button x:Name="FeedbackBtn" Content="Feedback" Style="{StaticResource ButtonBaseStyle}" Click="FeedbackBtn_Click"/>
+		</StackPanel>
+	</hc:GlowWindow.NonClientAreaContent>
+	<Grid>
+		<DockPanel LastChildFill="True">
+			<hc:TabControl x:Name="MainTabControl" ShowCloseButton="False" IsDraggable="False" IsTabFillEnabled="True" IsAnimationEnabled="True" DockPanel.Dock="Top" Height="500" Style="{StaticResource TabControlCapsuleSolid}">
+				<hc:TabItem Header="Engine" IsSelected="True">
+					<hc:TabControl x:Name="EngineTabControl" ShowCloseButton="False" IsDraggable="False" IsTabFillEnabled="True" IsAnimationEnabled="True" ShowScrollButton="True" Style="{StaticResource TabControlInLine}" Background="#FF2D2D30">
+						<hc:TabItem Header="Setup" IsSelected="True" ToolTip="Allows you to configure Setup.bat settings and run it.">
+							<hc:SimplePanel>
+								<TextBox x:Name="SetupBatFilePath" Text="{Binding SetupBatFile}" hc:InfoElement.Placeholder="Choose Engine Root Folder" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,450,0" Width="400"/>
+								<Button x:Name="BrowseEngineFolder" Content="Browse" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,380,0" Click="BrowseEngineFolder_Click" />
+								<Button x:Name="StartSetupBatFile" Content="Start" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Width="125" Style="{StaticResource ButtonPrimary}" IsEnabled="{Binding ElementName=SetupBatFilePath, Path=Text.Length, Mode=OneWay}" Click="StartSetupBatFile_Click"/>
+								<CheckBox x:Name="bContinueToEngineBuild" Content="Continue to Engine Build" IsChecked="{Binding bContinueToEngineBuild}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,153,16"/>
+								<Grid>
+									<GroupBox Header="Platforms" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Width="200" Style="{StaticResource GroupBoxOriginal}">
+										<StackPanel x:Name="PlatformStackPanelMain">
+											<StackPanel Orientation="Horizontal">
+												<hc:SimpleText Text="Win64" Foreground="#FFE6E0E0" Margin="10 10 38 10"/>
+												<ComboBox x:Name="GitWin64Platform" VerticalAlignment="Center" Width="100" SelectionChanged="GitWin64Platform_SelectionChanged">
+													<ComboBoxItem x:Name="GitWin64Include" Content="Include"/>
+													<ComboBoxItem x:Name="GitWin64Exclude" Content="Exclude"/>
+												</ComboBox>
+											</StackPanel>
+											<StackPanel Orientation="Horizontal">
+												<hc:SimpleText Text="Win32" Foreground="#FFE6E0E0" Margin="10 10 38 10"/>
+												<ComboBox x:Name="GitWin32Platform" VerticalAlignment="Center" Width="100" SelectionChanged="GitWin32Platform_SelectionChanged">
+													<ComboBoxItem x:Name="GitWin32Include" Content="Include"/>
+													<ComboBoxItem x:Name="GitWin32Exclude" Content="Exclude"/>
+												</ComboBox>
+											</StackPanel>
+											<StackPanel Orientation="Horizontal">
+												<hc:SimpleText Text="Mac" Foreground="#FFE6E0E0" Margin="10 10 50 10"/>
+												<ComboBox x:Name="GitMacPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitMacPlatform_SelectionChanged">
+													<ComboBoxItem x:Name="GitMacInclude" Content="Include"/>
+													<ComboBoxItem x:Name="GitMacExclude" Content="Exclude"/>
+												</ComboBox>
+											</StackPanel>
+											<StackPanel Orientation="Horizontal">
+												<hc:SimpleText Text="IOS" Foreground="#FFE6E0E0" Margin="10 10 53 10"/>
+												<ComboBox x:Name="GitIOSPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitIOSPlatform_SelectionChanged">
+													<ComboBoxItem x:Name="GitIOSInclude" Content="Include"/>
+													<ComboBoxItem x:Name="GitIOSExclude" Content="Exclude"/>
+												</ComboBox>
+											</StackPanel>
+											<StackPanel Orientation="Horizontal">
+												<hc:SimpleText Text="Android" Foreground="#FFE6E0E0" Margin="10 10 29 10"/>
+												<ComboBox x:Name="GitAndroidPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitAndroidPlatform_SelectionChanged">
+													<ComboBoxItem x:Name="GitAndroidInclude" Content="Include"/>
+													<ComboBoxItem x:Name="GitAndroidExclude" Content="Exclude"/>
+												</ComboBox>
+											</StackPanel>
+											<StackPanel Orientation="Horizontal">
+												<hc:SimpleText Text="HoloLens" Foreground="#FFE6E0E0" Margin="10 10 23 10"/>
+												<ComboBox x:Name="GitHololensPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitHololensPlatform_SelectionChanged">
+													<ComboBoxItem x:Name="GitHololensInclude" Content="Include"/>
+													<ComboBoxItem x:Name="GitHololensExclude" Content="Exclude"/>
+												</ComboBox>
+											</StackPanel>
+											<StackPanel Orientation="Horizontal">
+												<hc:SimpleText Text="Linux" Foreground="#FFE6E0E0" Margin="10 10 44 10"/>
+												<ComboBox x:Name="GitLinuxPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitLinuxPlatform_SelectionChanged">
+													<ComboBoxItem x:Name="GitLinuxInclude" Content="Include"/>
+													<ComboBoxItem x:Name="GitLinuxExclude" Content="Exclude"/>
+												</ComboBox>
+											</StackPanel>
+											<StackPanel Orientation="Horizontal">
+												<hc:SimpleText Text="Lumin" Foreground="#FFE6E0E0" Margin="10 10 40 10"/>
+												<ComboBox x:Name="GitLuminPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitLuminPlatform_SelectionChanged">
+													<ComboBoxItem x:Name="GitLuminInclude" Content="Include"/>
+													<ComboBoxItem x:Name="GitLuminExclude" Content="Exclude"/>
+												</ComboBox>
+											</StackPanel>
+											<StackPanel Orientation="Horizontal">
+												<hc:SimpleText Text="TVOS" Foreground="#FFE6E0E0" Margin="10 10 44 10"/>
+												<ComboBox x:Name="GitTvOSPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitTvOSPlatform_SelectionChanged">
+													<ComboBoxItem x:Name="GitTvOSInclude" Content="Include"/>
+													<ComboBoxItem x:Name="GitTvOSExclude" Content="Exclude"/>
+												</ComboBox>
+											</StackPanel>
+										</StackPanel>
+									</GroupBox>
+									<GroupBox Header="Git Dependencies Options" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="1068,10,0,0" Height="201" Width="200" Style="{StaticResource GroupBoxOriginal}">
+										<StackPanel>
+											<CheckBox x:Name="bGitSyncAll" HorizontalAlignment="Left" Content="Sync All" IsChecked="{Binding GitDependencyAll}" Margin="5" ToolTip ="Sync all folders"/>
+											<CheckBox HorizontalAlignment="Left" Content="Force" Margin="5" IsChecked="True" IsEnabled="False" ToolTip="--force parameter must be added to git."/>
+											<StackPanel Orientation="Horizontal" >
+												<TextBlock Text="Threads " VerticalAlignment="Center"/>
+												<hc:TextBox x:Name="GitNumberOfThreads" VerticalAlignment="Center" TextType="Number" hc:InfoElement.Placeholder="Number of threads" Text="{Binding GitDependencyThreads}" Margin="5" Width="140" ToolTip="Use N cpu threads when downloading new files"/>
+											</StackPanel>
+											<StackPanel Orientation="Horizontal" >
+												<TextBlock Text="Retries  " VerticalAlignment="Center"/>
+												<hc:TextBox x:Name="GitNumberOfRetries" VerticalAlignment="Center" TextType="Number" hc:InfoElement.Placeholder="Number of retries" Text="{Binding GitDependencyMaxRetries}" Margin="5" Width="140" ToolTip="Override maximum number of retries per file"/>
+											</StackPanel>
+										</StackPanel>
+									</GroupBox>
+									<GroupBox Header="Git Cache" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="1068,216,0,0" Width="200" Style="{StaticResource GroupBoxOriginal}">
+										<StackPanel>
+											<CheckBox x:Name="bGitEnableCache" Content="Enable Cache" IsChecked="{Binding GitDependencyEnableCache}" ToolTip="Enable/Disable caching of downloaded files" Margin="10"/>
+											<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+												<hc:TextBox x:Name="GitCachePath" hc:InfoElement.Placeholder="Cache path" IsEnabled="{Binding IsChecked, ElementName=bGitEnableCache}" Text="{Binding GitDependencyCache}" ToolTip="Custom path for the download cache" Width="132"/>
+												<Button x:Name="GitCachePathBrowse" Content="Browse" HorizontalAlignment="Right" IsEnabled="{Binding IsChecked, ElementName=bGitEnableCache}" Click="GitCachePathBrowse_Click"/>
+											</StackPanel>
+											<hc:TextBox x:Name="GitCacheDays" VerticalAlignment="Center" TextType="Number" hc:InfoElement.Placeholder="Cache days" IsEnabled="{Binding IsChecked, ElementName=bGitEnableCache}" Text="{Binding GitDependencyCacheDays}" ToolTip="Number of days to keep entries in cache"/>
+											<hc:TextBox x:Name="GitCacheMultiplier" VerticalAlignment="Center" TextType="Digits" hc:InfoElement.Placeholder="Cache Multiplier" IsEnabled="{Binding IsChecked, ElementName=bGitEnableCache}" Text="{Binding GitDependencyCacheMultiplier}" ToolTip="Cache size as multiplier of current download"/>
+										</StackPanel>
+									</GroupBox>
+								</Grid>
+							</hc:SimplePanel>
+						</hc:TabItem>
+
+						<hc:TabItem Header="Zip Build" ToolTip="Let's you choose a location to save compiled Unreal Engine as a zip file for easy distribution among team.">
+							<StackPanel Orientation="Horizontal">
+								<Grid Margin="10" Width="540">
+									<CheckBox x:Name="bZipBuild" Content="Zip final build." VerticalAlignment="Top" HorizontalAlignment="Left"/>
+									<TextBox x:Name="ZipPath" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,30,0,0" IsEnabled="{Binding IsChecked, ElementName=bZipBuild}" Width="458"/>
+									<Button x:Name="SetZipPathLocation" Content="Browse" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="463,30,0,0" ToolTip="Browse and select the folder where you want to move the zip file after Engine build." IsEnabled="{Binding IsChecked, ElementName=bZipBuild}" Click="SetZipPathLocation_Click" />
+									<GroupBox Header="Contents to zip" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="{Binding IsChecked, ElementName=bZipBuild}" Height="155" Margin="6,77,0,0">
+										<Grid>
+											<CheckBox x:Name="bIncludeCoreFiles" Content="Core" IsEnabled="False" IsChecked="True" VerticalAlignment="Top" HorizontalAlignment="Left" ToolTip="Required files. Cannot edit."/>
+											<CheckBox x:Name="bIncludePDB" Content="Include PDB" VerticalAlignment="Top" HorizontalAlignment="Left" ToolTip="If true, include *.pdb in zip. This significantly increases zip size." Margin="0 25"/>
+											<CheckBox x:Name="bIncludeDEBUG" Content="Include DEBUG" VerticalAlignment="Top" HorizontalAlignment="Left" ToolTip="If true, include *.debug files in zip. This significantly increases zip size." Margin="0,50,0,0"/>
+											<CheckBox x:Name="bIncludeDocumentation" Content="Include Documentation" VerticalAlignment="Top" HorizontalAlignment="Left" ToolTip="If true, include documentation folder" Margin="0,75,0,0"/>
+											<CheckBox x:Name="bIncludeExtras" Content="Include Extras" VerticalAlignment="Top" HorizontalAlignment="Left" ToolTip="If true, include extras folder." Margin="180,0,0,0" Width="119"/>
+											<CheckBox x:Name="bIncludeSource" Content="Include Source" VerticalAlignment="Top" HorizontalAlignment="Left" ToolTip="If true, include source code. This significantly increases zip size." Margin="180,25,0,0" Width="119"/>
+											<CheckBox x:Name="bIncludeFeaturePacks" Content="Include Feature Packs" VerticalAlignment="Top" HorizontalAlignment="Left" ToolTip="If true, include feature packs (e.g: First Person, Third Person, Vehicle etc.)." Margin="180,50,0,0" />
+											<CheckBox x:Name="bIncludeSamples" Content="Include Samples" VerticalAlignment="Top" HorizontalAlignment="Left" ToolTip="If true, include samples (e.g: Starter content)." Margin="180,75,0,0" />
+											<CheckBox x:Name="bIncludeTemplates" Content="Include Templates" VerticalAlignment="Top" HorizontalAlignment="Left" ToolTip="If true, include templates (e.g: First Person, Third Person, Vehicle etc.)." Margin="360,0,0,0" />
+										</Grid>
+									</GroupBox>
+									<CheckBox x:Name="bFastCompression" Content="Enable Fast Compression" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,250,0,0" IsEnabled="{Binding IsChecked, ElementName=bZipBuild}" ToolTip="If true, uses fast but least effect compression.&#xA;If false, uses Best Compression which greatly reduces size but also the slowest."/>
+								</Grid>
+								<Grid Margin="10" Width="700">
+									<GroupBox Header="Zip Status" Margin="10">
+										<Grid>
+											<Label x:Name="ZipStatusLabel" Content="Idle"/>
+											<StackPanel x:Name="ZipStausStackPanel" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+												<Label x:Name="CurrentFileSaving" Content="FileName" Margin="10" HorizontalAlignment="Left"/>
+												<Label x:Name="FileSaveState" Content="State" Margin="10" HorizontalAlignment="Left" />
+												<Label x:Name="TotalResult" Content="File Size" Margin="10" HorizontalAlignment="Left" />
+												<ProgressBar x:Name="FileProgressbar" Style="{DynamicResource ProgressBarInfo}" HorizontalAlignment="Stretch" Value="20" IsIndeterminate="True" Margin="10"/>
+												<ProgressBar x:Name="OverallProgressbar" Style="{DynamicResource ProgressBarInfoStripe}" HorizontalAlignment="Stretch" Value="50" IsIndeterminate="True" Margin="10"/>
+												<Button x:Name="CancelZipping" HorizontalAlignment="Stretch" Height="30" Content="Cancel Zipping" Click="CancelZipping_Click" Margin="10"/>
+												<Button x:Name="OpenBuildFolder" HorizontalAlignment="Stretch" Height="30" Content="Open Installed Engine Build Folder" Click="CancelZipping_Click" Margin="10 0"/>
+											</StackPanel>
+
+										</Grid>
+									</GroupBox>
+								</Grid>
+							</StackPanel>
+						</hc:TabItem>
+
+						<hc:TabItem Header="Compile" ToolTip="Various options to choose how you want to compile Unreal Engine.">
+							<Grid>
+								<GroupBox Header="Programs" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="123" Width="480">
+									<hc:SimplePanel>
+										<TextBox x:Name="AutomationToolPath" Text="{Binding AutomationToolPath}" hc:InfoElement.Placeholder="Select AutomationToolLauncher.exe" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400"/>
+										<Button x:Name="AutomationToolBrowse" Content="Browse" HorizontalAlignment="Right" VerticalAlignment="Top" Click="AutomationToolBrowse_Click" />
+
+										<TextBox x:Name="CustomBuildXMLFile" Text="{Binding CustomBuildFile}" hc:InfoElement.Placeholder="(Optional) Choose custom build XML file." hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="270" Margin="0,40,0,0"/>
+										<Button x:Name="CustomBuildXMLBrowse" Content="Browse" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,40,118,0" Width="80" Click="CustomBuildXMLBrowse_Click" />
+										<Button x:Name="ResetDefaultBuildXML" Content="Reset To Default" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,40,0,0" Width="113" Click="ResetDefaultBuildXML_Click" />
+									</hc:SimplePanel>
+								</GroupBox>
+
+								<GroupBox Header="Platforms" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,138,0,0" Height="190" Width="480">
+									<hc:ScrollViewer>
+										<WrapPanel Orientation="Horizontal">
+											<CheckBox x:Name="bHostPlatformOnly" Content="Host Only" Margin="10" IsChecked="{Binding bHostPlatformOnly}" />
+											<CheckBox x:Name="bHostPlatformEditorOnly" Content="Host Editor Only" Margin="10" IsChecked="{Binding bHostPlatformEditorOnly}" />
+											<CheckBox x:Name="bWithWin64" Content="Windows 64" Margin="10" IsChecked="{Binding bWithWin64}" />
+											<CheckBox x:Name="bWithWin32" Content="Windows 32" Margin="10" IsChecked="{Binding bWithWin32}"/>
+											<CheckBox x:Name="bWithMac" Content="Mac" Margin="10" IsChecked="{Binding bWithMac}" />
+											<CheckBox x:Name="bWithLinux" Content="Linux" Margin="10" IsChecked="{Binding bWithLinux}" />
+											<CheckBox x:Name="bWithLinuxAArch64" Content="Linux AArch 64" Margin="10" IsChecked="{Binding bWithLinuxAArch64}" />
+											<CheckBox x:Name="bWithAndroid" Content="Android" Margin="10" IsChecked="{Binding bWithAndroid}" />
+											<CheckBox x:Name="bWithIOS" Content="IOS" Margin="10" IsChecked="{Binding bWithIOS}" />
+											<CheckBox x:Name="bWithHTML5" Content="HTML 5" Margin="10" IsChecked="{Binding bWithHTML5}" />
+											<CheckBox x:Name="bWithTVOS" Content="TVOS" Margin="10" IsChecked="{Binding bWithTVOS}" />
+											<CheckBox x:Name="bWithSwitch" Content="Switch" Margin="10" IsChecked="{Binding bWithSwitch}" />
+											<CheckBox x:Name="bWithPS4" Content="PS4" Margin="10" IsChecked="{Binding bWithPS4}" />
+											<CheckBox x:Name="bWithXboxOne" Content="XBox One" Margin="10" IsChecked="{Binding bWithXboxOne}" />
+											<CheckBox x:Name="bWithLumin" Content="Lumin" Margin="10" IsChecked="{Binding bWithLumin}" />
+											<CheckBox x:Name="bWithHololens" Content="Holo Lens" Margin="10" IsChecked="{Binding bWithHoloLens}" />
+										</WrapPanel>
+									</hc:ScrollViewer>
+								</GroupBox>
+
+								<GroupBox Header="Options" VerticalAlignment="Top" Height="318" Width="480" Margin="506,10,290,0">
+									<hc:ScrollViewer>
+										<StackPanel>
+											<WrapPanel>
+												<CheckBox x:Name="bWithDDC" Content="Include DDC" Margin="10" IsChecked="{Binding bWithDDC}" ToolTip="Build a standalone derived-data cache for the engine content and templates.
+																								&#xA;Building a stand-alone Derived Data Cache (DDC) for the Engine and Template content can be one of the slowest aspects of the build.
+																								&#xA;If you don't need a stand-alone DDC, you can skip this step."/>
+												<CheckBox x:Name="bHostPlatformDDCOnly" Content="Host DDC Only" Margin="10" IsChecked="{Binding bHostPlatformDDCOnly}" IsEnabled="{Binding IsChecked, ElementName=bWithDDC}" ToolTip="Whether to include DDC for the host platform only. Requires DDC to be turned on." />
+												<CheckBox x:Name="bSignExecutables" Content="Sign Executables" Margin="10" IsChecked="{Binding bSignExecutables}" ToolTip="Sign the executables produced where signing is available." />
+												<CheckBox x:Name="bEnableSymStore" Content="Symbol Store" Margin="10" IsChecked="{Binding bEnableSymStore}" ToolTip="Whether to add Source indexing to Windows game apps so they can be added to a symbol server." />
+												<CheckBox x:Name="bWithFullDebugInfo" Content="Include Full Debug Info" Margin="10" IsChecked="{Binding bWithFullDebugInfo}" ToolTip="Generate full debug info for binary editor and packaged application builds." />
+												<CheckBox x:Name="bCleanBuild" Content="Remove Previous" Margin="10" IsChecked="{Binding bCleanBuild}" ToolTip="Cleans any previous builds. Appends -clean to command line." />
+												<CheckBox x:Name="bWithServer" Content="Include Server" Margin="10" IsChecked="{Binding bWithServer}" ToolTip="Create dedicated server target." />
+												<CheckBox x:Name="bWithClient" Content="Include Client" Margin="10" IsChecked="{Binding bWithClient}" ToolTip="Create client target." />
+												<CheckBox x:Name="bCompileDatasmithPlugins" Content="Include Datasmith" Margin="10" IsChecked="{Binding bCompileDatasmithPlugins}" ToolTip="If Datasmith plugins should be compiled." />
+												<CheckBox x:Name="bVS2019" Content="Use 2019 Compiler" Margin="10" IsChecked="{Binding bVS2019}" ToolTip="Use Visual Studio 2019 to build Windows targets. By default, Visual Studio 2017 is used for maximum compatibility." />
+											</WrapPanel>
+											<GroupBox Header="Shutdown Settings" Style="{StaticResource GroupBoxOriginal}" Margin="10">
+												<WrapPanel>
+													<CheckBox x:Name="bShutdownWindows" Content="Shutdown Computer after build" Margin="10" IsChecked="{Binding bShutdownPC}" ToolTip="Shuts down your computer after building." />
+													<CheckBox x:Name="bShutdownIfSuccess" Content="Shutdown only if build is successful" Margin="10" IsChecked="{Binding bShutdownIfBuildSuccess}" ToolTip="Shuts down your computer after building only if the build is successful." IsEnabled="{Binding IsChecked, ElementName=bShutdownWindows}" />
+												</WrapPanel>
+											</GroupBox>
+										</StackPanel>
+									</hc:ScrollViewer>
+								</GroupBox>
+
+								<StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
+									<WrapPanel>
+										<TextBox x:Name="GameConfigurations" Margin="12 5 12 5" Width="400" Text="{Binding GameConfigurations}" hc:InfoElement.Placeholder="Game Configurations. E.g: Debug;Development;Shipping" Style="{StaticResource TextBoxExtend}" ToolTip="Which game configurations to include for packaged applications. Defaults to Development;Shipping"/>
+										<TextBox x:Name="CustomOptions" Margin="12 5 12 5" Width="400" Text="{Binding CustomOptions}" hc:InfoElement.Placeholder="Custom Options (if any)" Style="{StaticResource TextBoxExtend}" ToolTip="Pass custom command line options. Typically used when using custom Build XML."/>
+										<TextBox x:Name="AnalyticsOverride" Margin="12 5 12 5" Width="400" Text="{Binding AnalyticsOverride}" hc:InfoElement.Placeholder="Analytics Type" Style="{StaticResource TextBoxExtend}" ToolTip="Identifier for analytic events to send."/>
+									</WrapPanel>
+									<hc:ComboBox x:Name="EngineVersionSelection" HorizontalAlignment="Left" Margin="12 5 12 5" SelectionChanged="EngineVersionSelection_SelectionChanged" SelectedIndex="2">
+										<ComboBoxItem Content="Select Engine Version" IsSelected="True"></ComboBoxItem>
+										<ComboBoxItem Content="Unreal Engine 4.22"></ComboBoxItem>
+										<ComboBoxItem Content="Unreal Engine 4.23"></ComboBoxItem>
+										<ComboBoxItem Content="Unreal Engine 4.24"></ComboBoxItem>
+										<ComboBoxItem Content="Unreal Engine 4.25"></ComboBoxItem>
+										<ComboBoxItem Content="Unreal Engine 4.26"></ComboBoxItem>
+									</hc:ComboBox>
+								</StackPanel>
+								<Button x:Name="BuildRocketUE" Content="Build Unreal Engine" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,19,6" Width="200" Click="BuildRocketUE_Click"/>
+								<Button x:Name="CopyCommandLine" Content="Copy Commandline to clipboard" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,19,85" Width="200" Click="CopyCommandLine_Click"/>
+							</Grid>
+						</hc:TabItem>
+					</hc:TabControl>
+				</hc:TabItem>
+				<hc:TabItem Header="Plugins">
+					<Grid>
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin ="10">
+							<TextBlock Text="Engine Version " VerticalAlignment="Center"/>
+							<hc:ComboBox x:Name="PluginEngineVersionSelection" Margin="12 5 12 5" SelectionChanged="PluginEngineVersionSelection_SelectionChanged"/>
+						</StackPanel>
+						<GroupBox Style="{StaticResource GroupBoxOriginal}" Margin="0 40 0 0">
+							<Grid>
+								<st:StackPanel MarginBetweenChildren="8" Margin="10">
+									<st:StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400">
+										<TextBlock Text="Plugin path    " VerticalAlignment="Center"/>
+										<hc:TextBox x:Name="PluginPath" hc:InfoElement.Placeholder="Select your .uplugin file" Margin="5" ToolTip="Navigate to your uplugin file." st:StackPanel.Fill="Fill"/>
+										<Button x:Name="PluginPathBrowse" Content="Browse" VerticalAlignment="Center" Click="PluginPathBrowse_Click" />
+									</st:StackPanel>
+
+									<st:StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400">
+										<TextBlock Text="Save Location" VerticalAlignment="Center"/>
+										<hc:TextBox x:Name="PluginDestinationPath" hc:InfoElement.Placeholder="Packaged plugin destination" Margin="5" ToolTip="Navigate to your uplugin file." st:StackPanel.Fill="Fill"/>
+										<Button x:Name="PluginDestinationPathBrowse" Content="Browse" VerticalAlignment="Center" Click="PluginDestinationPathBrowse_Click" />
+									</st:StackPanel>
+
+									<Grid>
+										<GroupBox Style="{StaticResource GroupBoxOriginal}" IsEnabled="{Binding IsChecked, ElementName=bPluginOverrideTargetPlatforms}" HorizontalAlignment="Left" MaxWidth="400" Margin="0 25 0 0">
+											<WrapPanel x:Name="PluginPlatforms" Orientation="Horizontal">
+												<CheckBox x:Name="bPluginWin64" Content="Windows 64" Margin="10" IsEnabled="False" IsChecked="True" ToolTip="Win64 is always included and cannot be toggled"/>
+												<CheckBox x:Name="bPluginWin32" Content="Windows 32" Margin="10"/>
+												<CheckBox x:Name="bPluginMac" Content="Mac" Margin="10"/>
+												<CheckBox x:Name="bPluginLinux" Content="Linux" Margin="10" />
+												<CheckBox x:Name="bPluginLinuxAArch64" Content="Linux AArch 64" Margin="10"/>
+												<CheckBox x:Name="bPluginAndroid" Content="Android" Margin="10"/>
+												<CheckBox x:Name="bPluginIOS" Content="IOS" Margin="10"/>
+												<CheckBox x:Name="bPluginHTML5" Content="HTML 5" Margin="10"/>
+												<CheckBox x:Name="bPluginTVOS" Content="TVOS" Margin="10"/>
+												<CheckBox x:Name="bPluginSwitch" Content="Switch" Margin="10"/>
+												<CheckBox x:Name="bPluginPS4" Content="PS4" Margin="10"/>
+												<CheckBox x:Name="bPluginXboxOne" Content="XBox One" Margin="10"/>
+												<CheckBox x:Name="bPluginLumin" Content="Lumin" Margin="10"/>
+												<CheckBox x:Name="bPluginHololens" Content="Holo Lens" Margin="10"/>
+											</WrapPanel>
+										</GroupBox>
+										<CheckBox x:Name="bPluginOverrideTargetPlatforms" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" Content="Override Target Platforms" />
+									</Grid>
+
+									<st:StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400">
+										<CheckBox x:Name="bUse2019Compiler" Content="Use 2019 Compiler" HorizontalAlignment="Left" st:StackPanel.Fill="Fill"/>
+										<Button x:Name="PluginQueueBtn" Content="Queue Build" Style="{StaticResource ButtonDashedPrimary}" HorizontalAlignment="Right" Click="PluginQueueBtn_Click"/>
+									</st:StackPanel>
+
+									<st:StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400">
+										<st:StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" MarginBetweenChildren="5" Width="400">
+											<CheckBox x:Name="PluginZip" Content="Zip Plugin" HorizontalAlignment="Left"/>
+											<hc:TextBox x:Name="PluginZipPath" hc:InfoElement.Placeholder="Plugin zip location" Margin="5" st:StackPanel.Fill="Fill" IsEnabled="{Binding IsChecked, ElementName=PluginZip}"/>
+											<Button x:Name="PluginZipDestinationPathBrowse" Content="Browse" VerticalAlignment="Center" Click="PluginZipDestinationPathBrowse_Click" IsEnabled="{Binding IsChecked, ElementName=PluginZip}"/>
+										</st:StackPanel>
+										<CheckBox x:Name="PluginZipForMarketplace" Content="Zip for Marketplace" HorizontalAlignment="Left" IsChecked="True" IsEnabled="{Binding IsChecked, ElementName=PluginZip}" ToolTip="Zipping for Unreal Marketplace will ignore 'Binaries' and 'Intermediate' folders." />
+									</st:StackPanel>
+
+								</st:StackPanel>
+								<ScrollViewer HorizontalAlignment="Right" Width="850" Margin="0,-40,0,50" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" CanContentScroll="True">
+									<WrapPanel x:Name="PluginQueues" Orientation="Horizontal" Width="850">
+
+									</WrapPanel>
+								</ScrollViewer>
+								<Button x:Name="StartPluginBuildsBtn" Content="Start Build" Style="{StaticResource ButtonPrimary}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Width="150" Click="StartPluginBuildsBtn_Click"/>
+							</Grid>
+						</GroupBox>
+					</Grid>
+				</hc:TabItem>
+
+				<hc:TabItem Header="Project">
+					<Grid>
+						<TextBlock Text="Not yet done. Will be available in a later version." HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Grid>
+				</hc:TabItem>
+			</hc:TabControl>
+
+			<DockPanel LastChildFill="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" DockPanel.Dock="Bottom" Background="#FF2D2D30">
+				<st:StackPanel Orientation="Horizontal"  DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
+					<hc:SimpleText x:Name="StepLabel" Text="Step: " Margin="5" Foreground="#FFE6E0E0"/>
+					<hc:SimpleText x:Name="StatusLabel" Text="Status: " Margin="5" Foreground="#FFE6E0E0"/>
+					<hc:SimpleText x:Name="ProcessedFilesLabel" Text="Compiled: 0" Margin="5" Foreground="#FFE6E0E0" st:StackPanel.Fill="Fill"/>
+					<Button x:Name="CheckUpdateBtn" Content="Check for Update" Height="20" Padding="10,0,10,0" FontSize="10" Width="110" Click="CheckUpdateBtn_Click" />
+					<Button x:Name="OpenSettingsBtn" Content="Open Settings" Height="20" Padding="10,0,10,0" FontSize="10" IsEnabled="False" Width="110" Click="OpenSettingsBtn_Click"/>
+					<Button x:Name="OpenLogFolderBtn" Content="Open Log Folder" Margin="0 0 10 0" Height="20" Padding="10,0,10,0" FontSize="10" IsEnabled="False" Width="110" Click="OpenLogFolderBtn_Click"/>
+				</st:StackPanel>
+				<local:LogViewer x:Name="LogControl" DockPanel.Dock="Top" Height="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
+			</DockPanel>
+		</DockPanel>
+
+		<ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+			<StackPanel>
+				<StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Top"/>
+				<StackPanel hc:Growl.Token="PluginBuild" VerticalAlignment="Top"/>
+				<StackPanel hc:Growl.Token="Important" VerticalAlignment="Top"/>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</hc:GlowWindow>

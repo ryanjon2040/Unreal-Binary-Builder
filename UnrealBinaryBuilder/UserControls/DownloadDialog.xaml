@@ -1,0 +1,15 @@
+﻿<Border x:Class="UnrealBinaryBuilder.UserControls.DownloadDialog"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:hc="https://handyorg.github.io/handycontrol"
+			 xmlns:local="clr-namespace:UnrealBinaryBuilder.UserControls"
+			 mc:Ignorable="d" 
+			 CornerRadius="10"
+			 Background="{DynamicResource RegionBrush}" Width="500">
+	<StackPanel>
+		<TextBlock x:Name="DownloadProgressTextBlock" Margin="10 10 40 10" Style="{StaticResource TextBlockDefaultInfo}" Text="Downloading..."/>
+		<ProgressBar x:Name="DownloadProgressbar" Style="{DynamicResource ProgressBarInfo}" HorizontalAlignment="Stretch" Value="20" IsIndeterminate="True" Margin="10"/>
+	</StackPanel>
+</Border>

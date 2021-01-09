@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Configurations>Debug;Release;ReleaseToPublic</Configurations>
+    <PackageId>Unreal Binary Builder</PackageId>
+    <Authors>Satheesh (ryanjon2040)</Authors>
+    <Company>Satheesh (ryanjon2040)</Company>
+    <Description>A helper application designed to create Installed Build of Unreal Engine from Github Source and plugin packager.</Description>
+    <Copyright>Copyright 2020-2021. Created by Satheesh (ryanjon2040)</Copyright>
+    <Version>3.0.0</Version>
+    <PackageProjectUrl>https://www.buymeacoffee.com/ryanjon2040</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ryanjon2040/UE4-Binary-Builder</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageIcon>compiler.png</PackageIcon>
+    <ApplicationIcon>compiler.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetZip" Version="1.15.0" />
+    <PackageReference Include="GameAnalytics.Net.Core.SDK" Version="3.1.1" />
+    <PackageReference Include="HandyControl" Version="3.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Sentry" Version="2.1.8" />
+    <PackageReference Include="SpicyTaco.AutoGrid" Version="1.2.29" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UnrealBinaryBuilderUpdater\UnrealBinaryBuilderUpdater.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="compiler.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -8,15 +8,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Data.Linq;
-using System.Drawing;
 using System.Windows.Media;
+using static UnrealBinaryBuilder.MainWindow;
 
-namespace Unreal_Binary_Builder
+namespace UnrealBinaryBuilder.UserControls
 {
-    /// <summary>
-    /// Interaction logic for LogViewer.xaml
-    /// </summary>
     public partial class LogViewer : UserControl
     {
         private ObservableCollection<LogEntry> LogEntries { get; set; }
@@ -36,8 +32,27 @@ namespace Unreal_Binary_Builder
             DataContext = LogEntries = new ObservableCollection<LogEntry>();
         }
 
+        public void AddZipLog(LogEntry InLogEntry, ZipLogInclusionType InType)
+		{
+            InLogEntry.DateTime = DateTime.Now;
+            switch (InType)
+			{
+                case ZipLogInclusionType.FileIncluded:
+                    InLogEntry.MessageColor = Brushes.Green;
+                    break;
+                case ZipLogInclusionType.FileSkipped:
+                    InLogEntry.MessageColor = Brushes.Orange;
+                    break;
+                case ZipLogInclusionType.ExtensionSkipped:
+                    InLogEntry.MessageColor = Brushes.OrangeRed;
+                    break;
+			}
+            Dispatcher.BeginInvoke((Action)(() => LogEntries.Add(InLogEntry)));
+        }
+
         public void AddLogEntry(LogEntry InLogEntry, EMessageType InMessageType)
         {
+            InLogEntry.DateTime = DateTime.Now;
             switch (InMessageType)
             {
                 case EMessageType.Info:

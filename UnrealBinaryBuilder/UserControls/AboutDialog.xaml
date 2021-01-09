@@ -1,0 +1,15 @@
+﻿<Border x:Class="UnrealBinaryBuilder.UserControls.AboutDialog"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:hc="https://handyorg.github.io/handycontrol"
+		xmlns:local="clr-namespace:UnrealBinaryBuilder.UserControls"
+		mc:Ignorable="d" 
+		CornerRadius="10"
+		 Background="{DynamicResource RegionBrush}">
+	<Grid>
+		<TextBlock Margin="10 10 40 10" Style="{StaticResource TextBlockDefaultInfo}" Text="A helper application designed to create binary version of Unreal Engine 4 from source&#xA;and package plugins as well as projects too.&#xA;&#xA;Created by Satheesh (ryanjon2040)&#xA;&#xA;Updated for 4.18 and PS4/Xbox Support by James Baxter (TheJamsh)&#xA;Updated for 4.21 and Lumin support by KarstenMaxim (AlphaSoftLLC)&#xA;Step counter added by Ben Vaccaro (freaksed)&#xA;Some small updates for 4.24 by Christian Walde (wchristian)"/>
+		<Button x:Name="CloseBtn" Content="Close" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0" Style="{StaticResource ButtonIcon}" Foreground="{DynamicResource PrimaryBrush}" hc:IconElement.Geometry="{StaticResource ErrorGeometry}" Padding="0" Width="22" Height="22" Click="CloseBtn_Click"/>
+	</Grid>
+</Border>

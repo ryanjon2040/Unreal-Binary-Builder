@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Configurations>Debug;Release;ReleaseToPublic</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetSparkleUpdater.UI.WPF" Version="2.0.0-preview20201117001" />
+  </ItemGroup>
+
+</Project>

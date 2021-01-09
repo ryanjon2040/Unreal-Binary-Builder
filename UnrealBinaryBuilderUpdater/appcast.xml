@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+	<channel>
+		<title>Unreal Binary Builder</title>
+					<description>Most recent changes with links to updates.</description>
+					<link>https://github.com/ryanjon2040/UE4-Binary-Builder/raw/master/UnrealBinaryBuilderUpdater/appcast.xml</link>
+		<language>en</language>
+		<item>
+			<title>Unreal Binary Builder 3.0.0</title>
+			<pubDate>Sat, 09 Jan 2021 15:25:40 +05:30</pubDate>
+			<sparkle:releaseNotesLink>
+					https://netsparkleupdater.github.io/NetSparkle/files/sample-app/2.0-release-notes.md
+			</sparkle:releaseNotesLink>
+			<enclosure url="https://github.com/ryanjon2040/UE4-Binary-Builder/releases/tag/3.0.0/UnrealBinaryBuilder.exe" 
+									sparkle:version="3.0.0" 
+									sparkle:shortVersionString="3.0" 
+									length="178176" 
+									sparkle:os="windows" 
+									type="application/x-msdownload" 
+									sparkle:signature="GNLu2Kd2eq7NGzcy2wtEI4onyTo5m9Qo9C8cL93R2Z/D1+DtkIrYrwzlNxXwPb876HUvQg9Odm1iF4egoppPCw==" />
+		</item>
+	</channel>
+</rss>
+

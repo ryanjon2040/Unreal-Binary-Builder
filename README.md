@@ -1,41 +1,38 @@
 Unreal Engine 4 Binary Builder
 ======================
 
+<a href="https://www.buymeacoffee.com/ryanjon2040" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+
 This is a small app designed to create binary build of [Unreal Engine 4](https://www.unrealengine.com/) from [GitHub source](https://github.com/EpicGames/UnrealEngine).
 
-![](https://img.shields.io/twitter/follow/ryanjon2040.svg?style=popout)	![](https://img.shields.io/github/last-commit/ryanjon2040/UE4-Binary-Builder.svg?style=popout) ![](https://img.shields.io/github/license/ryanjon2040/UE4-Binary-Builder.svg?style=popout) ![](https://img.shields.io/github/downloads/ryanjon2040/UE4-Binary-Builder/total.svg?style=popout) 
+![https://twitter.com/ryanjon2040](https://img.shields.io/twitter/follow/ryanjon2040.svg?style=popout)
+
+![](https://img.shields.io/github/last-commit/ryanjon2040/UE4-Binary-Builder.svg?style=popout) 
+![](https://img.shields.io/github/license/ryanjon2040/UE4-Binary-Builder.svg?style=popout) ![](https://img.shields.io/github/downloads/ryanjon2040/UE4-Binary-Builder/total.svg?style=popout) 
 
 ![](https://img.shields.io/github/languages/code-size/ryanjon2040/UE4-Binary-Builder.svg?style=flat) ![](https://img.shields.io/github/repo-size/ryanjon2040/UE4-Binary-Builder.svg?style=flat)
 
-![Screenshot](https://i.imgur.com/z9u42gI.png)
 
-Through this app you can also zip the final rocket build for distribution.
-![Screenshot](https://i.imgur.com/oOKw8uy.png)
+# How to use (Compiling Engine)
 
-# How to use
+###### Step I 
+- Download the latest release of Unreal Binary Builder.
 
-Step I: Prepare the UE4 source
-1. Clone the UE4 source from github
-2. Run Setup.bat/.sh from the cloned folder, follow the instruction and resolve any error at this step
-3. Run GenerateProjectFile.bat/.sh, make sure no error occured at this step
-4. Open UE4.sln with Visual Studio
-5. Rebuild these 2 project under Application group: AutomationTool and AutomationToolLauncher
+###### Step II
+- Clone or Download UE4 source from github.
 
-Choose one of these options. Either download or build:
+###### Step III
+- Open Unreal Binary Builder.
+- Click *Browse* and select **root folder** of your downloaded Engine (where **_Setup.bat_** and **_GenerateProjectFiles.bat_** exists).
 
-Step II: (a) Download UE4 Binary Builder
-1. Download [latest release](https://github.com/ryanjon2040/UE4-Binary-Builder/releases/latest).
-2. Unzip to your preferred location and start `Unreal Binary Builder.exe`.
+![Screenshot](Documentation/Screenshot_1.png)
 
-Step II: (b) Build UE4 Binary Builder
-1. Clone this git.
-2. Open the sln file with Visual Studio, switch to Release configuration and press F5 to build and start or build the application and start manually from bin folder.
+- Once the root folder is selected, click **Start**.
+- If **Continue to Engine Build** is enabled, then _Unreal Binary Builder_ will automatically continue to compile the Engine with given options under **Compile** tab.
 
-Step III: Build Engine
-1. Select your target engine version.
-2. Choose AutomationToolLauncher.exe by browsing to Engine\Binaries\DotNET folder.
-3. (a) [Optional] Click Post Build Settings, choose a location to save the zip and enable your preferred options.
-3. (b) Choose your settings and build.
+###### Step IV
+- Click **_Compile_** tab and set options for the Engine.
+![Screenshot](Documentation/Screenshot_2.png)
 
 # Troubleshoot
 
@@ -53,8 +50,13 @@ On Windows, just change the ownership to Users then try again. To change ownersh
 
    
 
-# Credits
+#### Dependencies
 
-[Material Design In XAML](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit) by [ButchersBoy](https://github.com/ButchersBoy)
-
+[HandyControl](https://github.com/HandyOrg/HandyControl) by [HandyOrg](https://github.com/HandyOrg)
+[DotNetZip](https://github.com/haf/DotNetZip.Semverd) by [Henrik](https://github.com/haf)/Dino Chiesa
+[GameAnalytics](https://github.com/GameAnalytics/GA-SDK-C-SHARP) by [Game Analytics](https://gameanalytics.com/)
+[Json.NET](https://github.com/JamesNK/Newtonsoft.Json) by [Newtonsoft](https://www.newtonsoft.com/json)
+[Sentry.NET](https://github.com/getsentry/sentry-dotnet) by [Sentry](https://sentry.io/)
+[AutoGrid](https://github.com/SpicyTaco/SpicyTaco.AutoGrid) by [SpicyTaco](https://github.com/SpicyTaco)
 [LogViewer](https://stackoverflow.com/a/16745054) by [Federico Berasategui](https://stackoverflow.com/users/643085/federico-berasategui)
+Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
