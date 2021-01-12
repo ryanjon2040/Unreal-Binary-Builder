@@ -12,6 +12,8 @@ This is a small app designed to create binary build of [Unreal Engine 4](https:/
 
 ![](https://img.shields.io/github/languages/code-size/ryanjon2040/UE4-Binary-Builder.svg?style=flat) ![](https://img.shields.io/github/repo-size/ryanjon2040/UE4-Binary-Builder.svg?style=flat)
 
+Watch the below video to get an idea.
+[![Watch the video](https://img.youtube.com/vi/fuvvBMrWX8s/maxresdefault.jpg)](https://youtu.be/fuvvBMrWX8s)
 
 # How to use (Compiling Engine)
 
@@ -32,7 +34,7 @@ This is a small app designed to create binary build of [Unreal Engine 4](https:/
 
 ###### Step IV
 - Click **_Compile_** tab and set options for the Engine.
-![Screenshot](Documentation/Screenshot_2.png)
+![Screenshot](Documentation/Screenshot_2.PNG)
 
 # Troubleshoot
 
