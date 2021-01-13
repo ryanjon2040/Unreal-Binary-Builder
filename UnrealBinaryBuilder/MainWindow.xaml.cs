@@ -91,13 +91,22 @@ namespace UnrealBinaryBuilder
 			DataContext = SettingsJSON;
 			bUse2019Compiler.IsEnabled = false;
 
-			foreach (var p in Plugins.GetInstalledEngines())
+			if (Plugins.GetInstalledEngines() == null)
 			{
-				string RunUATFile = Path.Combine(p.Value, "Engine", "Build", "BatchFiles", "RunUAT.bat");
-				if (File.Exists(RunUATFile))
+				PluginsTab.Visibility = Visibility.Collapsed;
+				AddLogEntry("Could not find any installed Engine versions. Plugins tab is disabled.", true);
+				ShowToastMessage("Could not find any installed Engine versions. Plugins tab is disabled.", LogViewer.EMessageType.Error);
+			}
+			else
+			{
+				foreach (var p in Plugins.GetInstalledEngines())
 				{
-					PluginEngineVersionSelection.Items.Add(p.Key);
-					PluginBuildEnginePath.Add(p.Value);
+					string RunUATFile = Path.Combine(p.Value, "Engine", "Build", "BatchFiles", "RunUAT.bat");
+					if (File.Exists(RunUATFile))
+					{
+						PluginEngineVersionSelection.Items.Add(p.Key);
+						PluginBuildEnginePath.Add(p.Value);
+					}
 				}
 			}
 

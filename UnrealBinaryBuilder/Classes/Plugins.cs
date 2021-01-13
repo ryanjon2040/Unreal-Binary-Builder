@@ -12,6 +12,11 @@ namespace UnrealBinaryBuilder.Classes
 			IDictionary<string, string> ReturnValue = new Dictionary<string, string>();
 
 			RegistryKey EngineInstallations = Registry.LocalMachine.OpenSubKey("Software\\EpicGames\\Unreal Engine");
+			if (EngineInstallations == null)
+			{
+				return null;
+			}
+
 			string[] InstalledEngines = EngineInstallations.GetSubKeyNames();
 			foreach (var s in InstalledEngines)
 			{

@@ -263,7 +263,7 @@
 						</hc:TabItem>
 					</hc:TabControl>
 				</hc:TabItem>
-				<hc:TabItem Header="Plugins">
+				<hc:TabItem x:Name="PluginsTab" Header="Plugins">
 					<Grid>
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin ="10">
 							<TextBlock Text="Engine Version " VerticalAlignment="Center"/>
