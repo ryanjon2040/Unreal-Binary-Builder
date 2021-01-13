@@ -594,30 +594,38 @@ namespace UnrealBinaryBuilder
 
 		private void CreateProcess(ProcessStartInfo processStartInfo, bool bClearLogs = true)
 		{
-			StartSetupBatFile.IsEnabled = false;
-			DispatchTimer.Start();
-			StopwatchTimer.Start();
-
-			CompiledFiles = CompiledFilesTotal = 0;
-			ProcessedFilesLabel.Text = "[Compiled: 0. Total: 0]";
-			
-			if (bClearLogs)
+			if (File.Exists(processStartInfo.FileName))
 			{
-				LogControl.ClearAllLogs();
-				AddLogEntry($"Welcome to UE4 Binary Builder v{PRODUCT_VERSION}");
+				StartSetupBatFile.IsEnabled = false;
+				DispatchTimer.Start();
+				StopwatchTimer.Start();
+
+				CompiledFiles = CompiledFilesTotal = 0;
+				ProcessedFilesLabel.Text = "[Compiled: 0. Total: 0]";
+
+				if (bClearLogs)
+				{
+					LogControl.ClearAllLogs();
+					AddLogEntry($"Welcome to UE4 Binary Builder v{PRODUCT_VERSION}");
+				}
+
+				AddLogEntry($"========================== RUNNING - {Path.GetFileName(processStartInfo.FileName)} ==========================");
+
+				CurrentProcess = new Process();
+				CurrentProcess.StartInfo = processStartInfo;
+				CurrentProcess.EnableRaisingEvents = true;
+				CurrentProcess.OutputDataReceived += new DataReceivedEventHandler(CurrentProcess_OutputDataReceived);
+				CurrentProcess.ErrorDataReceived += new DataReceivedEventHandler(CurrentProcess_ErrorDataReceived);
+				CurrentProcess.Exited += new EventHandler(CurrentProcess_Exited);
+				CurrentProcess.Start();
+				CurrentProcess.BeginErrorReadLine();
+				CurrentProcess.BeginOutputReadLine();
 			}
-
-			AddLogEntry($"========================== RUNNING - {Path.GetFileName(processStartInfo.FileName)} ==========================");
-
-			CurrentProcess = new Process();
-			CurrentProcess.StartInfo = processStartInfo;
-			CurrentProcess.EnableRaisingEvents = true;
-			CurrentProcess.OutputDataReceived += new DataReceivedEventHandler(CurrentProcess_OutputDataReceived);
-			CurrentProcess.ErrorDataReceived += new DataReceivedEventHandler(CurrentProcess_ErrorDataReceived);
-			CurrentProcess.Exited += new EventHandler(CurrentProcess_Exited);
-			CurrentProcess.Start();
-			CurrentProcess.BeginErrorReadLine();
-			CurrentProcess.BeginOutputReadLine();
+			else
+			{
+				AddLogEntry($"File does not exist: {processStartInfo.FileName}", true);
+				ShowToastMessage($"File does not exist: {Path.GetFileName(processStartInfo.FileName)}", LogViewer.EMessageType.Error);
+			}
 		}
 
 		private string GetCurrentProcessName()
