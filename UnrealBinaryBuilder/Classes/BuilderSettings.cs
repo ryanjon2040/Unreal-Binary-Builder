@@ -355,18 +355,29 @@ namespace UnrealBinaryBuilder.Classes
 
 		public static void UpdatePlatformInclusion(string InPlatform, bool bIncluded)
 		{
-			BuilderSettingsJson BSJ = GetSettingsFile();
-			foreach (GitPlatform gp in BSJ.GitDependencyPlatforms)
+			try
 			{
-				if (gp.Name.ToLower() == InPlatform.ToLower())
+				BuilderSettingsJson BSJ = GetSettingsFile();
+				foreach (GitPlatform gp in BSJ.GitDependencyPlatforms)
 				{
-					gp.bIsIncluded = bIncluded;
-					break;
+					if (gp.Name.ToLower() == InPlatform.ToLower())
+					{
+						gp.bIsIncluded = bIncluded;
+						break;
+					}
 				}
-			}
 
-			string JsonOutput = JsonConvert.SerializeObject(BSJ, Formatting.Indented);
-			File.WriteAllText(PROGRAM_SETTINGS_PATH, JsonOutput);
+				string JsonOutput = JsonConvert.SerializeObject(BSJ, Formatting.Indented);
+				File.WriteAllText(PROGRAM_SETTINGS_PATH, JsonOutput);
+			}
+			catch (Exception ex)
+			{
+				Sentry.SentrySdk.CaptureException(ex);
+				string ErrorMessage = $"Failed to update platform setting. ERROR: {ex.Message}";
+				MainWindow mainWindow = ((MainWindow)Application.Current.MainWindow);
+				mainWindow.AddLogEntry(ErrorMessage, true);
+				HandyControl.Controls.MessageBox.Fatal(ErrorMessage);
+			}
 		}
 
 		public static void LoadInitialValues()
