@@ -822,11 +822,12 @@ namespace UnrealBinaryBuilder
 		{
 			if (bIsBuilding)
 			{
+				MessageBoxResult MessageResult;
 				switch (currentProcessType)
 				{
 					case CurrentProcessType.SetupBat:
 					case CurrentProcessType.GenerateProjectFiles:
-						MessageBoxResult MessageResult = HandyControl.Controls.MessageBox.Show($"Automation tool is currently running. Would you like to stop it and start building the Engine?\n\nPress Yes to force stop Automation Tool and begin Engine Build.\nPress No to continue current process.", "Automation Tool Running!", MessageBoxButton.YesNo, MessageBoxImage.Question);
+						MessageResult = HandyControl.Controls.MessageBox.Show("Automation tool is currently running. Would you like to stop it and start building the Engine?\n\nPress Yes to force stop Automation Tool and begin Engine Build.\nPress No to continue current process.", "Automation Tool Running!", MessageBoxButton.YesNo, MessageBoxImage.Question);
 						switch (MessageResult)
 						{
 							case MessageBoxResult.Yes:
@@ -835,6 +836,15 @@ namespace UnrealBinaryBuilder
 								break;
 							case MessageBoxResult.No:
 								return;
+						}
+						break;
+					case CurrentProcessType.BuildUnrealEngine:
+						MessageResult = HandyControl.Controls.MessageBox.Show("Unreal Engine is being compiled right now. Do you want to stop it?", "Compiling Engine", MessageBoxButton.YesNo, MessageBoxImage.Question);
+						if (MessageResult == MessageBoxResult.Yes)
+						{
+							GameAnalyticsCSharp.AddDesignEvent("Build:AutomationTool:UnrealEngine:Killed");
+							CurrentProcess.Kill(true);
+							return;
 						}
 						break;
 				}
