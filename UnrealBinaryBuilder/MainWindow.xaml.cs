@@ -1325,51 +1325,6 @@ namespace UnrealBinaryBuilder
 			catch (Exception) {}
 		}
 
-		private void GitWin64Platform_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-		{
-			BuilderSettings.UpdatePlatformInclusion("Win64", GitWin64Platform.SelectedIndex == 0);
-		}
-
-		private void GitWin32Platform_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			BuilderSettings.UpdatePlatformInclusion("Win32", GitWin64Platform.SelectedIndex == 0);
-		}
-
-		private void GitMacPlatform_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			BuilderSettings.UpdatePlatformInclusion("Mac", GitWin64Platform.SelectedIndex == 0);
-		}
-
-		private void GitIOSPlatform_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			BuilderSettings.UpdatePlatformInclusion("IOS", GitWin64Platform.SelectedIndex == 0);
-		}
-
-		private void GitAndroidPlatform_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			BuilderSettings.UpdatePlatformInclusion("Android", GitWin64Platform.SelectedIndex == 0);
-		}
-
-		private void GitHololensPlatform_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			BuilderSettings.UpdatePlatformInclusion("Hololens", GitWin64Platform.SelectedIndex == 0);
-		}
-
-		private void GitLinuxPlatform_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			BuilderSettings.UpdatePlatformInclusion("Linux", GitWin64Platform.SelectedIndex == 0);
-		}
-
-		private void GitLuminPlatform_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			BuilderSettings.UpdatePlatformInclusion("Lumin", GitWin64Platform.SelectedIndex == 0);
-		}
-
-		private void GitTvOSPlatform_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			BuilderSettings.UpdatePlatformInclusion("TvOS", GitWin64Platform.SelectedIndex == 0);
-		}
-
 		private void PluginZipDestinationPathBrowse_Click(object sender, RoutedEventArgs e)
 		{
 			System.Windows.Forms.FolderBrowserDialog NewFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -1474,6 +1429,12 @@ namespace UnrealBinaryBuilder
 		{
 			downloadDialog.Close();
 			Close();
+		}
+
+		private void GitPlatform_CheckedChanged(object sender, RoutedEventArgs e)
+		{
+			string TargetPlatformName = ((Control)sender).Name.Replace("Git", "").Replace("Platform", "");
+			BuilderSettings.UpdatePlatformInclusion(TargetPlatformName, (bool)((CheckBox)sender).IsChecked);
 		}
 	}
 }

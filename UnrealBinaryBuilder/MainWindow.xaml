@@ -42,71 +42,17 @@
 								<Button x:Name="StartSetupBatFile" Content="Start" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Width="125" Style="{StaticResource ButtonPrimary}" IsEnabled="{Binding ElementName=SetupBatFilePath, Path=Text.Length, Mode=OneWay}" Click="StartSetupBatFile_Click"/>
 								<CheckBox x:Name="bContinueToEngineBuild" Content="Continue to Engine Build" IsChecked="{Binding bContinueToEngineBuild}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,153,16"/>
 								<Grid>
-									<GroupBox Header="Platforms" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Width="200" Style="{StaticResource GroupBoxOriginal}">
-										<StackPanel x:Name="PlatformStackPanelMain">
-											<StackPanel Orientation="Horizontal">
-												<hc:SimpleText Text="Win64" Foreground="#FFE6E0E0" Margin="10 10 38 10"/>
-												<ComboBox x:Name="GitWin64Platform" VerticalAlignment="Center" Width="100" SelectionChanged="GitWin64Platform_SelectionChanged">
-													<ComboBoxItem x:Name="GitWin64Include" Content="Include"/>
-													<ComboBoxItem x:Name="GitWin64Exclude" Content="Exclude"/>
-												</ComboBox>
-											</StackPanel>
-											<StackPanel Orientation="Horizontal">
-												<hc:SimpleText Text="Win32" Foreground="#FFE6E0E0" Margin="10 10 38 10"/>
-												<ComboBox x:Name="GitWin32Platform" VerticalAlignment="Center" Width="100" SelectionChanged="GitWin32Platform_SelectionChanged">
-													<ComboBoxItem x:Name="GitWin32Include" Content="Include"/>
-													<ComboBoxItem x:Name="GitWin32Exclude" Content="Exclude"/>
-												</ComboBox>
-											</StackPanel>
-											<StackPanel Orientation="Horizontal">
-												<hc:SimpleText Text="Mac" Foreground="#FFE6E0E0" Margin="10 10 50 10"/>
-												<ComboBox x:Name="GitMacPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitMacPlatform_SelectionChanged">
-													<ComboBoxItem x:Name="GitMacInclude" Content="Include"/>
-													<ComboBoxItem x:Name="GitMacExclude" Content="Exclude"/>
-												</ComboBox>
-											</StackPanel>
-											<StackPanel Orientation="Horizontal">
-												<hc:SimpleText Text="IOS" Foreground="#FFE6E0E0" Margin="10 10 53 10"/>
-												<ComboBox x:Name="GitIOSPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitIOSPlatform_SelectionChanged">
-													<ComboBoxItem x:Name="GitIOSInclude" Content="Include"/>
-													<ComboBoxItem x:Name="GitIOSExclude" Content="Exclude"/>
-												</ComboBox>
-											</StackPanel>
-											<StackPanel Orientation="Horizontal">
-												<hc:SimpleText Text="Android" Foreground="#FFE6E0E0" Margin="10 10 29 10"/>
-												<ComboBox x:Name="GitAndroidPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitAndroidPlatform_SelectionChanged">
-													<ComboBoxItem x:Name="GitAndroidInclude" Content="Include"/>
-													<ComboBoxItem x:Name="GitAndroidExclude" Content="Exclude"/>
-												</ComboBox>
-											</StackPanel>
-											<StackPanel Orientation="Horizontal">
-												<hc:SimpleText Text="HoloLens" Foreground="#FFE6E0E0" Margin="10 10 23 10"/>
-												<ComboBox x:Name="GitHololensPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitHololensPlatform_SelectionChanged">
-													<ComboBoxItem x:Name="GitHololensInclude" Content="Include"/>
-													<ComboBoxItem x:Name="GitHololensExclude" Content="Exclude"/>
-												</ComboBox>
-											</StackPanel>
-											<StackPanel Orientation="Horizontal">
-												<hc:SimpleText Text="Linux" Foreground="#FFE6E0E0" Margin="10 10 44 10"/>
-												<ComboBox x:Name="GitLinuxPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitLinuxPlatform_SelectionChanged">
-													<ComboBoxItem x:Name="GitLinuxInclude" Content="Include"/>
-													<ComboBoxItem x:Name="GitLinuxExclude" Content="Exclude"/>
-												</ComboBox>
-											</StackPanel>
-											<StackPanel Orientation="Horizontal">
-												<hc:SimpleText Text="Lumin" Foreground="#FFE6E0E0" Margin="10 10 40 10"/>
-												<ComboBox x:Name="GitLuminPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitLuminPlatform_SelectionChanged">
-													<ComboBoxItem x:Name="GitLuminInclude" Content="Include"/>
-													<ComboBoxItem x:Name="GitLuminExclude" Content="Exclude"/>
-												</ComboBox>
-											</StackPanel>
-											<StackPanel Orientation="Horizontal">
-												<hc:SimpleText Text="TVOS" Foreground="#FFE6E0E0" Margin="10 10 44 10"/>
-												<ComboBox x:Name="GitTvOSPlatform" VerticalAlignment="Center" Width="100" SelectionChanged="GitTvOSPlatform_SelectionChanged">
-													<ComboBoxItem x:Name="GitTvOSInclude" Content="Include"/>
-													<ComboBoxItem x:Name="GitTvOSExclude" Content="Exclude"/>
-												</ComboBox>
-											</StackPanel>
+									<GroupBox Header="Platforms" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Style="{StaticResource GroupBoxOriginal}">
+										<StackPanel x:Name="PlatformStackPanelMain" Width="200">
+											<CheckBox x:Name="GitWin64Platform" Content="Windows 64" Margin="5" HorizontalAlignment="Left" Checked="GitPlatform_CheckedChanged" Unchecked="GitPlatform_CheckedChanged"/>
+											<CheckBox x:Name="GitWin32Platform" Content="Windows 32" Margin="5" HorizontalAlignment = "Left" Checked="GitPlatform_CheckedChanged" Unchecked="GitPlatform_CheckedChanged"/>
+											<CheckBox x:Name="GitLinuxPlatform" Content="Linux" Margin="5" HorizontalAlignment = "Left" Checked="GitPlatform_CheckedChanged" Unchecked="GitPlatform_CheckedChanged"/>
+											<CheckBox x:Name="GitAndroidPlatform" Content="Android" Margin="5" HorizontalAlignment = "Left" Checked="GitPlatform_CheckedChanged" Unchecked="GitPlatform_CheckedChanged"/>
+											<CheckBox x:Name="GitLuminPlatform" Content="Lumin" Margin="5" HorizontalAlignment = "Left" Checked="GitPlatform_CheckedChanged" Unchecked="GitPlatform_CheckedChanged"/>
+											<CheckBox x:Name="GitHololensPlatform" Content="Holo Lens" Margin="5" HorizontalAlignment = "Left" Checked="GitPlatform_CheckedChanged" Unchecked="GitPlatform_CheckedChanged"/>
+											<CheckBox x:Name="GitMacPlatform" Content="Mac" Margin="5" HorizontalAlignment = "Left" Checked="GitPlatform_CheckedChanged" Unchecked="GitPlatform_CheckedChanged"/>
+											<CheckBox x:Name="GitIOSPlatform" Content="IOS" Margin="5" HorizontalAlignment = "Left" Checked="GitPlatform_CheckedChanged" Unchecked="GitPlatform_CheckedChanged"/>
+											<CheckBox x:Name="GitTVOSPlatform" Content="TV OS" Margin="5" HorizontalAlignment = "Left" Checked="GitPlatform_CheckedChanged" Unchecked="GitPlatform_CheckedChanged"/>
 										</StackPanel>
 									</GroupBox>
 									<GroupBox Header="Git Dependencies Options" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="1068,10,0,0" Height="201" Width="200" Style="{StaticResource GroupBoxOriginal}">

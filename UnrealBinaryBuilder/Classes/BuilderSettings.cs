@@ -320,15 +320,15 @@ namespace UnrealBinaryBuilder.Classes
 			BSJ.ZipEnginePath = mainWindow.ZipPath.Text;
 
 			List<GitPlatform> GitPlatformList = mainWindow.SettingsJSON.GitDependencyPlatforms;
-			IEnumerable<ComboBox> ComboBoxCollection = GetChildrenOfType<ComboBox>(mainWindow.PlatformStackPanelMain);
+			IEnumerable<CheckBox> ComboBoxCollection = GetChildrenOfType<CheckBox>(mainWindow.PlatformStackPanelMain);
 			foreach (GitPlatform gp in GitPlatformList)
 			{
 				string ComboBoxName = $"Git{gp.Name}Platform";
-				foreach (ComboBox c in ComboBoxCollection)
+				foreach (CheckBox c in ComboBoxCollection)
 				{
 					if (c.Name.ToLower() == ComboBoxName.ToLower())
 					{
-						gp.bIsIncluded = c.SelectedIndex == 0;
+						gp.bIsIncluded = (bool)c.IsChecked;
 						break;
 					}
 				}
@@ -384,16 +384,16 @@ namespace UnrealBinaryBuilder.Classes
 		{
 			MainWindow mainWindow = ((MainWindow)Application.Current.MainWindow);
 			List<GitPlatform> GitPlatformList = mainWindow.SettingsJSON.GitDependencyPlatforms;
-			IEnumerable<ComboBox> ComboBoxCollection = GetChildrenOfType<ComboBox>(mainWindow.PlatformStackPanelMain);
+			IEnumerable<CheckBox> ComboBoxCollection = GetChildrenOfType<CheckBox>(mainWindow.PlatformStackPanelMain);
 
 			foreach (GitPlatform gp in GitPlatformList)
 			{
 				string ComboBoxName = $"Git{gp.Name}Platform";
-				foreach (ComboBox c in ComboBoxCollection)
+				foreach (CheckBox c in ComboBoxCollection)
 				{
 					if (c.Name.ToLower() == ComboBoxName.ToLower())
 					{
-						c.SelectedIndex = gp.bIsIncluded ? 0 : 1;
+						c.IsChecked = gp.bIsIncluded;
 						break;
 					}
 				}
