@@ -951,7 +951,7 @@ namespace UnrealBinaryBuilder
 
 				GameAnalyticsCSharp.AddDesignEvent($"Build:Engine:{GetEngineName()}");
 				BuildRocketUE.Content = "Stop Build";
-
+				BuildRocketUE.IsEnabled = true;
 				string CommandLineArgs = PrepareCommandline();
 
 				ProcessStartInfo AutomationStartInfo = new ProcessStartInfo
