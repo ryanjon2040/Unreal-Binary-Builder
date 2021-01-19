@@ -22,7 +22,7 @@ namespace UnrealBinaryBuilder
 {
 	public partial class MainWindow
 	{
-		private static readonly string PRODUCT_VERSION = "3.0";
+		private static readonly string PRODUCT_VERSION = "3.1";
 
 		private static readonly string SetupBatFileName = "Setup.bat";
 		private static readonly string GenerateProjectBatFileName = "GenerateProjectFiles.bat";
