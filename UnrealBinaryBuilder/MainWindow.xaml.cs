@@ -1287,7 +1287,11 @@ namespace UnrealBinaryBuilder
 
 		private void PluginEngineVersionSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			bUse2019Compiler.IsEnabled = Convert.ToDouble(PluginEngineVersionSelection.SelectedValue) >= 4.25;
+			try
+			{
+				bUse2019Compiler.IsEnabled = Convert.ToDouble(PluginEngineVersionSelection.SelectedValue) >= 4.25;
+			}
+			catch (Exception) {}
 		}
 
 		private void GitWin64Platform_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
