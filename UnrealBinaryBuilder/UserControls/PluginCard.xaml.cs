@@ -32,6 +32,7 @@ namespace UnrealBinaryBuilder.UserControls
 			mainWindow = _mainWindow;
 			TargetPlatforms = InTargetPlatformsList;
 			IsUsing2019Compiler = bUse2019Compiler;
+			CompilerText.Text = IsUsing2019Compiler ? "2019" : "2017";
 			PluginPath = InPluginPath;
 			DestinationPath = InDestination;
 			RunUATFile = Path.Combine(InEnginePath, "Engine", "Build", "BatchFiles", "RunUAT.bat");

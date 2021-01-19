@@ -7,7 +7,11 @@
 			 mc:Ignorable="d" Width="200" Height="290" HorizontalAlignment="Left" VerticalAlignment="Top">
 	<hc:Card MaxWidth="240" BorderThickness="0" Effect="{DynamicResource EffectShadow3}" Margin="8">
 		<Grid>
-			<TextBlock x:Name="EngineVersionText" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin ="10" Foreground="#3FFFFFFF"/>
+			<StackPanel Margin ="10,0,0,25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Horizontal">
+				<TextBlock x:Name="CompilerText" Foreground="#3FFFFFFF" Text="" />
+				<TextBlock Foreground="#3FFFFFFF" Text=" Compiler" />
+			</StackPanel>
+			<TextBlock x:Name="EngineVersionText" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin ="10" Foreground="#3FFFFFFF" />
 			<Border CornerRadius="4,4,0,0" Width="128" Height="128" VerticalAlignment="Top" Margin="10">
 				<Image x:Name="PluginImage" Stretch="Fill" />
 			</Border>
