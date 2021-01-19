@@ -107,6 +107,10 @@ namespace UnrealBinaryBuilder
 						PluginEngineVersionSelection.Items.Add(p.Key);
 						PluginBuildEnginePath.Add(p.Value);
 					}
+					else
+					{
+						AddLogEntry($"{p.Key} will not be available for Plugin build. RunUAT.bat does not exist in {Path.GetDirectoryName(RunUATFile)}.", true);
+					}
 				}
 			}
 
