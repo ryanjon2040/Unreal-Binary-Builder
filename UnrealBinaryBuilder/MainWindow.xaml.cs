@@ -1416,7 +1416,7 @@ namespace UnrealBinaryBuilder
 				if (bUpdateAvailable)
 				{
 					downloadDialogWindow = new DownloadDialog(this);
-					downloadDialog = Dialog.Show(downloadDialog);
+					downloadDialog = Dialog.Show(downloadDialogWindow);
 					CheckUpdateBtn.IsEnabled = false;
 					CheckUpdateBtn.Content = "Downloading...";
 					unrealBinaryBuilderUpdater.UpdateDownloadStartedEventHandler += DownloadUpdateProgressStart;
