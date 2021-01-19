@@ -372,8 +372,8 @@ namespace UnrealBinaryBuilder.Classes
 			}
 			catch (Exception ex)
 			{
-				Sentry.SentrySdk.CaptureException(ex);
 				string ErrorMessage = $"Failed to update platform setting. ERROR: {ex.Message}";
+				GameAnalyticsCSharp.LogEvent(ErrorMessage, GameAnalyticsSDK.Net.EGAErrorSeverity.Error);
 				MainWindow mainWindow = ((MainWindow)Application.Current.MainWindow);
 				mainWindow.AddLogEntry(ErrorMessage, true);
 				HandyControl.Controls.MessageBox.Fatal(ErrorMessage);
