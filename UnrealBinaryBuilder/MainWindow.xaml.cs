@@ -1114,7 +1114,7 @@ namespace UnrealBinaryBuilder
 			return null;
 		}
 
-		private bool? BuildPlugin(PluginCard pluginCard)
+		private string BuildPlugin(PluginCard pluginCard)
 		{
 			if (bIsBuilding == false)
 			{
@@ -1144,11 +1144,13 @@ namespace UnrealBinaryBuilder
 					ChangeStatusLabel($"Building Plugin - {Path.GetFileNameWithoutExtension(pluginCard.PluginPath)}");
 					ShowToastMessage($"Building Plugin - {Path.GetFileNameWithoutExtension(pluginCard.PluginPath)}", LogViewer.EMessageType.Info, false, true, "PluginBuild");
 					GameAnalyticsCSharp.AddProgressStart("Build", "Plugin");					
-					return true;
+					return null;
 				}
+
+				return $"{pluginCard.PluginName.Text} ({pluginCard.EngineVersionText.Text}) is already compiled.";
 			}
 
-			return null;
+			return "Cannot build plugin while task is running";
 		}
 
 		private void CancelZipping_Click(object sender, RoutedEventArgs e)
@@ -1272,16 +1274,31 @@ namespace UnrealBinaryBuilder
 
 		private void StartPluginBuildsBtn_Click(object sender, RoutedEventArgs e)
 		{
-			if (PluginQueues.Children.Count > 0)
+			if (PluginQueues.Children.Count == 0)
 			{
-				AddLogEntry($"Building {PluginQueues.Children.Count} Plugin(s).");
-				AddLogEntry("");
-				ShowToastMessage($"Building {PluginQueues.Children.Count} Plugin(s).");
-				BuildPlugin((PluginCard)PluginQueues.Children[0]);
+				HandyControl.Controls.MessageBox.Fatal("Queue is empty. Add one or more plugin to queue and build.");
 			}
 			else
 			{
-				HandyControl.Controls.MessageBox.Fatal("Queue is empty. Add plugins to queue and build.");
+				string PluginBuildMessage = null;
+				foreach (var C in PluginQueues.Children)
+				{
+					PluginCard pluginCard = (PluginCard)C;
+					if (pluginCard.IsPending())
+					{
+						AddLogEntry($"Building {PluginQueues.Children.Count} Plugin(s).");
+						AddLogEntry("");
+						ShowToastMessage($"Building {PluginQueues.Children.Count} Plugin(s).");
+						PluginBuildMessage = BuildPlugin(pluginCard);
+						break;
+					}
+				}
+
+				if (PluginBuildMessage != null)
+				{
+					Growl.Clear();
+					HandyControl.Controls.MessageBox.Fatal(PluginBuildMessage);
+				}
 			}
 		}
 
