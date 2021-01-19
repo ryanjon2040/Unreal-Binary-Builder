@@ -45,7 +45,10 @@ namespace UnrealBinaryBuilder.UserControls
 			}
 
 			string PluginIcon = Path.Combine(InPluginPath.Replace(Path.GetFileName(InPluginPath), ""), "Resources", "Icon128.png");
-			PluginImage.Source = new BitmapImage(new Uri(PluginIcon));
+			if (File.Exists(PluginIcon))
+			{
+				PluginImage.Source = new BitmapImage(new Uri(PluginIcon));
+			}
 			LoadingCircle.Visibility = Visibility.Collapsed;
 			OpenBtn.Visibility = Visibility.Collapsed;
 			ZipProgressbar.Visibility = Visibility.Collapsed;
