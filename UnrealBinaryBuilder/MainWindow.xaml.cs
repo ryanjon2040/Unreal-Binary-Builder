@@ -1060,7 +1060,7 @@ namespace UnrealBinaryBuilder
 		private void CopyCommandLine_Click(object sender, RoutedEventArgs e)
 		{
 			GameAnalyticsCSharp.AddDesignEvent("CommandLine:CopyToClipboard");
-			Clipboard.SetText(PrepareCommandline());
+			Clipboard.SetDataObject(PrepareCommandline());
 			HandyControl.Controls.MessageBox.Show("Command line copied to clipboard!");
 		}
 
