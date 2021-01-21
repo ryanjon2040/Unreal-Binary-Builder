@@ -291,9 +291,9 @@
 					<hc:SimpleText x:Name="StepLabel" Text="Step: " Margin="5" Foreground="#FFE6E0E0"/>
 					<hc:SimpleText x:Name="StatusLabel" Text="Status: " Margin="5" Foreground="#FFE6E0E0"/>
 					<hc:SimpleText x:Name="ProcessedFilesLabel" Text="Compiled: 0" Margin="5" Foreground="#FFE6E0E0" st:StackPanel.Fill="Fill"/>
-					<Button x:Name="CheckUpdateBtn" Content="Check for Update" Height="20" Padding="10,0,10,0" FontSize="10" Width="110" Click="CheckUpdateBtn_Click" />
-					<Button x:Name="OpenSettingsBtn" Content="Open Settings" Height="20" Padding="10,0,10,0" FontSize="10" IsEnabled="False" Width="110" Click="OpenSettingsBtn_Click"/>
-					<Button x:Name="OpenLogFolderBtn" Content="Open Log Folder" Margin="0 0 10 0" Height="20" Padding="10,0,10,0" FontSize="10" IsEnabled="False" Width="110" Click="OpenLogFolderBtn_Click"/>
+					<Button x:Name="CheckUpdateBtn" Content="Check for Updates" Height="20" Padding="10,0,10,0" FontSize="10" Width="120" Click="CheckUpdateBtn_Click" />
+					<Button x:Name="OpenSettingsBtn" Content="Open Settings" Height="20" Padding="10,0,10,0" FontSize="10" IsEnabled="False" Width="120" Click="OpenSettingsBtn_Click"/>
+					<Button x:Name="OpenLogFolderBtn" Content="Open Log Folder" Margin="0 0 10 0" Height="20" Padding="10,0,10,0" FontSize="10" IsEnabled="False" Width="120" Click="OpenLogFolderBtn_Click"/>
 				</st:StackPanel>
 				<local:LogViewer x:Name="LogControl" DockPanel.Dock="Top" Height="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
 			</DockPanel>

@@ -68,10 +68,12 @@ namespace UnrealBinaryBuilderUpdater
 			if (_updateInfo != null)
 			{
 				UpdateProgressFinishedEventArgs eventArgs = new UpdateProgressFinishedEventArgs();
+				eventArgs.castItem = null;
 				switch (_updateInfo.Status)
 				{
 					case NetSparkleUpdater.Enums.UpdateStatus.UpdateAvailable:
 						eventArgs.appUpdateCheckStatus = AppUpdateCheckStatus.UpdateAvailable;
+						eventArgs.castItem = _updateInfo.Updates.First();
 						break;
 					case NetSparkleUpdater.Enums.UpdateStatus.UpdateNotAvailable:
 						eventArgs.appUpdateCheckStatus = AppUpdateCheckStatus.NoUpdate;
@@ -160,6 +162,7 @@ namespace UnrealBinaryBuilderUpdater
 	public class UpdateProgressFinishedEventArgs : EventArgs
 	{
 		public AppUpdateCheckStatus appUpdateCheckStatus { get; set; }
+		public AppCastItem castItem { get; set; }
 	}
 
 	public class UpdateProgressDownloadEventArgs : EventArgs

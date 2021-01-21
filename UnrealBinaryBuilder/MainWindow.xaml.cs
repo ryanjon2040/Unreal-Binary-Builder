@@ -221,8 +221,8 @@ namespace UnrealBinaryBuilder
 			{
 				case AppUpdateCheckStatus.UpdateAvailable:
 					bUpdateAvailable = true;
-					CheckUpdateBtn.Content = "Install Update!";
-					ShowToastMessage("A new update is available!", LogViewer.EMessageType.Info, true, false, "", 2);
+					CheckUpdateBtn.Content = $"Install Update {e.castItem.Version}";
+					ShowToastMessage($"Update {e.castItem.Version} is available.", LogViewer.EMessageType.Info, true, false, "", 2);
 					break;
 				case AppUpdateCheckStatus.NoUpdate:
 					ShowToastMessage("You are running the latest version.", LogViewer.EMessageType.Info, true, false, "", 2);
