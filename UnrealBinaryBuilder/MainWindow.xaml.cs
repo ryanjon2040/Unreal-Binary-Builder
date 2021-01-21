@@ -551,7 +551,7 @@ namespace UnrealBinaryBuilder
 			}
 			else if (string.IsNullOrEmpty(SettingsJSON.GitDependencyCache) == false)
 			{
-				CommandLines += $" --cache={SettingsJSON.GitDependencyCache}";
+				CommandLines += $" --cache={SettingsJSON.GitDependencyCache.Replace("\\", "/")}";
 				CommandLines += $" --cache-size-multiplier={SettingsJSON.GitDependencyCacheMultiplier}";
 				CommandLines += $" --cache-days={SettingsJSON.GitDependencyCacheDays}";
 			}
