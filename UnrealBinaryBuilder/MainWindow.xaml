@@ -18,8 +18,7 @@
 				Width="1280" Closing="UnrealBinaryBuilderWindow_Closing">
 	<hc:GlowWindow.NonClientAreaContent>
 		<StackPanel VerticalAlignment="Stretch" Orientation="Horizontal">
-			<Separator Width="10" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
-			<Button x:Name="AboutBtn" Content="About" Style="{StaticResource ButtonBaseStyle}" Click="AboutBtn_Click"/>
+			<Separator Width="10" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>			
 			<Button x:Name="GetSourceCode" Content="Source Code" Style="{StaticResource ButtonBaseStyle}" Click="GetSourceCode_Click"/>
 			<Menu>
 				<MenuItem Header="Support">
@@ -28,6 +27,8 @@
 				</MenuItem>
 			</Menu>
 			<Button x:Name="FeedbackBtn" Content="Feedback" Style="{StaticResource ButtonBaseStyle}" Click="FeedbackBtn_Click"/>
+			<Button x:Name="ChangelogBtn" Content="Changelog" Style="{StaticResource ButtonBaseStyle}" Click="ChangelogBtn_Click" />
+			<Button x:Name="AboutBtn" Content="About" Style="{StaticResource ButtonBaseStyle}" Click="AboutBtn_Click"/>
 		</StackPanel>
 	</hc:GlowWindow.NonClientAreaContent>
 	<Grid>

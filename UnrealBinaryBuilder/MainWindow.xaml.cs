@@ -1371,6 +1371,11 @@ namespace UnrealBinaryBuilder
 			OpenBrowser("https://forms.gle/LeZqAeqmV9fWQpxP7");
 			GameAnalyticsCSharp.AddDesignEvent("Menu:Click:Feedback");
 		}
+		private void ChangelogBtn_Click(object sender, RoutedEventArgs e)
+		{
+			OpenBrowser("https://github.com/ryanjon2040/UE4-Binary-Builder/blob/master/CHANGELOG.md");
+			GameAnalyticsCSharp.AddDesignEvent("Menu:Click:Changelog");
+		}
 
 		private void OpenLogFolderBtn_Click(object sender, RoutedEventArgs e)
 		{
