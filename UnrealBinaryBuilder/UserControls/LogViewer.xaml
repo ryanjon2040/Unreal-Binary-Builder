@@ -31,14 +31,13 @@
 			<Grid IsSharedSizeScope="True">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition SharedSizeGroup="Date" Width="Auto"/>
+					<ColumnDefinition SharedSizeGroup="Message" Width="Auto"/>
 					<ColumnDefinition/>
 				</Grid.ColumnDefinitions>
 
-				<TextBlock Text="{Binding DateTime}" Grid.Column="0"
-					   FontWeight="Bold" Margin="5,0,5,0"/>
-
-				<TextBlock Text="{Binding Message}" Grid.Column="2" Foreground="{Binding MessageColor}"
-					   TextWrapping="Wrap"/>
+				<Button x:Name="CopyBtn" Grid.Column="0" Content="Copy" Width="50" Height="20" Padding="0" Margin="0 5 0 0" FontSize="11" Visibility="{Binding MsgVisibility}" Click="CopyBtn_Click" Tag="{Binding Message}"/>
+				<TextBlock Text="{Binding DateTime}" Grid.Column="1" FontWeight="Bold" Margin="5 5 10 0" Visibility="{Binding MsgVisibility}" VerticalAlignment="Center"/>
+				<TextBlock Text="{Binding Message}" Grid.Column="2" Foreground="{Binding MessageColor}" TextWrapping="Wrap" Margin="5 0 0 0" VerticalAlignment="Center"/>
 			</Grid>
 		</DataTemplate>
 
@@ -75,9 +74,7 @@
 	</UserControl.Resources>
 
 	<DockPanel>
-		<TextBlock Text="{Binding Count, StringFormat='{}{0} Items'}"
-			   DockPanel.Dock="Top" Visibility="Collapsed"/>
-
+		<TextBlock Text="{Binding Count, StringFormat='Total log entries: {0}'}" DockPanel.Dock="Bottom" Margin="5,0,5,0" Visibility="Visible"/>
 		<Grid>
 			<Rectangle Fill="#FF111111"/>
 			<ItemsControl ItemsSource="{Binding}" Style="{StaticResource LogViewerStyle}" Margin="10">

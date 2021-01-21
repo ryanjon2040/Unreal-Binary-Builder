@@ -47,7 +47,15 @@ namespace UnrealBinaryBuilder.UserControls
                     InLogEntry.MessageColor = Brushes.OrangeRed;
                     break;
 			}
-            Dispatcher.BeginInvoke((Action)(() => LogEntries.Add(InLogEntry)));
+
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                if (string.IsNullOrEmpty(InLogEntry.Message))
+                {
+                    InLogEntry.MsgVisibility = Visibility.Hidden;
+                }
+                LogEntries.Add(InLogEntry);
+            }));
         }
 
         public void AddLogEntry(LogEntry InLogEntry, EMessageType InMessageType)
@@ -71,7 +79,15 @@ namespace UnrealBinaryBuilder.UserControls
                     break;
 
             }
-            Dispatcher.BeginInvoke((Action)(() => LogEntries.Add(InLogEntry)));
+
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                if (string.IsNullOrEmpty(InLogEntry.Message))
+                {
+                    InLogEntry.MsgVisibility = Visibility.Hidden;
+                }
+                LogEntries.Add(InLogEntry);
+            }));
         }
 
         public void ClearAllLogs()
@@ -113,9 +129,15 @@ namespace UnrealBinaryBuilder.UserControls
                 AddLogEntry(logEntry, EMessageType.Error);
             }
         }
-    }
 
-    public class PropertyChangedBase : INotifyPropertyChanged
+		private void CopyBtn_Click(object sender, RoutedEventArgs e)
+		{
+            Clipboard.SetDataObject(((Control)sender).Tag);
+            ((MainWindow)Application.Current.MainWindow).ShowToastMessage("Copied to clipboard!", EMessageType.Info, true, false, "", 1);
+        }
+	}
+
+	public class PropertyChangedBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -134,5 +156,6 @@ namespace UnrealBinaryBuilder.UserControls
         public DateTime DateTime { get; set; }
         public string Message { get; set; }
         public Brush MessageColor { get; set; }
+        public Visibility MsgVisibility { get; set; }
     }
 }
