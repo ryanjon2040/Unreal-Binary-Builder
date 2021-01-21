@@ -5,11 +5,11 @@ using HandyControl.Themes;
 using HandyControl.Tools;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,7 +22,23 @@ namespace UnrealBinaryBuilder
 {
 	public partial class MainWindow
 	{
-		private static readonly string PRODUCT_VERSION = "3.1";
+		private static string GetProductVersionString()
+		{
+			Version ProductVersion = Assembly.GetEntryAssembly().GetName().Version;
+			string ReturnValue = $"{ProductVersion.Major}.{ProductVersion.Minor}";
+
+			if (ProductVersion.Build > 0)
+			{
+				ReturnValue += $".{ProductVersion.Build}";
+			}
+
+			if (ProductVersion.Revision > 0)
+			{
+				ReturnValue += $".{ProductVersion.Revision}";
+			}
+
+			return ReturnValue;
+		}
 
 		private static readonly string SetupBatFileName = "Setup.bat";
 		private static readonly string GenerateProjectBatFileName = "GenerateProjectFiles.bat";
@@ -82,8 +98,8 @@ namespace UnrealBinaryBuilder
 		public MainWindow()
 		{
 			InitializeComponent();
-			GameAnalyticsCSharp.InitializeGameAnalytics(PRODUCT_VERSION, this);
-			AddLogEntry($"Welcome to Unreal Binary Builder v{PRODUCT_VERSION}");
+			GameAnalyticsCSharp.InitializeGameAnalytics(GetProductVersionString(), this);
+			AddLogEntry($"Welcome to Unreal Binary Builder v{GetProductVersionString()}");
 			PluginQueueBtn.IsEnabled = false;
 			postBuildSettings = new PostBuildSettings(this);
 			SettingsJSON = BuilderSettings.GetSettingsFile(true);
@@ -610,7 +626,7 @@ namespace UnrealBinaryBuilder
 				if (bClearLogs)
 				{
 					LogControl.ClearAllLogs();
-					AddLogEntry($"Welcome to UE4 Binary Builder v{PRODUCT_VERSION}");
+					AddLogEntry($"Welcome to UE4 Binary Builder v{GetProductVersionString()}");
 				}
 
 				AddLogEntry($"========================== RUNNING - {Path.GetFileName(processStartInfo.FileName)} ==========================");
