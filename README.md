@@ -5,7 +5,7 @@ Unreal Engine 4 Binary Builder
 
 This is a small app designed to create binary build of [Unreal Engine 4](https://www.unrealengine.com/) from [GitHub source](https://github.com/EpicGames/UnrealEngine).
 
-![https://twitter.com/ryanjon2040](https://img.shields.io/twitter/follow/ryanjon2040.svg?style=popout)
+[<img src="https://img.shields.io/twitter/follow/ryanjon2040.svg?style=popout">](https://twitter.com/ryanjon2040)
 
 ![](https://img.shields.io/github/last-commit/ryanjon2040/UE4-Binary-Builder.svg?style=popout) 
 ![](https://img.shields.io/github/license/ryanjon2040/UE4-Binary-Builder.svg?style=popout) ![](https://img.shields.io/github/downloads/ryanjon2040/UE4-Binary-Builder/total.svg?style=popout) 
