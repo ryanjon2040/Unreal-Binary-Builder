@@ -902,12 +902,6 @@ namespace UnrealBinaryBuilder
 				}
 			}
 
-			if (EngineVersionSelection.SelectedIndex == 0)
-			{
-				HandyControl.Controls.MessageBox.Fatal("Please select your Engine version to build. If you are unsure about the version number look into the following file:\n\n/Engine/Source/Runtime/Launch/Resources/Version.h\n\nAnd check ENGINE_MAJOR_VERSION and ENGINE_MINOR_VERSION.", "Select Engine Version.");
-				return;
-			}
-
 			ChangeStatusLabel("Preparing to build...");
 
 			if (postBuildSettings.ShouldSaveToZip() && postBuildSettings.DirectoryIsWritable(ZipPath.Text) == false)
@@ -1005,7 +999,7 @@ namespace UnrealBinaryBuilder
 
 		private void EngineVersionSelection_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
-			bWithServer.IsEnabled = bWithClient.IsEnabled = EngineVersionSelection.SelectedIndex > 1;
+			bWithServer.IsEnabled = bWithClient.IsEnabled = EngineVersionSelection.SelectedIndex > 1 || EngineVersionSelection.SelectedIndex == 0;
 			bWithHTML5.IsEnabled = SupportHTML5();
 			bWithLinuxAArch64.IsEnabled = SupportLinuxAArch64();
 			bWithSwitch.IsEnabled = bWithPS4.IsEnabled = bWithXboxOne.IsEnabled = SupportConsoles();
@@ -1019,7 +1013,7 @@ namespace UnrealBinaryBuilder
 
 		private bool SupportLinuxAArch64()
 		{
-			return EngineVersionSelection.SelectedIndex >= 3;
+			return EngineVersionSelection.SelectedIndex >= 3 || EngineVersionSelection.SelectedIndex == 0;
 		}
 
 		private bool SupportConsoles()
@@ -1029,7 +1023,7 @@ namespace UnrealBinaryBuilder
 
 		private bool IsEngineSelection425OrAbove()
 		{
-			return EngineVersionSelection.SelectedIndex >= 4;
+			return EngineVersionSelection.SelectedIndex >= 4 || EngineVersionSelection.SelectedIndex == 0;
 		}
 
 		private string GetEngineName()

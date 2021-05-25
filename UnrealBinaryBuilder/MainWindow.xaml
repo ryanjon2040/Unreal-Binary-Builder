@@ -195,13 +195,13 @@
 										<TextBox x:Name="CustomOptions" Margin="12 5 12 5" Width="400" Text="{Binding CustomOptions}" hc:InfoElement.Placeholder="Custom Options (if any)" Style="{StaticResource TextBoxExtend}" ToolTip="Pass custom command line options. Typically used when using custom Build XML."/>
 										<TextBox x:Name="AnalyticsOverride" Margin="12 5 12 5" Width="400" Text="{Binding AnalyticsOverride}" hc:InfoElement.Placeholder="Analytics Type" Style="{StaticResource TextBoxExtend}" ToolTip="Identifier for analytic events to send."/>
 									</WrapPanel>
-									<hc:ComboBox x:Name="EngineVersionSelection" HorizontalAlignment="Left" Margin="12 5 12 5" SelectionChanged="EngineVersionSelection_SelectionChanged" SelectedIndex="2">
-										<ComboBoxItem Content="Select Engine Version" IsSelected="True"></ComboBoxItem>
+									<hc:ComboBox x:Name="EngineVersionSelection" HorizontalAlignment="Left" Margin="12 5 12 5" Width="220"  SelectionChanged="EngineVersionSelection_SelectionChanged" SelectedIndex="{Binding EngineVersionIndex}">
+										<ComboBoxItem Content="Custom Engine" IsSelected="True"></ComboBoxItem>
 										<ComboBoxItem Content="Unreal Engine 4.22"></ComboBoxItem>
 										<ComboBoxItem Content="Unreal Engine 4.23"></ComboBoxItem>
 										<ComboBoxItem Content="Unreal Engine 4.24"></ComboBoxItem>
 										<ComboBoxItem Content="Unreal Engine 4.25"></ComboBoxItem>
-										<ComboBoxItem Content="Unreal Engine 4.26"></ComboBoxItem>
+										<ComboBoxItem Content="Unreal Engine 4.26 and above"></ComboBoxItem>
 									</hc:ComboBox>
 								</StackPanel>
 								<Button x:Name="BuildRocketUE" Content="Build Unreal Engine" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,19,6" Width="200" Click="BuildRocketUE_Click"/>
