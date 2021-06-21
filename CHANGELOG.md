@@ -1,4 +1,18 @@
-﻿# 3.1
+﻿# 3.1.1
+
+* Support **Unreal Engine 5**
+* Add basic editor to edit target cs files.
+* Add options to Start Build. You can now choose to run Setup, GenerateProjectFiles or AutomationTool.
+* Add UnrealBuilderHelpers class
+* New copy button in log viewer to copy message to clipboard.
+* Add changelog link to menubar.
+* Check and Install Update now shows version number.
+* Selecting Engine Version is now optional.
+* **FIXED**: Git dependency cache path
+* **FIXED**: OpenClipboard Failed (0x800401D0 (CLIPBRD_E_CANT_OPEN))
+* **FIXED**: ShadowErrors.cpp reporting as error.
+
+# 3.1
 
 * Add compiler info to plugin card.
 * Improved plugin build.
@@ -14,4 +28,4 @@
 
 # 3.0
 
-Initial Release
+* Initial Release
