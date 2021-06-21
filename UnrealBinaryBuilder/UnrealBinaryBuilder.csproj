@@ -11,7 +11,7 @@
     <Company>Satheesh (ryanjon2040)</Company>
     <Description>A helper application designed to create Installed Build of Unreal Engine from Github Source and plugin packager.</Description>
     <Copyright>Copyright 2020-2021. Created by Satheesh (ryanjon2040)</Copyright>
-    <Version>3.1.0</Version>
+    <Version>3.1.1</Version>
     <PackageProjectUrl>https://www.buymeacoffee.com/ryanjon2040</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ryanjon2040/UE4-Binary-Builder</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
