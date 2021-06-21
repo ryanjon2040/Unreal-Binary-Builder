@@ -38,9 +38,36 @@
 					<hc:TabControl x:Name="EngineTabControl" ShowCloseButton="False" IsDraggable="False" IsTabFillEnabled="True" IsAnimationEnabled="True" ShowScrollButton="True" Style="{StaticResource TabControlInLine}" Background="#FF2D2D30">
 						<hc:TabItem Header="Setup" IsSelected="True" ToolTip="Allows you to configure Setup.bat settings and run it.">
 							<hc:SimplePanel>
-								<TextBox x:Name="SetupBatFilePath" Text="{Binding SetupBatFile}" hc:InfoElement.Placeholder="Choose Engine Root Folder" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,450,0" Width="400"/>
-								<Button x:Name="BrowseEngineFolder" Content="Browse" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,380,0" Click="BrowseEngineFolder_Click" />
-								<Button x:Name="StartSetupBatFile" Content="Start" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Width="125" Style="{StaticResource ButtonPrimary}" IsEnabled="{Binding ElementName=SetupBatFilePath, Path=Text.Length, Mode=OneWay}" Click="StartSetupBatFile_Click"/>
+								<Grid Margin="360 100" Height="100">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="470"/>
+										<ColumnDefinition Width="80"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+									<Grid.RowDefinitions>
+										<RowDefinition Height="40"/>
+										<RowDefinition Height="*"/>
+									</Grid.RowDefinitions>
+									<TextBox x:Name="SetupBatFilePath" Grid.Row="0" Grid.Column="0" Text="{Binding SetupBatFile}" hc:InfoElement.Placeholder="Choose Engine Root Folder" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" TextChanged="SetupBatFilePath_TextChanged" />
+									<Button x:Name="BrowseEngineFolder" Grid.Row="0" Grid.Column="1" Content="Browse" Click="BrowseEngineFolder_Click"/>
+									<Grid Grid.Row="1" Grid.Column="0">
+										<Grid.RowDefinitions>
+											<RowDefinition Height="*"/>
+											<RowDefinition Height="*"/>
+										</Grid.RowDefinitions>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="*"/>
+											<ColumnDefinition Width="*"/>
+											<ColumnDefinition Width="*"/>
+										</Grid.ColumnDefinitions>
+										<CheckBox x:Name="bBuildSetupBatFile" Grid.Row="0" Grid.Column="0" Content="Build Setup" IsChecked="{Binding bBuildSetupBatFile}"/>
+										<CheckBox x:Name="bGenerateProjectFiles" Grid.Row="0" Grid.Column="1" Content="Generate Project Files" IsChecked="{Binding bGenerateProjectFiles}"/>
+										<CheckBox x:Name="bBuildAutomationTool" Grid.Row="0" Grid.Column="2" Content="Build Automation Tool" IsChecked="{Binding bBuildAutomationTool}"/>
+
+										<Button x:Name="StartSetupBatFile" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Content="Start" Style="{StaticResource ButtonPrimary}" IsEnabled="{Binding ElementName=SetupBatFilePath, Path=Text.Length, Mode=OneWay}" Click="StartSetupBatFile_Click" />
+									</Grid>
+								</Grid>
+								
 								<CheckBox x:Name="bContinueToEngineBuild" Content="Continue to Engine Build" IsChecked="{Binding bContinueToEngineBuild}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,153,16"/>
 								<Grid>
 									<GroupBox Header="Platforms" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Style="{StaticResource GroupBoxOriginal}">

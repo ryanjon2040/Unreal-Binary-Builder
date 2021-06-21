@@ -68,6 +68,9 @@ namespace UnrealBinaryBuilder.Classes
 		public bool bShutdownPC { get; set; }
 		public bool bShutdownIfBuildSuccess { get; set; }
 		public bool bContinueToEngineBuild { get; set; }
+		public bool bBuildSetupBatFile { get; set; }
+		public bool bGenerateProjectFiles { get; set; }
+		public bool bBuildAutomationTool { get; set; }
 
 		public bool bZipEngineBuild { get; set; }		
 		public bool bZipEnginePDB { get; set; }
@@ -177,6 +180,9 @@ namespace UnrealBinaryBuilder.Classes
 			BSJ.bShutdownPC = false;
 			BSJ.bShutdownIfBuildSuccess = false;
 			BSJ.bContinueToEngineBuild = true;
+			BSJ.bBuildSetupBatFile = true;
+			BSJ.bGenerateProjectFiles = true;
+			BSJ.bBuildAutomationTool = true;
 
 			BSJ.bZipEngineBuild = false;
 			BSJ.bZipEngineDebug = false;
@@ -306,6 +312,9 @@ namespace UnrealBinaryBuilder.Classes
 			BSJ.bShutdownPC = (bool)mainWindow.bShutdownWindows.IsChecked;
 			BSJ.bShutdownIfBuildSuccess = (bool)mainWindow.bShutdownIfSuccess.IsChecked;
 			BSJ.bContinueToEngineBuild = (bool)mainWindow.bContinueToEngineBuild.IsChecked;
+			BSJ.bBuildSetupBatFile = (bool)mainWindow.bBuildSetupBatFile.IsChecked;
+			BSJ.bGenerateProjectFiles = (bool)mainWindow.bGenerateProjectFiles.IsChecked;
+			BSJ.bBuildAutomationTool = (bool)mainWindow.bBuildAutomationTool.IsChecked; ;
 
 			BSJ.bZipEngineBuild = (bool)mainWindow.bZipBuild.IsChecked;
 			BSJ.bZipEngineDebug = (bool)mainWindow.bIncludeDEBUG.IsChecked;

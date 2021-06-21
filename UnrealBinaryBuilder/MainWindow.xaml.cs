@@ -586,32 +586,43 @@ namespace UnrealBinaryBuilder
 
 		private void StartSetupBatFile_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-			bool bRequiredFilesExist = File.Exists(Path.Combine(SetupBatFilePath.Text, SetupBatFileName)) && File.Exists(Path.Combine(SetupBatFilePath.Text, GenerateProjectBatFileName));
+			bool bRequiredFilesExist = File.Exists(Path.Combine(SetupBatFilePath.Text, UnrealBinaryBuilderHelpers.SetupBatFileName)) && File.Exists(Path.Combine(SetupBatFilePath.Text, UnrealBinaryBuilderHelpers.GenerateProjectBatFileName));
 			if (bRequiredFilesExist == false)
 			{
-				HandyControl.Controls.MessageBox.Error($"This is not the Unreal Engine root folder.\n\nPlease select the root folder where {SetupBatFileName} and {GenerateProjectBatFileName} exists.", "Incorrect folder");
+				HandyControl.Controls.MessageBox.Error($"This is not the Unreal Engine root folder.\n\nPlease select the root folder where {UnrealBinaryBuilderHelpers.SetupBatFileName} and {UnrealBinaryBuilderHelpers.GenerateProjectBatFileName} exists.", "Incorrect folder");
 				return;
 			}
 
 			if (bIsBuilding == false)
 			{
-				bIsBuilding = true;
-				string Commandline = SetupBatCommandLineArgs();
-				ProcessStartInfo processStartInfo = new ProcessStartInfo
+				if (bBuildSetupBatFile.IsChecked == true)
 				{
-					FileName = Path.Combine(SetupBatFilePath.Text, SetupBatFileName),
-					Arguments = Commandline,
-					UseShellExecute = false,
-					CreateNoWindow = true,
-					RedirectStandardError = true,
-					RedirectStandardOutput = true
-				};
+					bIsBuilding = true;
+					string Commandline = SetupBatCommandLineArgs();
+					ProcessStartInfo processStartInfo = new ProcessStartInfo
+					{
+						FileName = Path.Combine(SetupBatFilePath.Text, UnrealBinaryBuilderHelpers.SetupBatFileName),
+						Arguments = Commandline,
+						UseShellExecute = false,
+						CreateNoWindow = true,
+						RedirectStandardError = true,
+						RedirectStandardOutput = true
+					};
 
-				currentProcessType = CurrentProcessType.SetupBat;
-				CreateProcess(processStartInfo);
-				AddLogEntry($"Commandline: {Commandline}");
-				ChangeStatusLabel("Building...");
-				GameAnalyticsCSharp.AddProgressStart("Build", "Setup");
+					currentProcessType = CurrentProcessType.SetupBat;
+					CreateProcess(processStartInfo);
+					AddLogEntry($"Commandline: {Commandline}");
+					ChangeStatusLabel("Building...");
+					GameAnalyticsCSharp.AddProgressStart("Build", "Setup");
+				}
+				else if (bGenerateProjectFiles.IsChecked == true)
+				{
+					GenerateProjectFiles();
+				}
+				else if (bBuildAutomationTool.IsChecked == true)
+				{
+					BuildAutomationToolLauncher();
+				}
 			}
 		}
 
