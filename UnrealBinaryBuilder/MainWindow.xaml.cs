@@ -184,7 +184,7 @@ namespace UnrealBinaryBuilder
 		public MainWindow()
 		{
 			InitializeComponent();
-			GameAnalyticsCSharp.InitializeGameAnalytics(GetProductVersionString(), this);
+			GameAnalyticsCSharp.InitializeGameAnalytics(UnrealBinaryBuilderHelpers.GetProductVersionString(), this);
 			AddLogEntry($"Welcome to Unreal Binary Builder v{UnrealBinaryBuilderHelpers.GetProductVersionString()}");
 			PluginQueueBtn.IsEnabled = false;
 			postBuildSettings = new PostBuildSettings(this);
