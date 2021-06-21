@@ -3,6 +3,7 @@ using NetSparkleUpdater.SignatureVerifiers;
 using System;
 using NetSparkleUpdater.Events;
 using System.Linq;
+using System.IO.Compression;
 
 namespace UnrealBinaryBuilderUpdater
 {
@@ -25,7 +26,7 @@ namespace UnrealBinaryBuilderUpdater
 		public event EventHandler<UpdateProgressDownloadEventArgs> UpdateProgressEventHandler;
 		public event EventHandler<UpdateProgressDownloadErrorEventArgs> UpdateProgressDownloadErrorEventHandler;
 		public event EventHandler<UpdateProgressDownloadStartEventArgs> UpdateDownloadStartedEventHandler;
-		public event EventHandler UpdateDownloadFinishedEventHandler;
+		public event EventHandler<UpdateProgressDownloadFinishEventArgs> UpdateDownloadFinishedEventHandler;
 		public event EventHandler CloseApplicationEventHandler;
 
 		public UBBUpdater()
@@ -108,8 +109,7 @@ namespace UnrealBinaryBuilderUpdater
 
 		public void InstallUpdate()
 		{
-			_sparkle.CloseApplication += CloseApplication;
-			_sparkle.InstallUpdate(_updateInfo.Updates.First(), _downloadPath);
+			CloseApplication();
 		}
 
 		private void CloseApplication()
@@ -131,8 +131,17 @@ namespace UnrealBinaryBuilderUpdater
 		private void OnDownloadFinish(AppCastItem item, string path)
 		{
 			_downloadPath = path;
-			EventArgs eventArgs = new EventArgs();
-			EventHandler eventHandler = UpdateDownloadFinishedEventHandler;
+			UpdateProgressDownloadFinishEventArgs eventArgs = new UpdateProgressDownloadFinishEventArgs();
+			if (System.IO.File.Exists(_downloadPath + ".zip"))
+			{
+				System.IO.File.Delete(_downloadPath + ".zip");
+			}
+
+			System.IO.File.Move(_downloadPath, _downloadPath + ".zip");
+			string NewFile = _downloadPath + ".zip";
+			eventArgs.UpdateFilePath = NewFile;
+			eventArgs.castItem = item;
+			EventHandler<UpdateProgressDownloadFinishEventArgs> eventHandler = UpdateDownloadFinishedEventHandler;
 			eventHandler(this, eventArgs);
 		}
 
@@ -179,5 +188,11 @@ namespace UnrealBinaryBuilderUpdater
 	{
 		public long UpdateSize { get; set; }
 		public string Version { get; set; }
+	}
+
+	public class UpdateProgressDownloadFinishEventArgs : EventArgs
+	{
+		public AppCastItem castItem { get; set; }
+		public string UpdateFilePath { get; set; }
 	}
 }

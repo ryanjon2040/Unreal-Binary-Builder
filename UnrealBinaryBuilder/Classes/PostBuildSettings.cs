@@ -370,7 +370,7 @@ namespace UnrealBinaryBuilder.Classes
 			ZipCancelTokenSource.Cancel();
 		}
 
-		static string BytesToString(long byteCount)
+		public static string BytesToString(long byteCount)
 		{
 			string[] suf = { "B", "KB", "MB", "GB", "TB" };
 			if (byteCount == 0)

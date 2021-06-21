@@ -100,7 +100,7 @@ namespace UnrealBinaryBuilder.Classes
 	public static class BuilderSettings
 	{
 		private static readonly string PROGRAM_SAVED_PATH_BASE = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-		private static readonly string PROGRAM_SAVED_PATH = Path.Combine(PROGRAM_SAVED_PATH_BASE, "UnrealBinaryBuilder");
+		public static readonly string PROGRAM_SAVED_PATH = Path.Combine(PROGRAM_SAVED_PATH_BASE, "UnrealBinaryBuilder");
 
 		private static readonly string PROGRAM_SETTINGS_PATH_BASE = Path.Combine(PROGRAM_SAVED_PATH, "Saved");
 		private static readonly string PROGRAM_SETTINGS_FILE_NAME = "Settings.json";

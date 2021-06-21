@@ -1619,15 +1619,31 @@ namespace UnrealBinaryBuilder
 		{
 			downloadDialogWindow.SetProgress(progressDownloadEventArgs.AppUpdateProgress);
 		}
-
-		private void DownloadUpdateProgressFinish(object sender, EventArgs e)
+		private void DownloadUpdateProgressFinish(object sender, UpdateProgressDownloadFinishEventArgs e)
 		{
-			GameAnalyticsCSharp.AddDesignEvent($"Update:Install:{downloadDialogWindow.VersionText}");
-			unrealBinaryBuilderUpdater.UpdateDownloadStartedEventHandler -= DownloadUpdateProgressStart;
-			unrealBinaryBuilderUpdater.UpdateDownloadFinishedEventHandler -= DownloadUpdateProgressFinish;
-			unrealBinaryBuilderUpdater.UpdateProgressEventHandler -= DownloadUpdateProgress;
-			unrealBinaryBuilderUpdater.CloseApplicationEventHandler += CloseApplication;
-			unrealBinaryBuilderUpdater.InstallUpdate();
+			string TargetDownloadDirectory = Path.Combine(BuilderSettings.PROGRAM_SAVED_PATH, "Updates", e.castItem.Version);
+			if (Directory.Exists(TargetDownloadDirectory) == false)
+			{
+				Directory.CreateDirectory(TargetDownloadDirectory);
+			}
+
+			using (Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile(e.UpdateFilePath))
+			{
+				zip.ExtractProgress += (o, args) =>
+				{
+					if (args.EventType == Ionic.Zip.ZipProgressEventType.Extracting_AfterExtractAll)
+					{
+						GameAnalyticsCSharp.AddDesignEvent($"Update:Install:{downloadDialogWindow.VersionText}");
+						unrealBinaryBuilderUpdater.UpdateDownloadStartedEventHandler -= DownloadUpdateProgressStart;
+						unrealBinaryBuilderUpdater.UpdateDownloadFinishedEventHandler -= DownloadUpdateProgressFinish;
+						unrealBinaryBuilderUpdater.UpdateProgressEventHandler -= DownloadUpdateProgress;
+						unrealBinaryBuilderUpdater.CloseApplicationEventHandler += CloseApplication;
+						unrealBinaryBuilderUpdater.InstallUpdate();
+						Process.Start("explorer.exe", TargetDownloadDirectory);
+					}
+				};
+				zip.ExtractAll(TargetDownloadDirectory, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
+			}
 		}
 
 		private void CloseApplication(object sender, EventArgs e)

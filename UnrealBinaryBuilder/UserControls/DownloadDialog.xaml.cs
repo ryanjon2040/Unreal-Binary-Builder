@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using UnrealBinaryBuilder.Classes;
 
 namespace UnrealBinaryBuilder.UserControls
 {
@@ -7,6 +8,7 @@ namespace UnrealBinaryBuilder.UserControls
 	/// </summary>
 	public partial class DownloadDialog
 	{
+		long CurrentFileSize;
 		MainWindow _mainWindow = null;
 		public string VersionText = null;
 		public DownloadDialog(MainWindow mainWindow)
@@ -17,16 +19,17 @@ namespace UnrealBinaryBuilder.UserControls
 
 		public void Initialize(long fileSize, string InVersion)
 		{
+			CurrentFileSize = fileSize;
 			DownloadProgressbar.IsIndeterminate = false;
-			DownloadProgressbar.Maximum = fileSize;
+			DownloadProgressbar.Maximum = 100;
 			DownloadProgressbar.Value = 0;
-			VersionText = InVersion;			
+			VersionText = InVersion;
 		}
 
 		public void SetProgress(int InProgress)
 		{
 			DownloadProgressbar.Value = InProgress;
-			DownloadProgressTextBlock.Text = $"Downloading {VersionText} - {DownloadProgressbar.Value}/{DownloadProgressbar.Maximum}";
+			DownloadProgressTextBlock.Text = $"Downloading {VersionText} - {DownloadProgressbar.Value}/{DownloadProgressbar.Maximum} (File Size: {PostBuildSettings.BytesToString(CurrentFileSize)})";
 		}
 	}
 }
