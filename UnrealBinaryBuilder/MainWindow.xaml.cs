@@ -20,9 +20,14 @@ using UnrealBinaryBuilderUpdater;
 
 namespace UnrealBinaryBuilder
 {
-	public partial class MainWindow
+	public static class UnrealBinaryBuilderHelpers
 	{
-		private static string GetProductVersionString()
+		public static readonly string SetupBatFileName = "Setup.bat";
+		public static readonly string GenerateProjectBatFileName = "GenerateProjectFiles.bat";
+		public static readonly string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
+		public static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
+
+		public static string GetProductVersionString()
 		{
 			Version ProductVersion = Assembly.GetEntryAssembly().GetName().Version;
 			string ReturnValue = $"{ProductVersion.Major}.{ProductVersion.Minor}";
@@ -39,11 +44,9 @@ namespace UnrealBinaryBuilder
 
 			return ReturnValue;
 		}
-
-		private static readonly string SetupBatFileName = "Setup.bat";
-		private static readonly string GenerateProjectBatFileName = "GenerateProjectFiles.bat";
-		private static readonly string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
-		private static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
+	}
+	public partial class MainWindow
+	{
 		private Process CurrentProcess = null;
 
 		private int NumErrors = 0;
@@ -66,7 +69,7 @@ namespace UnrealBinaryBuilder
 
 		public BuilderSettingsJson SettingsJSON = null;
 
-		private string AutomationExePath = null;		
+		private string AutomationExePath = null;
 
 		private PluginCard CurrentPluginBeingBuilt = null;
 		private List<string> PluginBuildEnginePath = new List<string>();
@@ -99,7 +102,7 @@ namespace UnrealBinaryBuilder
 		{
 			InitializeComponent();
 			GameAnalyticsCSharp.InitializeGameAnalytics(GetProductVersionString(), this);
-			AddLogEntry($"Welcome to Unreal Binary Builder v{GetProductVersionString()}");
+			AddLogEntry($"Welcome to Unreal Binary Builder v{UnrealBinaryBuilderHelpers.GetProductVersionString()}");
 			PluginQueueBtn.IsEnabled = false;
 			postBuildSettings = new PostBuildSettings(this);
 			SettingsJSON = BuilderSettings.GetSettingsFile(true);
@@ -130,7 +133,7 @@ namespace UnrealBinaryBuilder
 				}
 			}
 
-			if (File.Exists(AutomationExePath) && Path.GetFileNameWithoutExtension(AutomationExePath) == AUTOMATION_TOOL_NAME)
+			if (File.Exists(AutomationExePath) && Path.GetFileNameWithoutExtension(AutomationExePath) == UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME)
 			{
 				BuildRocketUE.IsEnabled = true;
 			}
@@ -506,7 +509,7 @@ namespace UnrealBinaryBuilder
 			SetupBatFilePath.Text = NewFolderDialog.SelectedPath;
 			if (TryUpdateAutomationExePath() == false)
 			{
-				HandyControl.Controls.MessageBox.Error($"This is not the Unreal Engine root folder.\n\nPlease select the root folder where {SetupBatFileName} and {GenerateProjectBatFileName} exists.", "Incorrect folder");
+				HandyControl.Controls.MessageBox.Error($"This is not the Unreal Engine root folder.\n\nPlease select the root folder where {UnrealBinaryBuilderHelpers.SetupBatFileName} and {UnrealBinaryBuilderHelpers.GenerateProjectBatFileName} exists.", "Incorrect folder");
 			}
 		}
 
@@ -516,10 +519,10 @@ namespace UnrealBinaryBuilder
 			if (string.IsNullOrEmpty(AutomationToolPath.Text) == false && string.IsNullOrEmpty(AutomationExePath))
 			{
 				AutomationExePath = AutomationToolPath.Text;
-				if (Path.GetFileNameWithoutExtension(AutomationExePath) == AUTOMATION_TOOL_NAME)
+				if (Path.GetFileNameWithoutExtension(AutomationExePath) == UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME)
 				{
 					SetupBatFilePath.Text = AutomationExePath.Replace(Path.GetFileName(AutomationExePath), "").Replace(@"\Engine\Binaries\DotNET", "");
-					bRequiredFilesExist = File.Exists(Path.Combine(SetupBatFilePath.Text, SetupBatFileName)) && File.Exists(Path.Combine(SetupBatFilePath.Text, GenerateProjectBatFileName));
+					bRequiredFilesExist = File.Exists(Path.Combine(SetupBatFilePath.Text, UnrealBinaryBuilderHelpers.SetupBatFileName)) && File.Exists(Path.Combine(SetupBatFilePath.Text, UnrealBinaryBuilderHelpers.GenerateProjectBatFileName));
 				}
 				else
 				{
@@ -529,11 +532,11 @@ namespace UnrealBinaryBuilder
 			}
 			else
 			{
-				bRequiredFilesExist = File.Exists(Path.Combine(SetupBatFilePath.Text, SetupBatFileName)) && File.Exists(Path.Combine(SetupBatFilePath.Text, GenerateProjectBatFileName));
+				bRequiredFilesExist = File.Exists(Path.Combine(SetupBatFilePath.Text, UnrealBinaryBuilderHelpers.SetupBatFileName)) && File.Exists(Path.Combine(SetupBatFilePath.Text, UnrealBinaryBuilderHelpers.GenerateProjectBatFileName));
 				StartSetupBatFile.IsEnabled = bRequiredFilesExist;
 				if (bRequiredFilesExist)
 				{
-					AutomationExePath = Path.Combine(SetupBatFilePath.Text, "Engine", "Binaries", "DotNET", $"{AUTOMATION_TOOL_NAME}.exe");
+					AutomationExePath = Path.Combine(SetupBatFilePath.Text, "Engine", "Binaries", "DotNET", $"{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}.exe");
 					AutomationToolPath.Text = AutomationExePath;
 				}
 			}
@@ -626,7 +629,7 @@ namespace UnrealBinaryBuilder
 				if (bClearLogs)
 				{
 					LogControl.ClearAllLogs();
-					AddLogEntry($"Welcome to UE4 Binary Builder v{GetProductVersionString()}");
+					AddLogEntry($"Welcome to UE4 Binary Builder v{UnrealBinaryBuilderHelpers.GetProductVersionString()}");
 				}
 
 				AddLogEntry($"========================== RUNNING - {Path.GetFileName(processStartInfo.FileName)} ==========================");
@@ -682,12 +685,12 @@ namespace UnrealBinaryBuilder
 				Filter = "exe file (*.exe)|*.exe"
 			};
 
-			ChangeStatusLabel(string.Format("Waiting for {0}.exe", AUTOMATION_TOOL_NAME));
+			ChangeStatusLabel(string.Format("Waiting for {0}.exe", UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME));
 			if (NewFileDialog.ShowDialog() == true)
 			{
 				AutomationExePath = NewFileDialog.FileName;
 				AutomationToolPath.Text = AutomationExePath;
-				if (Path.GetFileNameWithoutExtension(AutomationExePath) == AUTOMATION_TOOL_NAME)
+				if (Path.GetFileNameWithoutExtension(AutomationExePath) == UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME)
 				{
 					BuildRocketUE.IsEnabled = true;
 					ChangeStatusLabel("Idle.");
@@ -727,7 +730,7 @@ namespace UnrealBinaryBuilder
 
 		private void ResetDefaultBuildXML_Click(object sender, RoutedEventArgs e)
 		{
-			CustomBuildXMLFile.Text = DEFAULT_BUILD_XML_FILE;
+			CustomBuildXMLFile.Text = UnrealBinaryBuilderHelpers.DEFAULT_BUILD_XML_FILE;
 			GameAnalyticsCSharp.AddDesignEvent("BuildXML:ResetToDefault");
 		}
 
@@ -736,10 +739,10 @@ namespace UnrealBinaryBuilder
 			string BuildXMLFile = CustomBuildXMLFile.Text;
 			if (CustomBuildXMLFile.Text == "")
 			{
-				BuildXMLFile = DEFAULT_BUILD_XML_FILE;
+				BuildXMLFile = UnrealBinaryBuilderHelpers.DEFAULT_BUILD_XML_FILE;
 			}
 
-			if (BuildXMLFile != DEFAULT_BUILD_XML_FILE)
+			if (BuildXMLFile != UnrealBinaryBuilderHelpers.DEFAULT_BUILD_XML_FILE)
 			{
 				BuildXMLFile = string.Format("\"{0}\"", CustomBuildXMLFile.Text);				
 			}
@@ -817,7 +820,7 @@ namespace UnrealBinaryBuilder
 					GetConditionalString(bWithHololens.IsChecked));
 			}
 
-			if (BuildXMLFile != DEFAULT_BUILD_XML_FILE && CustomOptions.Text != string.Empty)
+			if (BuildXMLFile != UnrealBinaryBuilderHelpers.DEFAULT_BUILD_XML_FILE && CustomOptions.Text != string.Empty)
 			{
 				CommandLineArgs += string.Format(" {0}", CustomOptions.Text);
 				AddLogEntry("Using custom options...");
@@ -913,9 +916,9 @@ namespace UnrealBinaryBuilder
 
 			if (CustomBuildXMLFile.Text == string.Empty)
 			{
-				CustomBuildXMLFile.Text = DEFAULT_BUILD_XML_FILE;
+				CustomBuildXMLFile.Text = UnrealBinaryBuilderHelpers.DEFAULT_BUILD_XML_FILE;
 			}
-			else if (CustomBuildXMLFile.Text != DEFAULT_BUILD_XML_FILE)
+			else if (CustomBuildXMLFile.Text != UnrealBinaryBuilderHelpers.DEFAULT_BUILD_XML_FILE)
 			{
 				if (File.Exists(CustomBuildXMLFile.Text) == false)
 				{
@@ -1078,7 +1081,7 @@ namespace UnrealBinaryBuilder
 				BuildRocketUE.IsEnabled = false;
 				ProcessStartInfo processStartInfo = new ProcessStartInfo
 				{
-					FileName = Path.Combine(SetupBatFilePath.Text, GenerateProjectBatFileName),
+					FileName = Path.Combine(SetupBatFilePath.Text, UnrealBinaryBuilderHelpers.GenerateProjectBatFileName),
 					UseShellExecute = false,
 					CreateNoWindow = true,
 					RedirectStandardError = true,
