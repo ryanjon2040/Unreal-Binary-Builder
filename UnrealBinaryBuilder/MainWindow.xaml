@@ -229,6 +229,7 @@
 										<ComboBoxItem Content="Unreal Engine 4.24"></ComboBoxItem>
 										<ComboBoxItem Content="Unreal Engine 4.25"></ComboBoxItem>
 										<ComboBoxItem Content="Unreal Engine 4.26 and above"></ComboBoxItem>
+										<ComboBoxItem Content="Unreal Engine 5"></ComboBoxItem>
 									</hc:ComboBox>
 								</StackPanel>
 								<Button x:Name="BuildRocketUE" Content="Build Unreal Engine" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,19,6" Width="200" Click="BuildRocketUE_Click"/>

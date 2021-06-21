@@ -26,7 +26,9 @@ namespace UnrealBinaryBuilder
 		public static readonly string GenerateProjectBatFileName = "GenerateProjectFiles.bat";
 		public static readonly string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
 		public static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
+		public static bool IsUnrealEngine5 { get; private set; } = false;
 
+		private static string EngineVersionMajor, EngineVersionMinor, EngineVersionPatch = null;
 		public static string GetProductVersionString()
 		{
 			Version ProductVersion = Assembly.GetEntryAssembly().GetName().Version;
@@ -43,6 +45,86 @@ namespace UnrealBinaryBuilder
 			}
 
 			return ReturnValue;
+		}
+
+		public static string GetMsBuildPath()
+		{
+			string ProgramFilesx86Path = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+			return Path.Combine(ProgramFilesx86Path, "Microsoft Visual Studio", "2019", "Community", "MSBuild", "Current", "Bin", "MSBuild.exe");
+		}
+
+		public static string DetectEngineVersion(string BaseEnginePath)
+		{
+			if (string.IsNullOrWhiteSpace(BaseEnginePath))
+			{
+				return null;
+			}
+
+			if (EngineVersionMajor == null)
+			{
+				string VersionFile = Path.Combine(BaseEnginePath, "Engine", "Source", "Runtime", "Launch", "Resources", "Version.h");
+				using(StreamReader file = new StreamReader(VersionFile))
+				{
+					string CurrentLine;
+					while ((CurrentLine = file.ReadLine()) != null)
+					{
+						if (CurrentLine.StartsWith("#define ENGINE_MAJOR_VERSION"))
+						{
+							EngineVersionMajor = CurrentLine.Replace("#define ENGINE_MAJOR_VERSION", "").Replace("\t", "");
+						}
+						else if (CurrentLine.StartsWith("#define ENGINE_MINOR_VERSION"))
+						{
+							EngineVersionMinor = CurrentLine.Replace("#define ENGINE_MINOR_VERSION", "").Replace("\t", "");
+						}
+						else if (CurrentLine.StartsWith("#define ENGINE_PATCH_VERSION"))
+						{
+							EngineVersionPatch = CurrentLine.Replace("#define ENGINE_PATCH_VERSION", "").Replace("\t", "");
+							break;
+						}
+					}
+				}
+
+				IsUnrealEngine5 = EngineVersionMajor.StartsWith("5");
+			}
+
+			return $"{EngineVersionMajor}.{EngineVersionMinor}.{EngineVersionPatch}";
+		}
+
+		public static bool AutomationToolExists(string BaseEnginePath)
+		{
+			if (string.IsNullOrWhiteSpace(BaseEnginePath))
+			{
+				if (IsUnrealEngine5)
+				{
+					return File.Exists(Path.Combine(BaseEnginePath, "Engine", "Binaries", "DotNET", "AutomationTool", "AutomationTool.exe"));
+				}
+				else
+				{
+					return File.Exists(Path.Combine(BaseEnginePath, "Engine", "Binaries", "DotNET", "AutomationTool.exe"));
+				}
+			}
+
+			return false;
+		}
+
+		public static string GetAutomationToolProjectFile(string BaseEnginePath)
+		{
+			if (string.IsNullOrWhiteSpace(BaseEnginePath))
+			{
+				return null;
+			}
+
+			return Path.Combine(BaseEnginePath, "Engine", "Source", "Programs", "AutomationTool", "AutomationTool.csproj");
+		}
+
+		public static string GetAutomationToolLauncherProjectFile(string BaseEnginePath)
+		{
+			if (string.IsNullOrWhiteSpace(BaseEnginePath))
+			{
+				return null;
+			}
+
+			return Path.Combine(BaseEnginePath, "Engine", "Source", "Programs", "AutomationToolLauncher", "AutomationToolLauncher.csproj");
 		}
 	}
 	public partial class MainWindow
@@ -92,6 +174,7 @@ namespace UnrealBinaryBuilder
 			SetupBat,
 			GenerateProjectFiles,
 			BuildAutomationTool,
+			BuildAutomationToolLauncher,
 			BuildUnrealEngine,
 			BuildPlugin
 		}
@@ -436,11 +519,15 @@ namespace UnrealBinaryBuilder
 						GenerateProjectFiles();
 						break;
 					case CurrentProcessType.GenerateProjectFiles:
-						GameAnalyticsCSharp.AddProgressEnd("Build", "ProjectFiles");						
-						BuildAutomationToolLauncher();
+						GameAnalyticsCSharp.AddProgressEnd("Build", "ProjectFiles");
+						BuildAutomationTool();
 						break;
 					case CurrentProcessType.BuildAutomationTool:
-						GameAnalyticsCSharp.AddProgressEnd("Build", "AutomationTool");					
+						GameAnalyticsCSharp.AddProgressEnd("Build", "AutomationTool");
+						BuildAutomationToolLauncher();
+						break;
+					case CurrentProcessType.BuildAutomationToolLauncher:
+						GameAnalyticsCSharp.AddProgressEnd("Build", "AutomationToolLauncher");
 						if (bContinueToEngineBuild.IsChecked == true)
 						{
 							BuildEngine();
@@ -527,7 +614,7 @@ namespace UnrealBinaryBuilder
 				else
 				{
 					ChangeStatusLabel("Error. Invalid automation tool file selected.");
-					HandyControl.Controls.MessageBox.Error("This is not Automation Tool Launcher. Please select AutomationToolLauncher.exe", "");
+					HandyControl.Controls.MessageBox.Error($"This is not Automation Tool Launcher. Please select {UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}.exe", "");
 				}
 			}
 			else
@@ -536,7 +623,14 @@ namespace UnrealBinaryBuilder
 				StartSetupBatFile.IsEnabled = bRequiredFilesExist;
 				if (bRequiredFilesExist)
 				{
-					AutomationExePath = Path.Combine(SetupBatFilePath.Text, "Engine", "Binaries", "DotNET", $"{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}.exe");
+					if (UnrealBinaryBuilderHelpers.IsUnrealEngine5)
+					{
+						AutomationExePath = Path.Combine(SetupBatFilePath.Text, "Engine", "Binaries", "DotNET", "AutomationToolLauncher", $"{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}.exe");
+					}
+					else
+					{
+						AutomationExePath = Path.Combine(SetupBatFilePath.Text, "Engine", "Binaries", "DotNET", $"{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}.exe");
+					}
 					AutomationToolPath.Text = AutomationExePath;
 				}
 			}
@@ -621,7 +715,7 @@ namespace UnrealBinaryBuilder
 				}
 				else if (bBuildAutomationTool.IsChecked == true)
 				{
-					BuildAutomationToolLauncher();
+					BuildAutomationTool();
 				}
 			}
 		}
@@ -1106,6 +1200,60 @@ namespace UnrealBinaryBuilder
 			}
 		}
 
+		private bool? BuildAutomationTool()
+		{
+			if (UnrealBinaryBuilderHelpers.IsUnrealEngine5)
+			{
+				if (bIsBuilding == false)
+				{
+					if (string.IsNullOrEmpty(AutomationExePath))
+					{
+						if (TryUpdateAutomationExePath() == false)
+						{
+							AddLogEntry("Failed to build Automation Tool. AutomationExePath was null.", true);
+							return null;
+						}
+					}
+
+					bIsBuilding = true;
+					BuildRocketUE.IsEnabled = false;
+					currentProcessType = CurrentProcessType.BuildAutomationTool;
+					if (UnrealBinaryBuilderHelpers.AutomationToolExists(SetupBatFilePath.Text) == true)
+					{
+						AddLogEntry("Skip building Automation Tool. Already exists.");
+						OnBuildFinished(true);
+						return false;
+					}
+
+					string MsBuildFile = UnrealBinaryBuilderHelpers.GetMsBuildPath();
+					if (File.Exists(MsBuildFile))
+					{
+						ProcessStartInfo processStartInfo = new ProcessStartInfo
+						{
+							FileName = MsBuildFile,
+							Arguments = UnrealBinaryBuilderHelpers.GetAutomationToolProjectFile(SetupBatFilePath.Text),
+							UseShellExecute = false,
+							CreateNoWindow = true,
+							RedirectStandardError = true,
+							RedirectStandardOutput = true
+						};
+
+						CreateProcess(processStartInfo, false);
+						ChangeStatusLabel("Building...");
+						GameAnalyticsCSharp.AddProgressStart("Build", "AutomationTool");
+						return true;
+					}
+					else
+					{
+						AddLogEntry($"Unable to build AutomationTool. MsBuild not found in {MsBuildFile}", true);
+					}
+				}
+
+				return false;
+			}
+
+			return BuildAutomationToolLauncher();
+		}
 		private bool? BuildAutomationToolLauncher()
 		{
 			if (bIsBuilding == false)
@@ -1114,38 +1262,66 @@ namespace UnrealBinaryBuilder
 				{
 					if (TryUpdateAutomationExePath() == false)
 					{
-						AddLogEntry("Failed to build Automation Tool. AutomationExePath was null.", true);
+						AddLogEntry("Failed to build Automation Tool Launcher. AutomationExePath was null.", true);
 						return null;
 					}
 				}
 
 				bIsBuilding = true;
 				BuildRocketUE.IsEnabled = false;
-				currentProcessType = CurrentProcessType.BuildAutomationTool;
+				currentProcessType = CurrentProcessType.BuildAutomationToolLauncher;
 				if (File.Exists(AutomationExePath))
 				{
-					AddLogEntry("Skip building Automation Tool. Already exists.");
+					AddLogEntry("Skip building Automation Tool Launcher. Already exists.");
 					OnBuildFinished(true);
 					return false;
 				}
 
-				string RunUATFile = Path.Combine(SetupBatFilePath.Text, "Engine", "Build", "BatchFiles", "RunUAT.bat");
-				if (File.Exists(RunUATFile))
+				if (UnrealBinaryBuilderHelpers.IsUnrealEngine5)
 				{
-					ProcessStartInfo processStartInfo = new ProcessStartInfo
+					string MsBuildFile = UnrealBinaryBuilderHelpers.GetMsBuildPath();
+					if (File.Exists(MsBuildFile))
 					{
-						FileName = RunUATFile,
-						Arguments = "-compileonly",
-						UseShellExecute = false,
-						CreateNoWindow = true,
-						RedirectStandardError = true,
-						RedirectStandardOutput = true
-					};
+						ProcessStartInfo processStartInfo = new ProcessStartInfo
+						{
+							FileName = MsBuildFile,
+							Arguments = UnrealBinaryBuilderHelpers.GetAutomationToolLauncherProjectFile(SetupBatFilePath.Text),
+							UseShellExecute = false,
+							CreateNoWindow = true,
+							RedirectStandardError = true,
+							RedirectStandardOutput = true
+						};
 
-					CreateProcess(processStartInfo, false);
-					ChangeStatusLabel("Building...");
-					GameAnalyticsCSharp.AddProgressStart("Build", "AutomationTool");
-					return true;
+						CreateProcess(processStartInfo, false);
+						ChangeStatusLabel("Building...");
+						GameAnalyticsCSharp.AddProgressStart("Build", "AutomationToolLauncher");
+						return true;
+					}
+					else
+					{
+						AddLogEntry($"Unable to build ${UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}. MsBuild not found in {MsBuildFile}", true);
+					}
+				}
+				else
+				{
+					string RunUATFile = Path.Combine(SetupBatFilePath.Text, "Engine", "Build", "BatchFiles", "RunUAT.bat");
+					if (File.Exists(RunUATFile))
+					{
+						ProcessStartInfo processStartInfo = new ProcessStartInfo
+						{
+							FileName = RunUATFile,
+							Arguments = "-compileonly",
+							UseShellExecute = false,
+							CreateNoWindow = true,
+							RedirectStandardError = true,
+							RedirectStandardOutput = true
+						};
+
+						CreateProcess(processStartInfo, false);
+						ChangeStatusLabel("Building...");
+						GameAnalyticsCSharp.AddProgressStart("Build", "AutomationTool");
+						return true;
+					}
 				}
 			}
 
@@ -1464,6 +1640,15 @@ namespace UnrealBinaryBuilder
 		{
 			string TargetPlatformName = ((Control)sender).Name.Replace("Git", "").Replace("Platform", "");
 			BuilderSettings.UpdatePlatformInclusion(TargetPlatformName, (bool)((CheckBox)sender).IsChecked);
+		}
+
+		private void SetupBatFilePath_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			if (string.IsNullOrWhiteSpace(SetupBatFilePath.Text) == false)
+			{
+				string EngineVersion = UnrealBinaryBuilderHelpers.DetectEngineVersion(SetupBatFilePath.Text);
+				AddLogEntry($"Detected Unreal Engine {EngineVersion}");
+			}
 		}
 	}
 }
