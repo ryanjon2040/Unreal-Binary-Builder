@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
-		<channel>
-				<title>Unreal Binary Builder</title>
-				<description>Most recent changes with links to updates.</description>
-				<link>https://github.com/ryanjon2040/UE4-Binary-Builder/raw/master/UnrealBinaryBuilderUpdater/appcast.xml</link>
-				<language>en</language>
-				<item>
-						<title>Unreal Binary Builder 3.1.0</title>
-						<pubDate>Tue, 19 Jan 2021 14:28:51 +05:30</pubDate>
-						<sparkle:releaseNotesLink>
-							https://raw.githubusercontent.com/ryanjon2040/UE4-Binary-Builder/master/CHANGELOG.md
-						</sparkle:releaseNotesLink>
-						<enclosure url="https://github.com/ryanjon2040/UE4-Binary-Builder/releases/download/3.1/UnrealBinaryBuilder.v3.1.zip" 
-											 sparkle:version="3.1.0" 
-											 sparkle:shortVersionString="3.1" 
-											 length="167487256" sparkle:os="windows" 
-											 type="application/x-msdownload" 
-											 sparkle:signature="SsOpdIiFLaq7I400dWoXJCwyju6df13AiGXe5ntE3pBQvoqtTbNn3AAMxf7tSz76w52XO9yYJAkTa6MCy0HlDw==" />
-				</item>
-		</channel>
+   <channel>
+		<title>Unreal Binary Builder</title>
+		<description>Most recent changes with links to updates.</description>
+		<link>https://github.com/ryanjon2040/UE4-Binary-Builder/raw/master/UnrealBinaryBuilderUpdater/appcast.xml</link>
+		<language>en</language>
+		<item>
+			<title>Unreal Binary Builder 3.1.1</title>
+			<pubDate>Mon, 21 Jun 2021 17:10:58 +05:30</pubDate>
+			<sparkle:releaseNotesLink>
+				https://raw.githubusercontent.com/ryanjon2040/UE4-Binary-Builder/master/CHANGELOG.md
+			</sparkle:releaseNotesLink>
+			<enclosure url="https://github.com/ryanjon2040/UE4-Binary-Builder/releases/download/3.1.1/UnrealBinaryBuilder.v3.1.1.zip" 
+				sparkle:version="3.1.1" sparkle:shortVersionString="3.1.1" length="167622211" sparkle:os="windows" type="application/x-msdownload" 
+				sparkle:signature="Zm/G/ylAWq6r+WTa9e7RwkQwOq1stG4mQNtpBlkSp48o81x5msi1eZIf4CCvVgv9uZ1EXd0SuaPG0o/4zojEBw==" />
+		</item>
+	</channel>
 </rss>
