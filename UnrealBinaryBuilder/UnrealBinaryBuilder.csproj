@@ -23,6 +23,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.1.1" />
     <PackageReference Include="DotNetZip" Version="1.15.0" />
     <PackageReference Include="GameAnalytics.Net.Core.SDK" Version="3.1.1" />
     <PackageReference Include="HandyControl" Version="3.0.0" />

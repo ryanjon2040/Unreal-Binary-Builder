@@ -1,0 +1,21 @@
+﻿<hc:GlowWindow x:Name="MainCodeEditor" x:Class="UnrealBinaryBuilder.UserControls.CodeEditor"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:avalon="http://icsharpcode.net/sharpdevelop/avalonedit"
+		xmlns:hc="https://handyorg.github.io/handycontrol" 
+		mc:Ignorable="d"
+		Title="CodeEditor" Height="450" Width="800" WindowStartupLocation="CenterOwner" Closed="MainCodeEditor_Closed">
+	<hc:GlowWindow.NonClientAreaContent>
+		<StackPanel VerticalAlignment="Stretch" Orientation="Horizontal">
+			<Separator Width="10" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
+			<Menu DockPanel.Dock="Top">
+				<MenuItem x:Name="SaveBtn" Header="Save" Click="SaveBtn_Click"/>
+			</Menu>
+		</StackPanel>
+	</hc:GlowWindow.NonClientAreaContent>
+	<Grid>
+		<avalon:TextEditor x:Name="TextEditor" ShowLineNumbers="True" SyntaxHighlighting="C#" IsModified="{Binding Path=IsDirty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="TextEditor_TextChanged" />
+	</Grid>
+</hc:GlowWindow>

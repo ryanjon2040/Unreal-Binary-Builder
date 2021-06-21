@@ -1642,6 +1642,66 @@ namespace UnrealBinaryBuilder
 			BuilderSettings.UpdatePlatformInclusion(TargetPlatformName, (bool)((CheckBox)sender).IsChecked);
 		}
 
+		private void OpenCodeEditor(string FileType)
+		{
+			string FilePath = null;
+			string UE4FileType = $"UE4{FileType}.Target.cs";
+			string UE5FileType = $"Unreal{FileType}.Target.cs";
+			if (string.IsNullOrWhiteSpace(SetupBatFilePath.Text) == false)
+			{
+				FilePath = Path.Combine(SetupBatFilePath.Text, "Engine", "Source", UE5FileType);
+				if (File.Exists(FilePath) == false)
+				{
+					FilePath = Path.Combine(SetupBatFilePath.Text, "Engine", "Source", UE4FileType);
+				}
+			}
+			else if (string.IsNullOrWhiteSpace(AutomationToolPath.Text) == false)
+			{
+				string Local_BaseEnginePath = Regex.Replace(AutomationToolPath.Text, @"\\Binaries.+", "");
+				FilePath = Path.Combine(Local_BaseEnginePath, "Source", UE5FileType);
+				if (File.Exists(FilePath) == false)
+				{
+					FilePath = Path.Combine(Local_BaseEnginePath, "Source", UE4FileType);
+				}
+			}
+
+			if (string.IsNullOrWhiteSpace(FilePath))
+			{
+				HandyControl.Controls.MessageBox.Fatal($"Please choose Engine root folder or {UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}.exe first.");
+				return;
+			}
+
+			CodeEditor CE = new CodeEditor();
+			CE.Owner = this;
+			CE.Show();
+			bool bLoaded = CE.LoadFile(FilePath);
+			if (bLoaded == false)
+			{
+				HandyControl.Controls.MessageBox.Error($"{FilePath} does not exist.");
+				CE.Close();
+			}
+		}
+
+		private void EditServerTargetCs_Click(object sender, RoutedEventArgs e)
+		{
+			OpenCodeEditor("Server");
+		}
+
+		private void EditGameTargetCs_Click(object sender, RoutedEventArgs e)
+		{
+			OpenCodeEditor("Game");
+		}
+
+		private void EditEditorTargetCs_Click(object sender, RoutedEventArgs e)
+		{
+			OpenCodeEditor("Editor");
+		}
+
+		private void EditClientTargetCs_Click(object sender, RoutedEventArgs e)
+		{
+			OpenCodeEditor("Client");
+		}
+
 		private void SetupBatFilePath_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			if (string.IsNullOrWhiteSpace(SetupBatFilePath.Text) == false)

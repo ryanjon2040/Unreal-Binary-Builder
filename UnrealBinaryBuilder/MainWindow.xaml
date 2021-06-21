@@ -232,8 +232,12 @@
 										<ComboBoxItem Content="Unreal Engine 5"></ComboBoxItem>
 									</hc:ComboBox>
 								</StackPanel>
-								<Button x:Name="BuildRocketUE" Content="Build Unreal Engine" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,19,6" Width="200" Click="BuildRocketUE_Click"/>
-								<Button x:Name="CopyCommandLine" Content="Copy Commandline to clipboard" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,19,85" Width="200" Click="CopyCommandLine_Click"/>
+								<Button x:Name="BuildRocketUE" Content="Build Unreal Engine" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,19,6" Width="200" Click="BuildRocketUE_Click" IsEnabled="{Binding ElementName=AutomationToolPath, Path=Text.Length, Mode=OneWay}" />
+								<Button x:Name="CopyCommandLine" Content="Copy Commandline to clipboard" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,19,85" Width="200" Click="CopyCommandLine_Click" />
+								<Button x:Name="EditServerTargetCs" Content="Edit - Server Target" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 19 120" Width="200" Click="EditServerTargetCs_Click" IsEnabled="{Binding ElementName=AutomationToolPath, Path=Text.Length, Mode=OneWay}" />
+								<Button x:Name="EditGameTargetCs" Content="Edit - Game Target" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 19 155" Width="200" IsEnabled="{Binding ElementName=AutomationToolPath, Path=Text.Length, Mode=OneWay}" Click="EditGameTargetCs_Click" />
+								<Button x:Name="EditEditorTargetCs" Content="Edit - Editor Target" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 19 190" Width="200" IsEnabled="{Binding ElementName=AutomationToolPath, Path=Text.Length, Mode=OneWay}" Click="EditEditorTargetCs_Click" />
+								<Button x:Name="EditClientTargetCs" Content="Edit - Client Target" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 19 225" Width="200" IsEnabled="{Binding ElementName=AutomationToolPath, Path=Text.Length, Mode=OneWay}" Click="EditClientTargetCs_Click" />
 							</Grid>
 						</hc:TabItem>
 					</hc:TabControl>
