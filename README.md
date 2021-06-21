@@ -7,6 +7,7 @@ This is a small app designed to create binary build of [Unreal Engine 4](https:/
 
 [<img src="https://img.shields.io/twitter/follow/ryanjon2040.svg?style=popout">](https://twitter.com/ryanjon2040)
 
+![](https://github.com/ryanjon2040/UE4-Binary-Builder/actions/workflows/build-ubb.yml/badge.svg)
 ![](https://img.shields.io/github/last-commit/ryanjon2040/UE4-Binary-Builder.svg?style=popout) 
 ![](https://img.shields.io/github/license/ryanjon2040/UE4-Binary-Builder.svg?style=popout) ![](https://img.shields.io/github/downloads/ryanjon2040/UE4-Binary-Builder/total.svg?style=popout) 
 
