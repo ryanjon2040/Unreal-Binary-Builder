@@ -1,4 +1,8 @@
-﻿# 3.1.1
+﻿# 3.1.2
+
+* **FIXED**: Issues with updating.
+
+# 3.1.1
 
 * Support **Unreal Engine 5**
 * Add basic editor to edit target cs files.
