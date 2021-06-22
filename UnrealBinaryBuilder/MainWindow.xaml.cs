@@ -608,7 +608,14 @@ namespace UnrealBinaryBuilder
 				AutomationExePath = AutomationToolPath.Text;
 				if (Path.GetFileNameWithoutExtension(AutomationExePath) == UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME)
 				{
-					SetupBatFilePath.Text = AutomationExePath.Replace(Path.GetFileName(AutomationExePath), "").Replace(@"\Engine\Binaries\DotNET", "");
+					if (IsUnrealEngine4())
+					{
+						SetupBatFilePath.Text = AutomationExePath.Replace(Path.GetFileName(AutomationExePath), "").Replace(@"\Engine\Binaries\DotNET", "");
+					}
+					else
+					{
+						SetupBatFilePath.Text = AutomationExePath.Replace(Path.GetFileName(AutomationExePath), "").Replace(@"\Engine\Binaries\DotNET\AutomationToolLauncher", "");
+					}
 					bRequiredFilesExist = File.Exists(Path.Combine(SetupBatFilePath.Text, UnrealBinaryBuilderHelpers.SetupBatFileName)) && File.Exists(Path.Combine(SetupBatFilePath.Text, UnrealBinaryBuilderHelpers.GenerateProjectBatFileName));
 				}
 				else
@@ -880,9 +887,13 @@ namespace UnrealBinaryBuilder
 			}
 			else
 			{
-				CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithWin32={1} -set:WithMac={2} -set:WithAndroid={3} -set:WithIOS={4} -set:WithTVOS={5} -set:WithLinux={6} -set:WithLumin={7}",
+				if (IsUnrealEngine4())
+				{
+					CommandLineArgs += string.Format("-set:WithWin32={0}", GetConditionalString(bWithWin32.IsChecked));
+				}
+
+				CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithMac={1} -set:WithAndroid={2} -set:WithIOS={3} -set:WithTVOS={4} -set:WithLinux={5} -set:WithLumin={6}",
 						GetConditionalString(bWithWin64.IsChecked),
-						GetConditionalString(bWithWin32.IsChecked),
 						GetConditionalString(bWithMac.IsChecked),
 						GetConditionalString(bWithAndroid.IsChecked),
 						GetConditionalString(bWithIOS.IsChecked),
@@ -912,9 +923,12 @@ namespace UnrealBinaryBuilder
 
 			if (IsEngineSelection425OrAbove())
 			{
-				CommandLineArgs += string.Format(" -set:CompileDatasmithPlugins={0} -set:VS2019={1}",
-					GetConditionalString(bCompileDatasmithPlugins.IsChecked),
-					GetConditionalString(bVS2019.IsChecked));
+				CommandLineArgs += string.Format(" -set:CompileDatasmithPlugins={0}", GetConditionalString(bCompileDatasmithPlugins.IsChecked));
+			}
+
+			if (IsUnrealEngine4())
+			{
+				CommandLineArgs += string.Format(" -set:VS2019={0}", GetConditionalString(bVS2019.IsChecked));
 			}
 
 			if (EngineVersionSelection.SelectedIndex > 1)
@@ -1108,25 +1122,38 @@ namespace UnrealBinaryBuilder
 		private void EngineVersionSelection_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
 			bWithServer.IsEnabled = bWithClient.IsEnabled = EngineVersionSelection.SelectedIndex > 1 || EngineVersionSelection.SelectedIndex == 0;
+			bWithWin32.IsEnabled = IsUnrealEngine4();
 			bWithHTML5.IsEnabled = SupportHTML5();
 			bWithLinuxAArch64.IsEnabled = SupportLinuxAArch64();
 			bWithSwitch.IsEnabled = bWithPS4.IsEnabled = bWithXboxOne.IsEnabled = SupportConsoles();
-			bCompileDatasmithPlugins.IsEnabled = bVS2019.IsEnabled = IsEngineSelection425OrAbove();
+			bCompileDatasmithPlugins.IsEnabled = IsEngineSelection425OrAbove();
+			bVS2019.IsEnabled = IsEngineSelection425OrAbove() && IsUnrealEngine4();
+		}
+
+		private bool IsUnrealEngine4()
+		{
+			if (string.IsNullOrWhiteSpace(SetupBatFilePath.Text))
+			{
+				return true;
+			}
+
+			UnrealBinaryBuilderHelpers.DetectEngineVersion(SetupBatFilePath.Text);
+			return UnrealBinaryBuilderHelpers.IsUnrealEngine5 == false;
 		}
 
 		private bool SupportHTML5()
 		{
-			return EngineVersionSelection.SelectedIndex < 3;
+			return IsUnrealEngine4() && EngineVersionSelection.SelectedIndex < 3;
 		}
 
 		private bool SupportLinuxAArch64()
 		{
-			return EngineVersionSelection.SelectedIndex >= 3 || EngineVersionSelection.SelectedIndex == 0;
+			return IsUnrealEngine4() && (EngineVersionSelection.SelectedIndex >= 3 || EngineVersionSelection.SelectedIndex == 0);
 		}
 
 		private bool SupportConsoles()
 		{
-			return EngineVersionSelection.SelectedIndex <= 3;
+			return IsUnrealEngine4() && EngineVersionSelection.SelectedIndex <= 3;
 		}
 
 		private bool IsEngineSelection425OrAbove()
@@ -1136,27 +1163,12 @@ namespace UnrealBinaryBuilder
 
 		private string GetEngineName()
 		{
-			string ReturnString = "Unknown";
-			switch (EngineVersionSelection.SelectedIndex)
+			if (string.IsNullOrWhiteSpace(SetupBatFilePath.Text))
 			{
-				case 1:
-					ReturnString = "4.22";
-					break;
-				case 2:
-					ReturnString = "4.23";
-					break;
-				case 3:
-					ReturnString = "4.24";
-					break;
-				case 4:
-					ReturnString = "4.25";
-					break;
-				case 5:
-					ReturnString = "4.26";
-					break;
+				return "Unknown";
 			}
 
-			return ReturnString;
+			return UnrealBinaryBuilderHelpers.DetectEngineVersion(SetupBatFilePath.Text);
 		}
 
 		private void CopyCommandLine_Click(object sender, RoutedEventArgs e)
@@ -1231,7 +1243,7 @@ namespace UnrealBinaryBuilder
 						ProcessStartInfo processStartInfo = new ProcessStartInfo
 						{
 							FileName = MsBuildFile,
-							Arguments = UnrealBinaryBuilderHelpers.GetAutomationToolProjectFile(SetupBatFilePath.Text),
+							Arguments = $"/restore {UnrealBinaryBuilderHelpers.GetAutomationToolProjectFile(SetupBatFilePath.Text)}",
 							UseShellExecute = false,
 							CreateNoWindow = true,
 							RedirectStandardError = true,
