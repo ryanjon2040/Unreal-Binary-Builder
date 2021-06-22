@@ -887,7 +887,7 @@ namespace UnrealBinaryBuilder
 			}
 			else
 			{
-				if (IsUnrealEngine4())
+				if (SupportWin32)
 				{
 					CommandLineArgs += string.Format("-set:WithWin32={0}", GetConditionalString(bWithWin32.IsChecked));
 				}
@@ -901,13 +901,13 @@ namespace UnrealBinaryBuilder
 						GetConditionalString(bWithLinux.IsChecked),
 						GetConditionalString(bWithLumin.IsChecked));
 
-				if (SupportHTML5())
+				if (SupportHTML5)
 				{
 					CommandLineArgs += string.Format(" -set:WithHTML5={0}",
 					GetConditionalString(bWithHTML5.IsChecked));
 				}
 
-				if (SupportConsoles())
+				if (SupportConsoles)
 				{
 					CommandLineArgs += string.Format(" -set:WithSwitch={0} -set:WithPS4={1} -set:WithXboxOne={2}",
 					GetConditionalString(bWithSwitch.IsChecked),
@@ -915,23 +915,23 @@ namespace UnrealBinaryBuilder
 					GetConditionalString(bWithXboxOne.IsChecked));
 				}
 
-				if (SupportLinuxAArch64())
+				if (SupportLinuxAArch64)
 				{
 					CommandLineArgs += string.Format(" -set:WithLinuxAArch64={0}", GetConditionalString(bWithLinuxAArch64.IsChecked));
 				}
 			}
 
-			if (IsEngineSelection425OrAbove())
+			if (IsEngineSelection425OrAbove)
 			{
 				CommandLineArgs += string.Format(" -set:CompileDatasmithPlugins={0}", GetConditionalString(bCompileDatasmithPlugins.IsChecked));
 			}
 
-			if (IsUnrealEngine4())
+			if (SupportVisualStudio2019)
 			{
 				CommandLineArgs += string.Format(" -set:VS2019={0}", GetConditionalString(bVS2019.IsChecked));
 			}
 
-			if (EngineVersionSelection.SelectedIndex > 1)
+			if (SupportServerClientTargets)
 			{
 				CommandLineArgs += string.Format(" -set:WithServer={0} -set:WithClient={1} -set:WithHoloLens={2}",
 					GetConditionalString(bWithServer.IsChecked),
@@ -1048,7 +1048,7 @@ namespace UnrealBinaryBuilder
 				}
 			}
 
-			if (SupportHTML5() == false && bWithHTML5.IsChecked == true)
+			if (SupportHTML5 == false && bWithHTML5.IsChecked == true)
 			{
 				GameAnalyticsCSharp.AddDesignEvent($"Build:HTML5:IncorrectEngine:{GetEngineName()}");
 				bWithHTML5.IsChecked = false;
@@ -1058,7 +1058,7 @@ namespace UnrealBinaryBuilder
 				}
 			}
 
-			if (SupportConsoles() == false && (bWithSwitch.IsChecked == true || bWithPS4.IsChecked == true || bWithXboxOne.IsChecked == true))
+			if (SupportConsoles == false && (bWithSwitch.IsChecked == true || bWithPS4.IsChecked == true || bWithXboxOne.IsChecked == true))
 			{
 				GameAnalyticsCSharp.AddDesignEvent($"Build:Console:IncorrectEngine:{GetEngineName()}");
 				bWithSwitch.IsChecked = bWithPS4.IsChecked = bWithXboxOne.IsChecked = false;
@@ -1119,47 +1119,24 @@ namespace UnrealBinaryBuilder
 			}
 		}
 
-		private void EngineVersionSelection_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-		{
-			bWithServer.IsEnabled = bWithClient.IsEnabled = EngineVersionSelection.SelectedIndex > 1 || EngineVersionSelection.SelectedIndex == 0;
-			bWithWin32.IsEnabled = IsUnrealEngine4();
-			bWithHTML5.IsEnabled = SupportHTML5();
-			bWithLinuxAArch64.IsEnabled = SupportLinuxAArch64();
-			bWithSwitch.IsEnabled = bWithPS4.IsEnabled = bWithXboxOne.IsEnabled = SupportConsoles();
-			bCompileDatasmithPlugins.IsEnabled = IsEngineSelection425OrAbove();
-			bVS2019.IsEnabled = IsEngineSelection425OrAbove() && IsUnrealEngine4();
-		}
-
 		private bool IsUnrealEngine4()
 		{
-			if (string.IsNullOrWhiteSpace(SetupBatFilePath.Text))
-			{
-				return true;
-			}
-
-			UnrealBinaryBuilderHelpers.DetectEngineVersion(SetupBatFilePath.Text);
-			return UnrealBinaryBuilderHelpers.IsUnrealEngine5 == false;
+			return GetEngineValue() < 5;
 		}
 
-		private bool SupportHTML5()
-		{
-			return IsUnrealEngine4() && EngineVersionSelection.SelectedIndex < 3;
-		}
+		public bool SupportServerClientTargets => GetEngineValue() > 4.22;
 
-		private bool SupportLinuxAArch64()
-		{
-			return IsUnrealEngine4() && (EngineVersionSelection.SelectedIndex >= 3 || EngineVersionSelection.SelectedIndex == 0);
-		}
+		public bool SupportWin32 => IsUnrealEngine4();
 
-		private bool SupportConsoles()
-		{
-			return IsUnrealEngine4() && EngineVersionSelection.SelectedIndex <= 3;
-		}
+		public bool SupportHTML5 => GetEngineValue() < 4.24;
 
-		private bool IsEngineSelection425OrAbove()
-		{
-			return EngineVersionSelection.SelectedIndex >= 4 || EngineVersionSelection.SelectedIndex == 0;
-		}
+		public bool SupportLinuxAArch64 => GetEngineValue() >= 4.24;
+
+		public bool SupportConsoles => GetEngineValue() <= 4.24;
+
+		public bool SupportVisualStudio2019 => IsUnrealEngine4() && IsEngineSelection425OrAbove;
+
+		public bool IsEngineSelection425OrAbove => GetEngineValue() >= 4.25;
 
 		private string GetEngineName()
 		{
@@ -1169,6 +1146,24 @@ namespace UnrealBinaryBuilder
 			}
 
 			return UnrealBinaryBuilderHelpers.DetectEngineVersion(SetupBatFilePath.Text);
+		}
+
+		private double GetEngineValue()
+		{
+			string MyEngineName = GetEngineName();
+			if (MyEngineName != "Unknown")
+			{
+				int pos = MyEngineName.LastIndexOf(".");
+				if (pos > 0)
+				{
+					string sub = MyEngineName.Substring(pos).Replace(".", "");
+					string RemovedName = MyEngineName.Remove(pos);
+					double EngineValue = Convert.ToDouble(RemovedName.Insert(pos, sub));
+					return EngineValue;
+				}
+			}
+
+			return 0;
 		}
 
 		private void CopyCommandLine_Click(object sender, RoutedEventArgs e)
@@ -1735,7 +1730,7 @@ namespace UnrealBinaryBuilder
 			if (string.IsNullOrWhiteSpace(SetupBatFilePath.Text) == false)
 			{
 				string EngineVersion = UnrealBinaryBuilderHelpers.DetectEngineVersion(SetupBatFilePath.Text);
-				AddLogEntry($"Detected Unreal Engine {EngineVersion}");
+				FoundEngineLabel.Content = $"Selected Unreal Engine {EngineVersion}";
 			}
 		}
 	}

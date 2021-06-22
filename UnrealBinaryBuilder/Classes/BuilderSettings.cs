@@ -20,7 +20,6 @@ namespace UnrealBinaryBuilder.Classes
 		public bool bShowHTML5DeprecatedMessage { get; set; }
 		public bool bShowConsoleDeprecatedMessage { get; set; }
 
-		public int EngineVersionIndex { get; set; }
 		public string SetupBatFile { get; set; }
 		public string AutomationToolPath { get; set; }
 		public string CustomBuildFile { get; set; }
@@ -123,7 +122,6 @@ namespace UnrealBinaryBuilder.Classes
 			BSJ.bShowHTML5DeprecatedMessage = true;
 			BSJ.bShowConsoleDeprecatedMessage = true;
 
-			BSJ.EngineVersionIndex = 0;
 			BSJ.SetupBatFile = null;
 			BSJ.AutomationToolPath = null;
 			BSJ.CustomBuildFile = null;
@@ -265,7 +263,6 @@ namespace UnrealBinaryBuilder.Classes
 			BuilderSettingsJson BSJ = new BuilderSettingsJson();
 			BSJ.Theme = mainWindow.CurrentTheme;
 			BSJ.bCheckForUpdatesAtStartup = mainWindow.SettingsJSON.bCheckForUpdatesAtStartup;
-			BSJ.EngineVersionIndex = mainWindow.EngineVersionSelection.SelectedIndex;
 			BSJ.SetupBatFile = mainWindow.SetupBatFilePath.Text;
 			BSJ.AutomationToolPath = mainWindow.AutomationToolPath.Text;
 			BSJ.CustomBuildFile = mainWindow.CustomBuildXMLFile.Text;
