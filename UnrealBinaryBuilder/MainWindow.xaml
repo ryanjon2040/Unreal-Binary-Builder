@@ -155,17 +155,16 @@
 						</hc:TabItem>
 
 						<hc:TabItem Header="Compile" ToolTip="Various options to choose how you want to compile Unreal Engine.">
-							<Grid>
-								<GroupBox Header="Programs" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="123" Width="480">
-									<hc:SimplePanel>
-										<TextBox x:Name="AutomationToolPath" Text="{Binding AutomationToolPath}" hc:InfoElement.Placeholder="Select AutomationToolLauncher.exe" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400"/>
-										<Button x:Name="AutomationToolBrowse" Content="Browse" HorizontalAlignment="Right" VerticalAlignment="Top" Click="AutomationToolBrowse_Click" />
-
-										<TextBox x:Name="CustomBuildXMLFile" Text="{Binding CustomBuildFile}" hc:InfoElement.Placeholder="(Optional) Choose custom build XML file." hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="270" Margin="0,40,0,0"/>
-										<Button x:Name="CustomBuildXMLBrowse" Content="Browse" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,40,118,0" Width="80" Click="CustomBuildXMLBrowse_Click" />
-										<Button x:Name="ResetDefaultBuildXML" Content="Reset To Default" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,40,0,0" Width="113" Click="ResetDefaultBuildXML_Click" />
-									</hc:SimplePanel>
-								</GroupBox>
+							<Grid x:Name="CompileMainGrid">
+								<Grid.BindingGroup>
+									<BindingGroup Name="EngineChanged">
+									</BindingGroup>
+								</Grid.BindingGroup>
+								<hc:SimplePanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="123" Width="480">
+									<TextBox x:Name="CustomBuildXMLFile" Text="{Binding CustomBuildFile}" hc:InfoElement.Placeholder="(Optional) Choose custom build XML file." hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="270" Margin="0,40,0,0"/>
+									<Button x:Name="CustomBuildXMLBrowse" Content="Browse" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,40,118,0" Width="80" Click="CustomBuildXMLBrowse_Click" />
+									<Button x:Name="ResetDefaultBuildXML" Content="Reset To Default" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,40,0,0" Width="113" Click="ResetDefaultBuildXML_Click" />
+								</hc:SimplePanel>
 
 								<GroupBox Header="Platforms" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,138,0,0" Height="190" Width="480">
 									<hc:ScrollViewer>
@@ -173,19 +172,19 @@
 											<CheckBox x:Name="bHostPlatformOnly" Content="Host Only" Margin="10" IsChecked="{Binding bHostPlatformOnly}" />
 											<CheckBox x:Name="bHostPlatformEditorOnly" Content="Host Editor Only" Margin="10" IsChecked="{Binding bHostPlatformEditorOnly}" />
 											<CheckBox x:Name="bWithWin64" Content="Windows 64" Margin="10" IsChecked="{Binding bWithWin64}" />
-											<CheckBox x:Name="bWithWin32" Content="Windows 32" Margin="10" IsChecked="{Binding bWithWin32}" IsEnabled="{Binding SupportWin32, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
+											<CheckBox x:Name="bWithWin32" Content="Windows 32" Margin="10" IsChecked="{Binding bWithWin32}" IsEnabled="{Binding SupportWin32, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
 											<CheckBox x:Name="bWithMac" Content="Mac" Margin="10" IsChecked="{Binding bWithMac}" />
 											<CheckBox x:Name="bWithLinux" Content="Linux" Margin="10" IsChecked="{Binding bWithLinux}" />
-											<CheckBox x:Name="bWithLinuxAArch64" Content="Linux AArch 64" Margin="10" IsChecked="{Binding bWithLinuxAArch64}" IsEnabled="{Binding SupportLinuxAArch64, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
+											<CheckBox x:Name="bWithLinuxAArch64" Content="Linux AArch 64" Margin="10" IsChecked="{Binding bWithLinuxAArch64}" IsEnabled="{Binding SupportLinuxAArch64, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
 											<CheckBox x:Name="bWithAndroid" Content="Android" Margin="10" IsChecked="{Binding bWithAndroid}" />
 											<CheckBox x:Name="bWithIOS" Content="IOS" Margin="10" IsChecked="{Binding bWithIOS}" />
-											<CheckBox x:Name="bWithHTML5" Content="HTML 5" Margin="10" IsChecked="{Binding bWithHTML5}" IsEnabled="{Binding SupportHTML5, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}" />
+											<CheckBox x:Name="bWithHTML5" Content="HTML 5" Margin="10" IsChecked="{Binding bWithHTML5}" IsEnabled="{Binding SupportHTML5, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}" />
 											<CheckBox x:Name="bWithTVOS" Content="TVOS" Margin="10" IsChecked="{Binding bWithTVOS}" />
-											<CheckBox x:Name="bWithSwitch" Content="Switch" Margin="10" IsChecked="{Binding bWithSwitch}" IsEnabled="{Binding SupportConsoles, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
-											<CheckBox x:Name="bWithPS4" Content="PS4" Margin="10" IsChecked="{Binding bWithPS4}" IsEnabled="{Binding SupportConsoles, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
-											<CheckBox x:Name="bWithXboxOne" Content="XBox One" Margin="10" IsChecked="{Binding bWithXboxOne}" IsEnabled="{Binding SupportConsoles, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
+											<CheckBox x:Name="bWithSwitch" Content="Switch" Margin="10" IsChecked="{Binding bWithSwitch}" IsEnabled="{Binding SupportConsoles, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
+											<CheckBox x:Name="bWithPS4" Content="PS4" Margin="10" IsChecked="{Binding bWithPS4}" IsEnabled="{Binding SupportConsoles, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
+											<CheckBox x:Name="bWithXboxOne" Content="XBox One" Margin="10" IsChecked="{Binding bWithXboxOne}" IsEnabled="{Binding SupportConsoles, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
 											<CheckBox x:Name="bWithLumin" Content="Lumin" Margin="10" IsChecked="{Binding bWithLumin}" />
-											<CheckBox x:Name="bWithHololens" Content="Holo Lens" Margin="10" IsChecked="{Binding bWithHoloLens}" IsEnabled="{Binding SupportServerClientTargets, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
+											<CheckBox x:Name="bWithHololens" Content="Holo Lens" Margin="10" IsChecked="{Binding bWithHoloLens}" IsEnabled="{Binding SupportServerClientTargets, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
 										</WrapPanel>
 									</hc:ScrollViewer>
 								</GroupBox>
@@ -193,17 +192,17 @@
 								<GroupBox Header="Options" VerticalAlignment="Top" Height="318" Width="480" Margin="506,10,290,0">
 									<hc:ScrollViewer>
 										<StackPanel>
-											<WrapPanel>
+											<WrapPanel x:Name="EngineBuildOptionsWrapPanel">
 												<CheckBox x:Name="bWithDDC" Content="Include DDC" Margin="10" IsChecked="{Binding bWithDDC}" ToolTip="Build a standalone derived-data cache for the engine content and templates.                         &#xA;Building a stand-alone Derived Data Cache (DDC) for the Engine and Template content can be one of the slowest aspects of the build.                         &#xA;If you don't need a stand-alone DDC, you can skip this step."/>
 												<CheckBox x:Name="bHostPlatformDDCOnly" Content="Host DDC Only" Margin="10" IsChecked="{Binding bHostPlatformDDCOnly}" IsEnabled="{Binding IsChecked, ElementName=bWithDDC}" ToolTip="Whether to include DDC for the host platform only. Requires DDC to be turned on." />
 												<CheckBox x:Name="bSignExecutables" Content="Sign Executables" Margin="10" IsChecked="{Binding bSignExecutables}" ToolTip="Sign the executables produced where signing is available." />
 												<CheckBox x:Name="bEnableSymStore" Content="Symbol Store" Margin="10" IsChecked="{Binding bEnableSymStore}" ToolTip="Whether to add Source indexing to Windows game apps so they can be added to a symbol server." />
 												<CheckBox x:Name="bWithFullDebugInfo" Content="Include Full Debug Info" Margin="10" IsChecked="{Binding bWithFullDebugInfo}" ToolTip="Generate full debug info for binary editor and packaged application builds." />
 												<CheckBox x:Name="bCleanBuild" Content="Remove Previous" Margin="10" IsChecked="{Binding bCleanBuild}" ToolTip="Cleans any previous builds. Appends -clean to command line." />
-												<CheckBox x:Name="bWithServer" Content="Include Server" Margin="10" IsChecked="{Binding bWithServer}" ToolTip="Create dedicated server target." IsEnabled="{Binding SupportServerClientTargets, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
-												<CheckBox x:Name="bWithClient" Content="Include Client" Margin="10" IsChecked="{Binding bWithClient}" ToolTip="Create client target." IsEnabled="{Binding SupportServerClientTargets, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
-												<CheckBox x:Name="bCompileDatasmithPlugins" Content="Include Datasmith" Margin="10" IsChecked="{Binding bCompileDatasmithPlugins}" ToolTip="If Datasmith plugins should be compiled." IsEnabled="{Binding IsEngineSelection425OrAbove, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
-												<CheckBox x:Name="bVS2019" Content="Use 2019 Compiler" Margin="10" IsChecked="{Binding bVS2019}" ToolTip="Use Visual Studio 2019 to build Windows targets. By default, Visual Studio 2017 is used for maximum compatibility." IsEnabled="{Binding SupportVisualStudio2019, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
+												<CheckBox x:Name="bWithServer" Content="Include Server" Margin="10" IsChecked="{Binding bWithServer}" ToolTip="Create dedicated server target." IsEnabled="{Binding SupportServerClientTargets, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
+												<CheckBox x:Name="bWithClient" Content="Include Client" Margin="10" IsChecked="{Binding bWithClient}" ToolTip="Create client target." IsEnabled="{Binding SupportServerClientTargets, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
+												<CheckBox x:Name="bCompileDatasmithPlugins" Content="Include Datasmith" Margin="10" IsChecked="{Binding bCompileDatasmithPlugins}" ToolTip="If Datasmith plugins should be compiled." IsEnabled="{Binding IsEngineSelection425OrAbove, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
+												<CheckBox x:Name="bVS2019" Content="Use 2019 Compiler" Margin="10" IsChecked="{Binding bVS2019}" ToolTip="Use Visual Studio 2019 to build Windows targets. By default, Visual Studio 2017 is used for maximum compatibility." IsEnabled="{Binding SupportVisualStudio2019, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
 											</WrapPanel>
 											<GroupBox Header="Shutdown Settings" Style="{StaticResource GroupBoxOriginal}" Margin="10">
 												<WrapPanel>
@@ -221,14 +220,14 @@
 										<TextBox x:Name="CustomOptions" Margin="12 5 12 5" Width="400" Text="{Binding CustomOptions}" hc:InfoElement.Placeholder="Custom Options (if any)" Style="{StaticResource TextBoxExtend}" ToolTip="Pass custom command line options. Typically used when using custom Build XML."/>
 										<TextBox x:Name="AnalyticsOverride" Margin="12 5 12 5" Width="400" Text="{Binding AnalyticsOverride}" hc:InfoElement.Placeholder="Analytics Type" Style="{StaticResource TextBoxExtend}" ToolTip="Identifier for analytic events to send."/>
 									</WrapPanel>
-									<Label x:Name="FoundEngineLabel" Content="Engine" HorizontalAlignment="Left" Margin="12 0 0 0"/>
+									<Label x:Name="FoundEngineLabel" Content="No Engine selected." HorizontalAlignment="Left" Margin="12 0 0 0"/>
 								</StackPanel>
-								<Button x:Name="BuildRocketUE" Content="Build Unreal Engine" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,19,0" Width="200" Click="BuildRocketUE_Click" IsEnabled="{Binding Text.Length, ElementName=AutomationToolPath, Mode=OneWay}" />
+								<Button x:Name="BuildRocketUE" Content="Build Unreal Engine" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,19,0" Width="200" Click="BuildRocketUE_Click" IsEnabled="{Binding AutomationExePathPathIsValid, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
 								<Button x:Name="CopyCommandLine" Content="Copy Commandline to clipboard" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,19,85" Width="200" Click="CopyCommandLine_Click" />
-								<Button x:Name="EditServerTargetCs" Content="Edit - Server Target" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 19 120" Width="200" Click="EditServerTargetCs_Click" IsEnabled="{Binding Text.Length, ElementName=AutomationToolPath, Mode=OneWay}" />
-								<Button x:Name="EditGameTargetCs" Content="Edit - Game Target" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 19 155" Width="200" IsEnabled="{Binding Text.Length, ElementName=AutomationToolPath, Mode=OneWay}" Click="EditGameTargetCs_Click" />
-								<Button x:Name="EditEditorTargetCs" Content="Edit - Editor Target" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 19 190" Width="200" IsEnabled="{Binding Text.Length, ElementName=AutomationToolPath, Mode=OneWay}" Click="EditEditorTargetCs_Click" />
-								<Button x:Name="EditClientTargetCs" Content="Edit - Client Target" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 19 225" Width="200" IsEnabled="{Binding Text.Length, ElementName=AutomationToolPath, Mode=OneWay}" Click="EditClientTargetCs_Click" />
+								<Button x:Name="EditServerTargetCs" Content="Edit - Server Target" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 19 120" Width="200" Click="EditServerTargetCs_Click" IsEnabled="{Binding AutomationExePathPathIsValid, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}" />
+								<Button x:Name="EditGameTargetCs" Content="Edit - Game Target" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 19 155" Width="200" IsEnabled="{Binding AutomationExePathPathIsValid, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}" Click="EditGameTargetCs_Click" />
+								<Button x:Name="EditEditorTargetCs" Content="Edit - Editor Target" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 19 190" Width="200" IsEnabled="{Binding AutomationExePathPathIsValid, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}" Click="EditEditorTargetCs_Click" />
+								<Button x:Name="EditClientTargetCs" Content="Edit - Client Target" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 19 225" Width="200" IsEnabled="{Binding AutomationExePathPathIsValid, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}" Click="EditClientTargetCs_Click" />
 							</Grid>
 						</hc:TabItem>
 					</hc:TabControl>

@@ -21,7 +21,6 @@ namespace UnrealBinaryBuilder.Classes
 		public bool bShowConsoleDeprecatedMessage { get; set; }
 
 		public string SetupBatFile { get; set; }
-		public string AutomationToolPath { get; set; }
 		public string CustomBuildFile { get; set; }
 		public string GameConfigurations { get; set; }
 		public string CustomOptions { get; set; }
@@ -123,7 +122,6 @@ namespace UnrealBinaryBuilder.Classes
 			BSJ.bShowConsoleDeprecatedMessage = true;
 
 			BSJ.SetupBatFile = null;
-			BSJ.AutomationToolPath = null;
 			BSJ.CustomBuildFile = null;
 			BSJ.GameConfigurations = "Development;Shipping";
 			BSJ.CustomOptions = null;
@@ -264,7 +262,6 @@ namespace UnrealBinaryBuilder.Classes
 			BSJ.Theme = mainWindow.CurrentTheme;
 			BSJ.bCheckForUpdatesAtStartup = mainWindow.SettingsJSON.bCheckForUpdatesAtStartup;
 			BSJ.SetupBatFile = mainWindow.SetupBatFilePath.Text;
-			BSJ.AutomationToolPath = mainWindow.AutomationToolPath.Text;
 			BSJ.CustomBuildFile = mainWindow.CustomBuildXMLFile.Text;
 			BSJ.GameConfigurations = mainWindow.GameConfigurations.Text;
 			BSJ.CustomOptions = mainWindow.CustomOptions.Text;
