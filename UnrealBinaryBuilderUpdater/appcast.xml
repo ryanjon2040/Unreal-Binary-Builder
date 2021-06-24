@@ -6,14 +6,14 @@
 		<link>https://github.com/ryanjon2040/UE4-Binary-Builder/raw/master/UnrealBinaryBuilderUpdater/appcast.xml</link>
 		<language>en</language>
 		<item>
-			<title>Unreal Binary Builder 3.1.2</title>
-			<pubDate>Mon, 21 Jun 2021 18:32:44 +05:30</pubDate>
+			<title>Unreal Binary Builder 3.1.3</title>
+			<pubDate>Thu, 24 Jun 2021 17:30:32 +05:30</pubDate>
 			<sparkle:releaseNotesLink>
 				https://raw.githubusercontent.com/ryanjon2040/UE4-Binary-Builder/master/CHANGELOG.md
 			</sparkle:releaseNotesLink>
-			<enclosure url="https://github.com/ryanjon2040/UE4-Binary-Builder/releases/download/3.1.2/UnrealBinaryBuilder.v3.1.2.zip" 
-			sparkle:version="3.1.2" sparkle:shortVersionString="3.1.2" length="167622723" sparkle:os="windows" type="application/x-msdownload" 
-			sparkle:signature="09qm/ppEetFyRZC1Gf1e3mVcKG8TrmWdvjvQhAONYBJ4vqCou4zj5bGrVzXnL6nsEA1rTrnGfK5yL6KfaOOFBg==" />
+			<enclosure url="https://github.com/ryanjon2040/UE4-Binary-Builder/releases/download/3.1.3/UnrealBinaryBuilder.v3.1.3.zip" 
+			sparkle:version="3.1.3" sparkle:shortVersionString="3.1" length="382875099" sparkle:os="windows" type="application/x-msdownload" 
+			sparkle:signature="CR/N2fAH7a0YBr7emo6VfG/fH1Epfs3NRytQN2nOrfeNpwujl3btgGzHk8aCtHAO2VrCBqgIZyw0K7iLprSzBA==" />
 		</item>
 	</channel>
 </rss>
