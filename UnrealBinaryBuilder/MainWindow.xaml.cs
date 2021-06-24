@@ -316,6 +316,10 @@ namespace UnrealBinaryBuilder
 				unrealBinaryBuilderUpdater.SilentUpdateFinishedEventHandler += OnUpdateCheck;
 				unrealBinaryBuilderUpdater.CheckForUpdatesSilently();
 			}
+			else
+			{
+				ShowToastMessage($"{GetCurrentProcessName()} is currently running. You can check for updates after it is done.", LogViewer.EMessageType.Error);
+			}
 		}
 
 		private void CheckUpdateBtn_Click(object sender, RoutedEventArgs e)
