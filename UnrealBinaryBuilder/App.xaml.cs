@@ -12,7 +12,15 @@ namespace UnrealBinaryBuilder
 		public App()
 		{
 			DispatcherUnhandledException += App_DispatcherUnhandledException;
-			SentrySdk.Init("https://23f478ac8a004c5782a7f6597c0b0325@o502371.ingest.sentry.io/5584682");
+			SentryOptions sentryOptions = new SentryOptions();
+			sentryOptions.Dsn = "https://23f478ac8a004c5782a7f6597c0b0325@o502371.ingest.sentry.io/5584682";
+			sentryOptions.StackTraceMode = StackTraceMode.Enhanced;
+			sentryOptions.AttachStacktrace = true;
+			sentryOptions.AutoSessionTracking = true;
+			sentryOptions.DetectStartupTime = StartupTimeDetectionMode.Best;
+			sentryOptions.Release = UnrealBinaryBuilderHelpers.GetProductVersionString();
+			sentryOptions.ReportAssembliesMode = ReportAssembliesMode.InformationalVersion;
+			SentrySdk.Init(sentryOptions);
 		}
 
 		void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
