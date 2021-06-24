@@ -1316,7 +1316,7 @@ namespace UnrealBinaryBuilder
 						ProcessStartInfo processStartInfo = new ProcessStartInfo
 						{
 							FileName = MsBuildFile,
-							Arguments = $"/restore {UnrealBinaryBuilderHelpers.GetAutomationToolProjectFile(SetupBatFilePath.Text)}",
+							Arguments = $"/restore /verbosity:minimal {UnrealBinaryBuilderHelpers.GetAutomationToolProjectFile(SetupBatFilePath.Text)}",
 							UseShellExecute = false,
 							CreateNoWindow = true,
 							RedirectStandardError = true,
