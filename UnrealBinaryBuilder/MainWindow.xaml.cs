@@ -512,7 +512,14 @@ namespace UnrealBinaryBuilder
 							EngineTabControl.SelectedIndex = 1;
 							if (FinalBuildPath == null)
 							{
-								FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@"\Engine\Binaries\DotNET", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
+								if (UnrealBinaryBuilderHelpers.IsUnrealEngine5)
+								{
+									FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@$"\Engine\Binaries\DotNET\{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
+								}
+								else
+								{
+									FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@"\Engine\Binaries\DotNET", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
+								}
 								GameAnalyticsCSharp.LogEvent("Final Build Path was null. Fixed.", GameAnalyticsSDK.Net.EGAErrorSeverity.Info);
 							}
 							AddLogEntry($"Creating ZIP file. Installed build can be found in {FinalBuildPath}");
@@ -971,7 +978,14 @@ namespace UnrealBinaryBuilder
 
 			if (FinalBuildPath == null && string.IsNullOrWhiteSpace(AutomationExePath) == false)
 			{
-				FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@"\Engine\Binaries\DotNET", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
+				if (UnrealBinaryBuilderHelpers.IsUnrealEngine5)
+				{
+					FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@$"\Engine\Binaries\DotNET\{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
+				}
+				else
+				{
+					FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@"\Engine\Binaries\DotNET", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
+				}
 			}
 
 			if (Directory.Exists(FinalBuildPath))
