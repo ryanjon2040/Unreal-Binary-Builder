@@ -1,4 +1,19 @@
-﻿# 3.1.2
+﻿# 3.1.3
+
+* Improve UE5 support
+* Improve app update. Now shows changelog as well.
+* Remove Engine Version selection. This is now automated.
+* Remove Automation Tool Launcher selection. This is now automated.
+* Use AutomationTool instead of AutomationToolLauncher for UE5.
+* Improve messages in Zip tab.
+* Updated dependencies.
+
+* **FIXED**: Crashing when zipping UE5 build.
+* **FIXED**: Incorrect method for OpenBuildFolder in zip tab.
+* **FIXED**: Not Building Engine if all checkboxes are unchecked in Setup tab.
+
+
+# 3.1.2
 
 * **FIXED**: Issues with updating.
 
