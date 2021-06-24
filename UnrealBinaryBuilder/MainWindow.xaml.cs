@@ -270,6 +270,37 @@ namespace UnrealBinaryBuilder
 			Process.Start(new ProcessStartInfo("cmd", $"/c start {InURL}") { CreateNoWindow = true });
 		}
 
+		public void DownloadUpdate()
+		{
+			if (CurrentProcess == null)
+			{
+				if (bUpdateAvailable)
+				{
+					CheckUpdateBtn.IsEnabled = false;
+					CheckUpdateBtn.Content = "Downloading...";
+					unrealBinaryBuilderUpdater.UpdateDownloadStartedEventHandler += DownloadUpdateProgressStart;
+					unrealBinaryBuilderUpdater.UpdateDownloadFinishedEventHandler += DownloadUpdateProgressFinish;
+					unrealBinaryBuilderUpdater.UpdateProgressEventHandler += DownloadUpdateProgress;
+					unrealBinaryBuilderUpdater.DownloadUpdate();
+				}
+			}
+			else
+			{
+				CloseUpdateDialogWindow();
+				ShowToastMessage($"{GetCurrentProcessName()} is currently running. You can check for updates after it is done.", LogViewer.EMessageType.Error);
+			}
+		}
+
+		public void CloseUpdateDialogWindow()
+		{
+			if (downloadDialog != null)
+			{
+				downloadDialog.Close();
+				downloadDialog = null;
+				downloadDialogWindow = null;
+			}
+		}
+
 		private void CheckForUpdates()
 		{
 			if (CurrentProcess == null)
@@ -285,6 +316,90 @@ namespace UnrealBinaryBuilder
 				unrealBinaryBuilderUpdater.SilentUpdateFinishedEventHandler += OnUpdateCheck;
 				unrealBinaryBuilderUpdater.CheckForUpdatesSilently();
 			}
+		}
+
+		private void CheckUpdateBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (bUpdateAvailable)
+			{
+				DownloadUpdate();
+			}
+			else
+			{
+				CheckForUpdates();
+			}
+		}
+
+		private void OnUpdateCheck(object sender, UpdateProgressFinishedEventArgs e)
+		{
+			CheckUpdateBtn.Content = "Check for Update";
+			switch (e.appUpdateCheckStatus)
+			{
+				case AppUpdateCheckStatus.UpdateAvailable:
+					bUpdateAvailable = true;
+					CheckUpdateBtn.Content = $"Install Update {e.castItem.Version}";
+					ShowToastMessage($"Update {e.castItem.Version} is available.", LogViewer.EMessageType.Info, true, false, "", 2);
+					downloadDialogWindow = new DownloadDialog(this, e.castItem.Version);
+					downloadDialog = Dialog.Show(downloadDialogWindow);
+					break;
+				case AppUpdateCheckStatus.NoUpdate:
+					ShowToastMessage("You are running the latest version.", LogViewer.EMessageType.Info, true, false, "", 2);
+					break;
+				case AppUpdateCheckStatus.CouldNotDetermine:
+					ShowToastMessage("Failed to determine update settings. Please try again later.", LogViewer.EMessageType.Error);
+					break;
+				case AppUpdateCheckStatus.UserSkip:
+					break;
+			}
+			CheckUpdateBtn.IsEnabled = true;
+		}
+
+		private void DownloadUpdateProgressStart(object sender, UpdateProgressDownloadStartEventArgs e)
+		{
+			GameAnalyticsCSharp.AddDesignEvent($"Update:Download:{e.Version}");
+			if (downloadDialogWindow == null)
+			{
+				downloadDialogWindow = new DownloadDialog(this, e.Version);
+				downloadDialog = Dialog.Show(downloadDialogWindow);
+			}
+			downloadDialogWindow.Initialize(e.UpdateSize);
+		}
+
+		private void DownloadUpdateProgress(object sender, UpdateProgressDownloadEventArgs progressDownloadEventArgs)
+		{
+			downloadDialogWindow.SetProgress(progressDownloadEventArgs.AppUpdateProgress);
+		}
+		private void DownloadUpdateProgressFinish(object sender, UpdateProgressDownloadFinishEventArgs e)
+		{
+			string TargetDownloadDirectory = Path.Combine(BuilderSettings.PROGRAM_SAVED_PATH, "Updates", e.castItem.Version);
+			if (Directory.Exists(TargetDownloadDirectory) == false)
+			{
+				Directory.CreateDirectory(TargetDownloadDirectory);
+			}
+
+			using (Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile(e.UpdateFilePath))
+			{
+				zip.ExtractProgress += (o, args) =>
+				{
+					if (args.EventType == Ionic.Zip.ZipProgressEventType.Extracting_AfterExtractAll)
+					{
+						GameAnalyticsCSharp.AddDesignEvent($"Update:Install:{downloadDialogWindow.VersionText}");
+						unrealBinaryBuilderUpdater.UpdateDownloadStartedEventHandler -= DownloadUpdateProgressStart;
+						unrealBinaryBuilderUpdater.UpdateDownloadFinishedEventHandler -= DownloadUpdateProgressFinish;
+						unrealBinaryBuilderUpdater.UpdateProgressEventHandler -= DownloadUpdateProgress;
+						unrealBinaryBuilderUpdater.CloseApplicationEventHandler += CloseApplication;
+						unrealBinaryBuilderUpdater.InstallUpdate();
+						Process.Start("explorer.exe", TargetDownloadDirectory);
+					}
+				};
+				zip.ExtractAll(TargetDownloadDirectory, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
+			}
+		}
+
+		private void CloseApplication(object sender, EventArgs e)
+		{
+			downloadDialog.Close();
+			Close();
 		}
 
 		public void ShowToastMessage(string Message, LogViewer.EMessageType ToastType = LogViewer.EMessageType.Info, bool bShowCloseButton = true, bool bStaysOpen = false, string Token = "", int WaitTime = 3)
@@ -312,28 +427,6 @@ namespace UnrealBinaryBuilder
 					Growl.Error(growlInfo);
 					break;
 			}
-		}
-
-		private void OnUpdateCheck(object sender, UpdateProgressFinishedEventArgs e)
-		{
-			CheckUpdateBtn.Content = "Check for Update";
-			switch (e.appUpdateCheckStatus)
-			{
-				case AppUpdateCheckStatus.UpdateAvailable:
-					bUpdateAvailable = true;
-					CheckUpdateBtn.Content = $"Install Update {e.castItem.Version}";
-					ShowToastMessage($"Update {e.castItem.Version} is available.", LogViewer.EMessageType.Info, true, false, "", 2);
-					break;
-				case AppUpdateCheckStatus.NoUpdate:
-					ShowToastMessage("You are running the latest version.", LogViewer.EMessageType.Info, true, false, "", 2);
-					break;
-				case AppUpdateCheckStatus.CouldNotDetermine:
-					ShowToastMessage("Failed to determine update settings. Please try again later.", LogViewer.EMessageType.Error);
-					break;
-				case AppUpdateCheckStatus.UserSkip:
-					break;
-			}
-			CheckUpdateBtn.IsEnabled = true;
 		}
 
 		private void ChangeStatusLabel(string InStatus)
@@ -1574,75 +1667,6 @@ namespace UnrealBinaryBuilder
 		{
 			GameAnalyticsCSharp.AddDesignEvent("AboutDialog:Close");
 			aboutDialog.Close();
-		}
-
-		private void CheckUpdateBtn_Click(object sender, RoutedEventArgs e)
-		{
-			if (CurrentProcess == null)
-			{
-				if (bUpdateAvailable)
-				{
-					downloadDialogWindow = new DownloadDialog(this);
-					downloadDialog = Dialog.Show(downloadDialogWindow);
-					CheckUpdateBtn.IsEnabled = false;
-					CheckUpdateBtn.Content = "Downloading...";
-					unrealBinaryBuilderUpdater.UpdateDownloadStartedEventHandler += DownloadUpdateProgressStart;
-					unrealBinaryBuilderUpdater.UpdateDownloadFinishedEventHandler += DownloadUpdateProgressFinish;
-					unrealBinaryBuilderUpdater.UpdateProgressEventHandler += DownloadUpdateProgress;
-					unrealBinaryBuilderUpdater.DownloadUpdate();
-				}
-				else
-				{
-					CheckForUpdates();
-				}
-			}
-			else
-			{
-				ShowToastMessage($"{GetCurrentProcessName()} is currently running. You can check for updates after it is done.", LogViewer.EMessageType.Error);
-			}
-		}
-
-		private void DownloadUpdateProgressStart(object sender, UpdateProgressDownloadStartEventArgs e)
-		{
-			GameAnalyticsCSharp.AddDesignEvent($"Update:Download:{e.Version}");
-			downloadDialogWindow.Initialize(e.UpdateSize, e.Version);
-		}
-
-		private void DownloadUpdateProgress(object sender, UpdateProgressDownloadEventArgs progressDownloadEventArgs)
-		{
-			downloadDialogWindow.SetProgress(progressDownloadEventArgs.AppUpdateProgress);
-		}
-		private void DownloadUpdateProgressFinish(object sender, UpdateProgressDownloadFinishEventArgs e)
-		{
-			string TargetDownloadDirectory = Path.Combine(BuilderSettings.PROGRAM_SAVED_PATH, "Updates", e.castItem.Version);
-			if (Directory.Exists(TargetDownloadDirectory) == false)
-			{
-				Directory.CreateDirectory(TargetDownloadDirectory);
-			}
-
-			using (Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile(e.UpdateFilePath))
-			{
-				zip.ExtractProgress += (o, args) =>
-				{
-					if (args.EventType == Ionic.Zip.ZipProgressEventType.Extracting_AfterExtractAll)
-					{
-						GameAnalyticsCSharp.AddDesignEvent($"Update:Install:{downloadDialogWindow.VersionText}");
-						unrealBinaryBuilderUpdater.UpdateDownloadStartedEventHandler -= DownloadUpdateProgressStart;
-						unrealBinaryBuilderUpdater.UpdateDownloadFinishedEventHandler -= DownloadUpdateProgressFinish;
-						unrealBinaryBuilderUpdater.UpdateProgressEventHandler -= DownloadUpdateProgress;
-						unrealBinaryBuilderUpdater.CloseApplicationEventHandler += CloseApplication;
-						unrealBinaryBuilderUpdater.InstallUpdate();
-						Process.Start("explorer.exe", TargetDownloadDirectory);
-					}
-				};
-				zip.ExtractAll(TargetDownloadDirectory, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
-			}
-		}
-
-		private void CloseApplication(object sender, EventArgs e)
-		{
-			downloadDialog.Close();
-			Close();
 		}
 
 		private void GitPlatform_CheckedChanged(object sender, RoutedEventArgs e)
