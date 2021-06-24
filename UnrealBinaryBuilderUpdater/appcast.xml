@@ -11,7 +11,7 @@
 			<sparkle:releaseNotesLink>
 				https://raw.githubusercontent.com/ryanjon2040/UE4-Binary-Builder/master/CHANGELOG.md
 			</sparkle:releaseNotesLink>
-			<enclosure url="https://github.com/ryanjon2040/UE4-Binary-Builder/releases/download/3.1.2/UnrealBinaryBuilder.v3.1.2.zip/UnrealBinaryBuilder.exe" 
+			<enclosure url="https://github.com/ryanjon2040/UE4-Binary-Builder/releases/download/3.1.2/UnrealBinaryBuilder.v3.1.2.zip" 
 			sparkle:version="3.1.2" sparkle:shortVersionString="3.1.2" length="167622723" sparkle:os="windows" type="application/x-msdownload" 
 			sparkle:signature="09qm/ppEetFyRZC1Gf1e3mVcKG8TrmWdvjvQhAONYBJ4vqCou4zj5bGrVzXnL6nsEA1rTrnGfK5yL6KfaOOFBg==" />
 		</item>
