@@ -145,7 +145,7 @@
 												<ProgressBar x:Name="FileProgressbar" Style="{DynamicResource ProgressBarInfo}" HorizontalAlignment="Stretch" Value="20" IsIndeterminate="True" Margin="10"/>
 												<ProgressBar x:Name="OverallProgressbar" Style="{DynamicResource ProgressBarInfoStripe}" HorizontalAlignment="Stretch" Value="50" IsIndeterminate="True" Margin="10"/>
 												<Button x:Name="CancelZipping" HorizontalAlignment="Stretch" Height="30" Content="Cancel Zipping" Click="CancelZipping_Click" Margin="10"/>
-												<Button x:Name="OpenBuildFolder" HorizontalAlignment="Stretch" Height="30" Content="Open Installed Engine Build Folder" Click="CancelZipping_Click" Margin="10 0"/>
+												<Button x:Name="OpenBuildFolder" HorizontalAlignment="Stretch" Height="30" Content="Open Installed Engine Build Folder" Click="OpenBuildFolder_Click" Margin="10 0"/>
 											</StackPanel>
 
 										</Grid>

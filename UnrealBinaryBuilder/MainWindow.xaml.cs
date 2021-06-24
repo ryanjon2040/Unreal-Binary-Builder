@@ -1329,6 +1329,11 @@ namespace UnrealBinaryBuilder
 			postBuildSettings.CancelTask();
 		}
 
+		private void OpenBuildFolder_Click(object sender, RoutedEventArgs e)
+		{
+			Process.Start("explorer.exe", FinalBuildPath);
+		}
+
 		private void GitCachePathBrowse_Click(object sender, RoutedEventArgs e)
 		{
 			System.Windows.Forms.FolderBrowserDialog NewFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
