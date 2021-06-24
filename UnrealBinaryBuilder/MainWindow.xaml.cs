@@ -25,7 +25,8 @@ namespace UnrealBinaryBuilder
 	{
 		public static readonly string SetupBatFileName = "Setup.bat";
 		public static readonly string GenerateProjectBatFileName = "GenerateProjectFiles.bat";
-		public static readonly string AUTOMATION_TOOL_NAME = "AutomationToolLauncher";
+		public static readonly string AUTOMATION_TOOL_NAME = "AutomationTool";
+		public static readonly string AUTOMATION_TOOL_LAUNCHER_NAME = $"{AUTOMATION_TOOL_NAME}Launcher";
 		public static readonly string DEFAULT_BUILD_XML_FILE = "Engine/Build/InstalledEngineBuild.xml";
 		public static bool IsUnrealEngine5 { get; private set; } = false;
 
@@ -107,11 +108,11 @@ namespace UnrealBinaryBuilder
 			{
 				if (IsUnrealEngine5)
 				{
-					return File.Exists(Path.Combine(BaseEnginePath, "Engine", "Binaries", "DotNET", "AutomationTool", "AutomationTool.exe"));
+					return File.Exists(Path.Combine(BaseEnginePath, "Engine", "Binaries", "DotNET", AUTOMATION_TOOL_NAME, $"{AUTOMATION_TOOL_NAME}.exe"));
 				}
 				else
 				{
-					return File.Exists(Path.Combine(BaseEnginePath, "Engine", "Binaries", "DotNET", "AutomationTool.exe"));
+					return File.Exists(Path.Combine(BaseEnginePath, "Engine", "Binaries", "DotNET", $"{AUTOMATION_TOOL_LAUNCHER_NAME}.exe"));
 				}
 			}
 
@@ -125,7 +126,7 @@ namespace UnrealBinaryBuilder
 				return null;
 			}
 
-			return Path.Combine(BaseEnginePath, "Engine", "Source", "Programs", "AutomationTool", "AutomationTool.csproj");
+			return Path.Combine(BaseEnginePath, "Engine", "Source", "Programs", AUTOMATION_TOOL_NAME, $"{AUTOMATION_TOOL_NAME}.csproj");
 		}
 
 		public static string GetAutomationToolLauncherProjectFile(string BaseEnginePath)
@@ -135,7 +136,7 @@ namespace UnrealBinaryBuilder
 				return null;
 			}
 
-			return Path.Combine(BaseEnginePath, "Engine", "Source", "Programs", "AutomationToolLauncher", "AutomationToolLauncher.csproj");
+			return Path.Combine(BaseEnginePath, "Engine", "Source", "Programs", AUTOMATION_TOOL_LAUNCHER_NAME, $"{AUTOMATION_TOOL_LAUNCHER_NAME}.csproj");
 		}
 	}
 	public partial class MainWindow
@@ -536,11 +537,11 @@ namespace UnrealBinaryBuilder
 						BuildAutomationTool();
 						break;
 					case CurrentProcessType.BuildAutomationTool:
-						GameAnalyticsCSharp.AddProgressEnd("Build", "AutomationTool");
+						GameAnalyticsCSharp.AddProgressEnd("Build", UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME);
 						BuildAutomationToolLauncher();
 						break;
 					case CurrentProcessType.BuildAutomationToolLauncher:
-						GameAnalyticsCSharp.AddProgressEnd("Build", "AutomationToolLauncher");
+						GameAnalyticsCSharp.AddProgressEnd("Build", UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_LAUNCHER_NAME);
 						if (bContinueToEngineBuild.IsChecked == true)
 						{
 							BuildEngine();
@@ -621,11 +622,11 @@ namespace UnrealBinaryBuilder
 			{
 				if (UnrealBinaryBuilderHelpers.IsUnrealEngine5)
 				{
-					AutomationExePath = Path.Combine(SetupBatFilePath.Text, "Engine", "Binaries", "DotNET", "AutomationToolLauncher", $"{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}.exe");
+					AutomationExePath = Path.Combine(SetupBatFilePath.Text, "Engine", "Binaries", "DotNET", UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME, $"{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}.exe");
 				}
 				else
 				{
-					AutomationExePath = Path.Combine(SetupBatFilePath.Text, "Engine", "Binaries", "DotNET", $"{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}.exe");
+					AutomationExePath = Path.Combine(SetupBatFilePath.Text, "Engine", "Binaries", "DotNET", $"{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_LAUNCHER_NAME}.exe");
 				}
 			}
 
@@ -1171,7 +1172,7 @@ namespace UnrealBinaryBuilder
 					{
 						if (TryUpdateAutomationExePath() == false)
 						{
-							AddLogEntry("Failed to build Automation Tool. AutomationExePath was null.", true);
+							AddLogEntry($"Failed to build {UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}. AutomationExePath was null.", true);
 							return null;
 						}
 					}
@@ -1181,7 +1182,7 @@ namespace UnrealBinaryBuilder
 					currentProcessType = CurrentProcessType.BuildAutomationTool;
 					if (UnrealBinaryBuilderHelpers.AutomationToolExists(SetupBatFilePath.Text) == true)
 					{
-						AddLogEntry("Skip building Automation Tool. Already exists.");
+						AddLogEntry($"Skip building ${UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}. Already exists.");
 						OnBuildFinished(true);
 						return false;
 					}
@@ -1201,12 +1202,12 @@ namespace UnrealBinaryBuilder
 
 						CreateProcess(processStartInfo, false);
 						ChangeStatusLabel("Building...");
-						GameAnalyticsCSharp.AddProgressStart("Build", "AutomationTool");
+						GameAnalyticsCSharp.AddProgressStart("Build", UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME);
 						return true;
 					}
 					else
 					{
-						AddLogEntry($"Unable to build AutomationTool. MsBuild not found in {MsBuildFile}", true);
+						AddLogEntry($"Unable to build {UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}. MsBuild not found in {MsBuildFile}", true);
 					}
 				}
 
@@ -1223,7 +1224,7 @@ namespace UnrealBinaryBuilder
 				{
 					if (TryUpdateAutomationExePath() == false)
 					{
-						AddLogEntry("Failed to build Automation Tool Launcher. AutomationExePath was null.", true);
+						AddLogEntry($"Failed to build {UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_LAUNCHER_NAME}. AutomationExePath was null.", true);
 						return null;
 					}
 				}
@@ -1233,7 +1234,7 @@ namespace UnrealBinaryBuilder
 				currentProcessType = CurrentProcessType.BuildAutomationToolLauncher;
 				if (File.Exists(AutomationExePath))
 				{
-					AddLogEntry("Skip building Automation Tool Launcher. Already exists.");
+					AddLogEntry($"Skip building ${UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_LAUNCHER_NAME}. Already exists.");
 					OnBuildFinished(true);
 					return false;
 				}
@@ -1255,12 +1256,12 @@ namespace UnrealBinaryBuilder
 
 						CreateProcess(processStartInfo, false);
 						ChangeStatusLabel("Building...");
-						GameAnalyticsCSharp.AddProgressStart("Build", "AutomationToolLauncher");
+						GameAnalyticsCSharp.AddProgressStart("Build", UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_LAUNCHER_NAME);
 						return true;
 					}
 					else
 					{
-						AddLogEntry($"Unable to build ${UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}. MsBuild not found in {MsBuildFile}", true);
+						AddLogEntry($"Unable to build ${UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_LAUNCHER_NAME}. MsBuild not found in {MsBuildFile}", true);
 					}
 				}
 				else
@@ -1280,7 +1281,7 @@ namespace UnrealBinaryBuilder
 
 						CreateProcess(processStartInfo, false);
 						ChangeStatusLabel("Building...");
-						GameAnalyticsCSharp.AddProgressStart("Build", "AutomationTool");
+						GameAnalyticsCSharp.AddProgressStart("Build", UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_LAUNCHER_NAME);
 						return true;
 					}
 				}
@@ -1649,7 +1650,7 @@ namespace UnrealBinaryBuilder
 
 			if (string.IsNullOrWhiteSpace(FilePath))
 			{
-				HandyControl.Controls.MessageBox.Fatal($"Please choose Engine root folder or {UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}.exe first.");
+				HandyControl.Controls.MessageBox.Fatal("Please choose Engine root folder first.");
 				return;
 			}
 
