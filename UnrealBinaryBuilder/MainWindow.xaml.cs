@@ -711,6 +711,10 @@ namespace UnrealBinaryBuilder
 				{
 					BuildAutomationTool();
 				}
+				else
+				{
+					BuildEngine();
+				}
 			}
 		}
 
