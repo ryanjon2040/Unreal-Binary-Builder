@@ -442,10 +442,7 @@ namespace UnrealBinaryBuilder
 				if (HandyControl.Controls.MessageBox.Show($"{GetCurrentProcessName()} is still running. Would you like to stop it and exit?", "Build in progress", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
 				{
 					GameAnalyticsCSharp.AddDesignEvent($"Build:{GetCurrentProcessName()}:Killed:ExitProgram");
-					CurrentProcess.Kill();
-					CurrentProcess.Close();
-					CurrentProcess.Dispose();
-					CurrentProcess = null;
+					CloseCurrentProcess(true);
 				}
 				else
 				{
@@ -484,9 +481,7 @@ namespace UnrealBinaryBuilder
 				ChangeStatusLabel(string.Format("Build finished with code {0}. {1} errors, {2} warnings. Time elapsed: {3:hh\\:mm\\:ss}", CurrentProcess.ExitCode, NumErrors, NumWarnings, StopwatchTimer.Elapsed));
 			});
 
-			CurrentProcess.Close();
-			CurrentProcess.Dispose();
-			CurrentProcess = null;
+			CloseCurrentProcess();
 
 			NumErrors = 0;
 			NumWarnings = 0;
@@ -755,6 +750,23 @@ namespace UnrealBinaryBuilder
 			}
 		}
 
+		private void CloseCurrentProcess(bool bKillProcess = false)
+		{
+			if (CurrentProcess != null)
+			{
+				if (bKillProcess)
+				{
+					CurrentProcess.Kill(true);
+				}
+				else
+				{
+					CurrentProcess.Close();
+					CurrentProcess.Dispose();
+					CurrentProcess = null;
+				}
+			}
+		}
+
 		private string GetCurrentProcessName()
 		{
 			if (CurrentProcess != null)
@@ -933,8 +945,8 @@ namespace UnrealBinaryBuilder
 						switch (MessageResult)
 						{
 							case MessageBoxResult.Yes:
-								GameAnalyticsCSharp.AddDesignEvent("Build:AutomationTool:Killed");
-								CurrentProcess.Kill();
+								GameAnalyticsCSharp.AddDesignEvent($"Build:{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}:Killed");
+								CloseCurrentProcess(true);
 								break;
 							case MessageBoxResult.No:
 								return;
@@ -944,8 +956,8 @@ namespace UnrealBinaryBuilder
 						MessageResult = HandyControl.Controls.MessageBox.Show("Unreal Engine is being compiled right now. Do you want to stop it?", "Compiling Engine", MessageBoxButton.YesNo, MessageBoxImage.Question);
 						if (MessageResult == MessageBoxResult.Yes)
 						{
-							GameAnalyticsCSharp.AddDesignEvent("Build:AutomationTool:UnrealEngine:Killed");
-							CurrentProcess.Kill(true);
+							GameAnalyticsCSharp.AddDesignEvent($"Build:{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}:UnrealEngine:Killed");
+							CloseCurrentProcess(true);
 							return;
 						}
 						break;
