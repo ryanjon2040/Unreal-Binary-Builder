@@ -158,7 +158,7 @@ namespace UnrealBinaryBuilder.Classes
 			{
 				using (var zipFile = new ZipFile { CompressionLevel = CL })
 				{
-					Application.Current.Dispatcher.Invoke(() => { mainWindow.FileSaveState.Content = "State: Finding files..."; });
+					Application.Current.Dispatcher.Invoke(() => { mainWindow.FileSaveState.Content = $"State: Be Patient! This might take a long time. Ninjas are finding files in {InBuildDirectory}"; });
 					IEnumerable<string> files = Directory.EnumerateFiles(InBuildDirectory, "*.*", SearchOption.AllDirectories);
 
 					ZipCancelToken.ThrowIfCancellationRequested();
@@ -335,7 +335,13 @@ namespace UnrealBinaryBuilder.Classes
 
 					zipFile.UseZip64WhenSaving = Zip64Option.Always;
 					zipFile.Save(ZipLocationToSave);
-					Application.Current.Dispatcher.Invoke(() => { mainWindow.AddLogEntry($"Done zipping. File location: {ZipLocationToSave}"); });
+					Application.Current.Dispatcher.Invoke(() => 
+					{
+						mainWindow.CancelZipping.IsEnabled = false;
+						mainWindow.CurrentFileSaving.Visibility = Visibility.Collapsed;
+						mainWindow.FileSaveState.Content = $"State: Saved to {ZipLocationToSave}";
+						mainWindow.AddLogEntry($"Done zipping. {ZipLocationToSave}");
+					});
 				}
 			}, ZipCancelToken);
 
