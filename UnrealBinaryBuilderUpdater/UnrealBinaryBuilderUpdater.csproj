@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NetSparkleUpdater.UI.WPF" Version="2.0.0-preview20201117001" />
+    <PackageReference Include="NetSparkleUpdater.UI.WPF" Version="2.0.5" />
   </ItemGroup>
 
 </Project>
