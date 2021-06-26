@@ -236,7 +236,7 @@
 					<Grid>
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin ="10">
 							<TextBlock Text="Engine Version " VerticalAlignment="Center"/>
-							<hc:ComboBox x:Name="PluginEngineVersionSelection" Margin="12 5 12 5" SelectionChanged="PluginEngineVersionSelection_SelectionChanged"/>
+							<hc:ComboBox x:Name="PluginEngineVersionSelection" Width="100" Margin="12 5 12 5" SelectionChanged="PluginEngineVersionSelection_SelectionChanged"/>
 						</StackPanel>
 						<GroupBox Style="{StaticResource GroupBoxOriginal}" Margin="0 40 0 0">
 							<Grid>

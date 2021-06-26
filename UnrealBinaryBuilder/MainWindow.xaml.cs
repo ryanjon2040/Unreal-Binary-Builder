@@ -55,6 +55,41 @@ namespace UnrealBinaryBuilder
 			return Path.Combine(ProgramFilesx86Path, "Microsoft Visual Studio", "2019", "Community", "MSBuild", "Current", "Bin", "MSBuild.exe");
 		}
 
+		public static string GetEngineVersion(string BaseEnginePath)
+		{
+			string VersionFile = Path.Combine(BaseEnginePath, "Engine", "Source", "Runtime", "Launch", "Resources", "Version.h");
+			string Local_EngineVersionMajor = null;
+			string Local_EngineVersionMinor = null;
+			string Local_EngineVersionPatch = null;
+			if (File.Exists(VersionFile))
+			{
+				using (StreamReader file = new StreamReader(VersionFile))
+				{
+					string CurrentLine;
+					while ((CurrentLine = file.ReadLine()) != null)
+					{
+						if (CurrentLine.StartsWith("#define ENGINE_MAJOR_VERSION"))
+						{
+							Local_EngineVersionMajor = CurrentLine.Replace("#define ENGINE_MAJOR_VERSION", "").Replace("\t", "");
+						}
+						else if (CurrentLine.StartsWith("#define ENGINE_MINOR_VERSION"))
+						{
+							Local_EngineVersionMinor = CurrentLine.Replace("#define ENGINE_MINOR_VERSION", "").Replace("\t", "");
+						}
+						else if (CurrentLine.StartsWith("#define ENGINE_PATCH_VERSION"))
+						{
+							Local_EngineVersionPatch = CurrentLine.Replace("#define ENGINE_PATCH_VERSION", "").Replace("\t", "");
+							break;
+						}
+					}
+				}
+
+				return $"{Local_EngineVersionMajor}.{Local_EngineVersionMinor}.{Local_EngineVersionPatch}";
+			}
+
+			return null;
+		}
+
 		public static string DetectEngineVersion(string BaseEnginePath, bool bForceDetect = false)
 		{
 			if (string.IsNullOrWhiteSpace(BaseEnginePath))
@@ -64,30 +99,13 @@ namespace UnrealBinaryBuilder
 
 			if (EngineVersionMajor == null || bForceDetect)
 			{
-				string VersionFile = Path.Combine(BaseEnginePath, "Engine", "Source", "Runtime", "Launch", "Resources", "Version.h");
-				if (File.Exists(VersionFile))
+				string MyEngineVersion = GetEngineVersion(BaseEnginePath);
+				if (MyEngineVersion != null)
 				{
-					using (StreamReader file = new StreamReader(VersionFile))
-					{
-						string CurrentLine;
-						while ((CurrentLine = file.ReadLine()) != null)
-						{
-							if (CurrentLine.StartsWith("#define ENGINE_MAJOR_VERSION"))
-							{
-								EngineVersionMajor = CurrentLine.Replace("#define ENGINE_MAJOR_VERSION", "").Replace("\t", "");
-							}
-							else if (CurrentLine.StartsWith("#define ENGINE_MINOR_VERSION"))
-							{
-								EngineVersionMinor = CurrentLine.Replace("#define ENGINE_MINOR_VERSION", "").Replace("\t", "");
-							}
-							else if (CurrentLine.StartsWith("#define ENGINE_PATCH_VERSION"))
-							{
-								EngineVersionPatch = CurrentLine.Replace("#define ENGINE_PATCH_VERSION", "").Replace("\t", "");
-								break;
-							}
-						}
-					}
-
+					string[] SplitString = MyEngineVersion.Split(".");
+					EngineVersionMajor = SplitString[0];
+					EngineVersionMinor = SplitString[1];
+					EngineVersionPatch = SplitString[2];
 					IsUnrealEngine5 = EngineVersionMajor.StartsWith("5");
 				}
 				else
@@ -96,7 +114,6 @@ namespace UnrealBinaryBuilder
 					IsUnrealEngine5 = false;
 					return null;
 				}
-			
 			}
 
 			return $"{EngineVersionMajor}.{EngineVersionMinor}.{EngineVersionPatch}";
@@ -215,17 +232,17 @@ namespace UnrealBinaryBuilder
 			}
 			else
 			{
-				foreach (var p in Plugins.GetInstalledEngines())
+				foreach (EngineBuild engineBuild in Plugins.GetInstalledEngines())
 				{
-					string RunUATFile = Path.Combine(p.Value, "Engine", "Build", "BatchFiles", "RunUAT.bat");
+					string RunUATFile = Path.Combine(engineBuild.EnginePath, "Engine", "Build", "BatchFiles", "RunUAT.bat");
 					if (File.Exists(RunUATFile))
 					{
-						PluginEngineVersionSelection.Items.Add(p.Key);
-						PluginBuildEnginePath.Add(p.Value);
+						PluginEngineVersionSelection.Items.Add(engineBuild.EngineName);
+						PluginBuildEnginePath.Add(engineBuild.EnginePath);
 					}
 					else
 					{
-						AddLogEntry($"{p.Key} will not be available for Plugin build. RunUAT.bat does not exist in {Path.GetDirectoryName(RunUATFile)}.", true);
+						AddLogEntry($"{engineBuild.EngineName} will not be available for Plugin build. RunUAT.bat does not exist in {Path.GetDirectoryName(RunUATFile)}.", true);
 					}
 				}
 			}
