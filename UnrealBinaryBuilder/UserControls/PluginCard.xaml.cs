@@ -13,21 +13,20 @@ namespace UnrealBinaryBuilder.UserControls
 {
 	public partial class PluginCard : UserControl
 	{
-		public string PluginPath = null;
-		public string DestinationPath = null;		
-		public string RunUATFile = null;
+		public readonly string PluginPath = null;
+		public readonly string DestinationPath = null;
+		public readonly string RunUATFile = null;
 
-		private List<string> TargetPlatforms = null;
-		private bool IsUsing2019Compiler = false;
+		private readonly List<string> TargetPlatforms = null;
+		private readonly bool IsUsing2019Compiler = false;
 		private bool bBuildFinished = false;
-		private bool bCanZip = false;
-		private bool bZipForMarketplaceZip = false;
+		private readonly bool bCanZip = false;
+		private readonly bool bZipForMarketplaceZip = false;
 		private string TargetZipPath = null;
-
-		MainWindow mainWindow = null;
+		private readonly MainWindow mainWindow = null;
 
 		public PluginCard(MainWindow _mainWindow, string InPluginPath, string InDestination, string InEnginePath, bool bUse2019Compiler, List<string> InTargetPlatformsList, bool bZipBuild, string ZipPath, bool bForMarketplace)
-		{			
+		{
 			InitializeComponent();
 			mainWindow = _mainWindow;
 			TargetPlatforms = InTargetPlatformsList;
@@ -122,7 +121,7 @@ namespace UnrealBinaryBuilder.UserControls
 
 		public bool IsPending()
 		{
-			return (bBuildFinished == false);
+			return bBuildFinished == false;
 		}
 
 		public string GetCompiler()
@@ -132,13 +131,13 @@ namespace UnrealBinaryBuilder.UserControls
 
 		private void CancelBtn_Click(object sender, RoutedEventArgs e)
 		{
-			MainWindow mainWindow = ((MainWindow)Application.Current.MainWindow);
-			mainWindow.RemovePluginFromList(this);			
+			MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+			mainWindow.RemovePluginFromList(this);
 		}
 
 		private void OpenBtn_Click(object sender, RoutedEventArgs e)
 		{
-			Process.Start("explorer.exe", DestinationPath);
+			_ = Process.Start("explorer.exe", DestinationPath);
 		}
 	}
 }
