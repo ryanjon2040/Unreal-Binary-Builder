@@ -83,5 +83,10 @@ namespace UnrealBinaryBuilder.Classes
 
 			return false;
 		}
+
+		public override int GetHashCode()
+		{
+			return EngineName.GetHashCode();
+		}
 	}
 }
