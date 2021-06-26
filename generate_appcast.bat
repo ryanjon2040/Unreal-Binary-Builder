@@ -5,7 +5,7 @@ set appcast_output=%cd%\UnrealBinaryBuilderUpdater
 set appcast_binary=%cd%\Output
 set appcast_mainexe=%appcast_binary%\UnrealBinaryBuilder.exe
 set appcast_version=3.1.3
-set appcast_release=https://github.com/ryanjon2040/UE4-Binary-Builder/releases/download/%appcast_version%/UnrealBinaryBuilder.v%appcast_version%.zip
+set appcast_release=https://github.com/ryanjon2040/Unreal-Binary-Builder/releases/download/%appcast_version%/UnrealBinaryBuilder.v%appcast_version%.zip
 set appcast_changelog=https://raw.githubusercontent.com/ryanjon2040/UE4-Binary-Builder/master/CHANGELOG.md
 set appcast_default_key_path=%localappdata%\netsparkle
 
