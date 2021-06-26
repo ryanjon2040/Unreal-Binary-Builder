@@ -99,8 +99,14 @@ namespace UnrealBinaryBuilder.UserControls
 				OpenBtn.Visibility = Visibility.Visible;
 				LoadingCircle.Visibility = Visibility.Collapsed;
 				CancelBtn.Visibility = Visibility.Collapsed;
-				if (bCanZip && mainWindow.postBuildSettings.DirectoryIsWritable(TargetZipPath))
+				if (bCanZip)
 				{
+					if (mainWindow.postBuildSettings.DirectoryIsWritable(TargetZipPath) == false)
+					{
+						TargetZipPath = DestinationPath;
+						mainWindow.AddZipLog($"{PluginName.Text} - Zip path was not found or not writable. New save location is {TargetZipPath}", MainWindow.ZipLogInclusionType.FileSkipped);
+					}
+
 					ZipProgressbar.Visibility = Visibility.Visible;
 					mainWindow.postBuildSettings.SavePluginToZip(this, $"{TargetZipPath}\\{Path.GetFileNameWithoutExtension(PluginPath)}_{EngineVersionText.Text}.zip", bZipForMarketplaceZip);
 				}

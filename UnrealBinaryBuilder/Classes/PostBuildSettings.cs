@@ -36,8 +36,13 @@ namespace UnrealBinaryBuilder.Classes
 
 		public bool DirectoryIsWritable(string DirectoryPath)
 		{
-			DirectoryInfo ZipDirectory = new FileInfo(DirectoryPath).Directory;
-			bool bDirectoryExists = (ZipDirectory != null) && ZipDirectory.Exists;
+			if (string.IsNullOrWhiteSpace(DirectoryPath))
+			{
+				return false;
+			}
+
+			DirectoryInfo ZipDirectory = new DirectoryInfo(DirectoryPath);
+			bool bDirectoryExists = ZipDirectory.Exists;
 			bool bHasWriteAccess = false;
 			if (bDirectoryExists)
 			{
