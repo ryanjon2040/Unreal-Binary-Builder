@@ -1,6 +1,7 @@
 ﻿using Sentry;
 using System.Windows;
 using System.Windows.Threading;
+using UnrealBinaryBuilder.UserControls;
 
 namespace UnrealBinaryBuilder
 {
@@ -9,6 +10,8 @@ namespace UnrealBinaryBuilder
 	/// </summary>
 	public partial class App : Application
 	{
+		private CrashReporter crashReporter = null;
+
 		public App()
 		{
 			DispatcherUnhandledException += App_DispatcherUnhandledException;
@@ -25,10 +28,14 @@ namespace UnrealBinaryBuilder
 
 		void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
 		{
-			SentrySdk.CaptureException(e.Exception);
+			SentryId sentryId = SentrySdk.CaptureException(e.Exception);
+			e.Handled = true;
 
-			// If you want to avoid the application from crashing:
-			//e.Handled = true;
+			crashReporter = new CrashReporter(e.Exception);
+			crashReporter.Owner = Current.MainWindow;
+			crashReporter.CurrentSentryId = sentryId;
+			crashReporter.ShowDialog();
+			crashReporter = null;
 		}
 	}
 }

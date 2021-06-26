@@ -1,0 +1,50 @@
+﻿<hc:GlowWindow x:Class="UnrealBinaryBuilder.UserControls.CrashReporter"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:hc="https://handyorg.github.io/handycontrol" 
+		xmlns:local="clr-namespace:UnrealBinaryBuilder.UserControls"
+		Background="{DynamicResource MainContentBackgroundBrush}"
+		ActiveGlowColor="{DynamicResource PrimaryColor}"
+		InactiveGlowColor="{DynamicResource SecondaryBorderColor}"
+		mc:Ignorable="d"
+		Title="Crash Reporter" Height="400" Width="960" WindowStartupLocation="CenterOwner">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<TextBlock Text="Unreal Binary Builder Crash Report" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10"/>
+		<TextBlock Grid.Row="1" Grid.ColumnSpan="3" Margin="10" Text="Apologies but something happened and an internal unhandled exception has occurred which should be resolved to improve Unreal Binary Builder. An exception report has been sent but please submit any additional information that you can provide." TextWrapping="Wrap"/>
+
+		<hc:TextBox x:Name="StackTraceText" Grid.Column="3" Grid.Row="2" Grid.RowSpan="3" Margin="0 0 10 0" FontSize="10" MaxHeight="200" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+
+		<TextBlock Text="Name:" Grid.Row="2" VerticalAlignment="Center" Margin="10"/>
+		<hc:TextBox x:Name="Username" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="100 0 10 0"/>
+		
+		<TextBlock Text="Email:" Grid.Row="3" VerticalAlignment="Center" Margin="10"/>
+		<hc:TextBox x:Name="Email" TextType="Mail" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="100 0 10 0"/>
+		
+		<TextBlock Text="Comments" Grid.Row="4" Margin="10"/>
+		<hc:TextBox x:Name="Comment" Grid.Row="4" Grid.ColumnSpan="2" Height="100" Margin="100 10 10 0" hc:InfoElement.Placeholder="Describe what you were doing when this error occurred." VerticalContentAlignment="Top" FontSize="10" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
+		
+		<TextBlock Grid.Row="5" Grid.ColumnSpan="2" Text="No personal information has been collected in this crash report." FontSize="8" Margin="100 0 0 5"/>
+		<Separator Grid.Row="6" Grid.ColumnSpan="3"/>
+		<StackPanel Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"  Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 2 0 0">
+			<Button x:Name="SubmitBtn" Content="Submit" Width="100" Click="SubmitBtn_Click" />
+			<Button x:Name="CancelBtn" Content="Close" Width="100" Margin="10 0 10 0" Click="CancelBtn_Click"/>
+		</StackPanel>
+	</Grid>
+</hc:GlowWindow>
