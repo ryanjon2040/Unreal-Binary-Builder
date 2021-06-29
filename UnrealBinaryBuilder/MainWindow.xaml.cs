@@ -1126,7 +1126,7 @@ namespace UnrealBinaryBuilder
 
 			ChangeStatusLabel("Preparing to build...");
 
-			if (postBuildSettings.ShouldSaveToZip() && postBuildSettings.DirectoryIsWritable(ZipPath.Text) == false)
+			if (postBuildSettings.ShouldSaveToZip() && postBuildSettings.DirectoryIsWritable(Path.GetDirectoryName(ZipPath.Text)) == false)
 			{
 				GameAnalyticsCSharp.AddDesignEvent("Build:ZipEnabled:InvalidSetting");
 				HandyControl.Controls.MessageBox.Error(string.Format("You chose to save Engine build as a zip file but below directory is either not available or not writable.\n\n{0}", ZipPath.Text), "Error");
