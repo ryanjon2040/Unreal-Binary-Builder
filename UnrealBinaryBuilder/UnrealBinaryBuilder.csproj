@@ -24,10 +24,10 @@
 
   <ItemGroup>
     <PackageReference Include="AvalonEdit" Version="6.1.2.30" />
-    <PackageReference Include="CefSharp.Wpf.NETCore" Version="91.1.210" />
+    <PackageReference Include="CefSharp.Wpf.NETCore" Version="91.1.211" />
     <PackageReference Include="DotNetZip" Version="1.15.0" />
     <PackageReference Include="GameAnalytics.Net.Core.SDK" Version="3.1.2" />
-    <PackageReference Include="HandyControl" Version="3.1.0" />
+    <PackageReference Include="HandyControl" Version="3.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Sentry" Version="3.6.0" />
     <PackageReference Include="SpicyTaco.AutoGrid" Version="1.2.29" />
