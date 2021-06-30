@@ -522,7 +522,7 @@ namespace UnrealBinaryBuilder
 						NumWarnings++;
 						InMessageType = LogViewer.EMessageType.Warning;
 					}
-					else if (ErrorRgx.IsMatch(InMessage) && InMessage.Contains("ShadowError") == false)
+					else if (ErrorRgx.IsMatch(InMessage) && InMessage.Contains("ShadowError") == false && InMessage.Contains("error_details.") == false)
 					{
 						NumErrors++;
 						InMessageType = LogViewer.EMessageType.Error;
