@@ -419,7 +419,7 @@ namespace UnrealBinaryBuilder.Classes
 			}
 		}
 
-		private static IEnumerable<T> GetChildrenOfType<T>(DependencyObject dependencyObject) where T : DependencyObject
+		public static IEnumerable<T> GetChildrenOfType<T>(DependencyObject dependencyObject) where T : DependencyObject
 		{
 			if (dependencyObject != null)
 			{
