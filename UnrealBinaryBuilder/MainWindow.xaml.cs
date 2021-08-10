@@ -170,6 +170,7 @@ namespace UnrealBinaryBuilder
 		private bool bLastBuildSuccess = false;
 
 		private string LogMessage = null;
+		private string LogMessageErrors = null;
 		private string FinalBuildPath = null;
 
 		public string CurrentTheme = null;
@@ -526,6 +527,7 @@ namespace UnrealBinaryBuilder
 					{
 						NumErrors++;
 						InMessageType = LogViewer.EMessageType.Error;
+						LogMessageErrors += InMessage + "\r\n";
 					}
 					else if (DebugRgx.IsMatch(InMessage))
 					{
@@ -690,6 +692,7 @@ namespace UnrealBinaryBuilder
 
 			WriteToLogFile();
 			TryShutdown();
+			LogMessageErrors = null;
 		}
 
 		public void TryShutdown()
@@ -901,6 +904,7 @@ namespace UnrealBinaryBuilder
 		private void WriteToLogFile()
 		{
 			BuilderSettings.WriteToLogFile(LogMessage);
+			BuilderSettings.WriteErrorsToLogFile(LogMessageErrors);
 		}
 
 		private void UpdateSkin(SkinType skin)

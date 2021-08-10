@@ -105,9 +105,11 @@ namespace UnrealBinaryBuilder.Classes
 
 		private static readonly string PROGRAM_LOG_PATH_BASE = Path.Combine(PROGRAM_SAVED_PATH, "Logs");
 		private static readonly string PROGRAM_LOG_FILE_NAME = "UnrealBinaryBuilder.log";
+		private static readonly string PROGRAM_ERRORLOG_FILE_NAME = "BuildErrors.log";
 
 		private static readonly string PROGRAM_SETTINGS_PATH = Path.Combine(PROGRAM_SETTINGS_PATH_BASE, PROGRAM_SETTINGS_FILE_NAME);
 		private static readonly string PROGRAM_LOG_PATH = Path.Combine(PROGRAM_LOG_PATH_BASE, PROGRAM_LOG_FILE_NAME);
+		private static readonly string PROGRAM_ERRORLOG_PATH = Path.Combine(PROGRAM_LOG_PATH_BASE, PROGRAM_ERRORLOG_FILE_NAME);
 
 		private static readonly string DEFAULT_GIT_CUSTOM_CACHE_PATH = Path.Combine(PROGRAM_SAVED_PATH, "GitCache");
 
@@ -354,6 +356,24 @@ namespace UnrealBinaryBuilder.Classes
 				mainWindow.OpenLogFolderBtn.IsEnabled = true;
 			}
 			File.WriteAllText(PROGRAM_LOG_PATH, InContent);
+		}
+
+		public static void WriteErrorsToLogFile(string InContent)
+		{
+			try
+			{
+				File.Delete(PROGRAM_ERRORLOG_PATH);
+			}
+			catch (Exception) {}
+
+			if (string.IsNullOrWhiteSpace(InContent) == false)
+			{
+				if (Directory.Exists(PROGRAM_LOG_PATH_BASE) == false)
+				{
+					Directory.CreateDirectory(PROGRAM_LOG_PATH_BASE);
+				}
+				File.WriteAllText(PROGRAM_ERRORLOG_PATH, InContent);
+			}
 		}
 
 		public static void UpdatePlatformInclusion(string InPlatform, bool bIncluded)
