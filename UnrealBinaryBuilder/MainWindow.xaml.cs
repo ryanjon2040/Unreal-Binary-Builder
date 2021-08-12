@@ -986,7 +986,7 @@ namespace UnrealBinaryBuilder
 			{
 				if (SupportWin32)
 				{
-					CommandLineArgs += string.Format("-set:WithWin32={0}", GetConditionalString(bWithWin32.IsChecked));
+					CommandLineArgs += string.Format(" -set:WithWin32={0}", GetConditionalString(bWithWin32.IsChecked));
 				}
 
 				CommandLineArgs += string.Format(" -set:WithWin64={0} -set:WithMac={1} -set:WithAndroid={2} -set:WithIOS={3} -set:WithTVOS={4} -set:WithLinux={5} -set:WithLumin={6}",
