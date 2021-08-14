@@ -1083,9 +1083,8 @@ namespace UnrealBinaryBuilder
 						{
 							GameAnalyticsCSharp.AddDesignEvent($"Build:{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}:UnrealEngine:Killed");
 							CloseCurrentProcess(true);
-							return;
 						}
-						break;
+						return;
 				}
 			}
 
