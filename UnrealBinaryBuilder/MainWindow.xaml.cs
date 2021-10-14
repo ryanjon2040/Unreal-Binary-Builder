@@ -1012,7 +1012,11 @@ namespace UnrealBinaryBuilder
 					GetConditionalString(bWithXboxOne.IsChecked));
 				}
 
-				if (SupportLinuxAArch64)
+				if (SupportLinuxArm64)
+				{
+					CommandLineArgs += string.Format(" -set:WithLinuxArm64={0}", GetConditionalString(bWithLinuxAArch64.IsChecked));
+				}
+				else if (SupportLinuxAArch64)
 				{
 					CommandLineArgs += string.Format(" -set:WithLinuxAArch64={0}", GetConditionalString(bWithLinuxAArch64.IsChecked));
 				}
@@ -1238,7 +1242,9 @@ namespace UnrealBinaryBuilder
 
 		public bool SupportHTML5 => GetEngineValue() < 4.24;
 
-		public bool SupportLinuxAArch64 => GetEngineValue() >= 4.24;
+		public bool SupportLinuxAArch64 => IsUnrealEngine4() && GetEngineValue() >= 4.24;
+
+		public bool SupportLinuxArm64 => IsUnrealEngine4() == false;
 
 		public bool SupportConsoles => GetEngineValue() <= 4.24;
 

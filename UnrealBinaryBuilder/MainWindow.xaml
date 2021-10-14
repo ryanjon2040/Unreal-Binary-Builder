@@ -157,8 +157,7 @@
 						<hc:TabItem Header="Compile" ToolTip="Various options to choose how you want to compile Unreal Engine.">
 							<Grid x:Name="CompileMainGrid">
 								<Grid.BindingGroup>
-									<BindingGroup Name="EngineChanged">
-									</BindingGroup>
+									<BindingGroup Name="EngineChanged"/>
 								</Grid.BindingGroup>
 								<hc:SimplePanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="123" Width="480">
 									<TextBox x:Name="CustomBuildXMLFile" Text="{Binding CustomBuildFile}" hc:InfoElement.Placeholder="(Optional) Choose custom build XML file." hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="270" Margin="0,40,0,0"/>
@@ -175,7 +174,7 @@
 											<CheckBox x:Name="bWithWin32" Content="Windows 32" Margin="10" IsChecked="{Binding bWithWin32}" IsEnabled="{Binding SupportWin32, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
 											<CheckBox x:Name="bWithMac" Content="Mac" Margin="10" IsChecked="{Binding bWithMac}" />
 											<CheckBox x:Name="bWithLinux" Content="Linux" Margin="10" IsChecked="{Binding bWithLinux}" />
-											<CheckBox x:Name="bWithLinuxAArch64" Content="Linux AArch 64" Margin="10" IsChecked="{Binding bWithLinuxAArch64}" IsEnabled="{Binding SupportLinuxAArch64, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
+											<CheckBox x:Name="bWithLinuxAArch64" Content="Linux 64" Margin="10" IsChecked="{Binding bWithLinuxAArch64}" IsEnabled="{Binding SupportLinuxAArch64, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}"/>
 											<CheckBox x:Name="bWithAndroid" Content="Android" Margin="10" IsChecked="{Binding bWithAndroid}" />
 											<CheckBox x:Name="bWithIOS" Content="IOS" Margin="10" IsChecked="{Binding bWithIOS}" />
 											<CheckBox x:Name="bWithHTML5" Content="HTML 5" Margin="10" IsChecked="{Binding bWithHTML5}" IsEnabled="{Binding SupportHTML5, BindingGroupName=EngineChanged, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:MainWindow}}}" />
