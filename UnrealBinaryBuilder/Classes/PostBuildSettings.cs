@@ -26,7 +26,7 @@ namespace UnrealBinaryBuilder.Classes
 
 		public bool CanSaveToZip()
 		{
-			return ShouldSaveToZip() && DirectoryIsWritable(mainWindow.ZipPath.Text);
+			return ShouldSaveToZip() && DirectoryIsWritable(Path.GetDirectoryName(mainWindow.ZipPath.Text));
 		}
 
 		public bool ShouldSaveToZip()
