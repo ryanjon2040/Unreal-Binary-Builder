@@ -1219,6 +1219,11 @@ namespace UnrealBinaryBuilder
 				ChangeStatusLabel("Building...");
 				ZipStatusLabel.Content = "Waiting for Engine to finish building...";
 				GameAnalyticsCSharp.AddDesignEvent("Build:Started");
+
+				if (Git.CommitHashShort != null)
+				{
+					AddLogEntry($"Building commit {Git.CommitHashShort}");
+				}
 			}
 		}
 
@@ -1276,6 +1281,10 @@ namespace UnrealBinaryBuilder
 			System.Windows.Forms.SaveFileDialog SFD = new System.Windows.Forms.SaveFileDialog();
 			SFD.DefaultExt = ".zip";
 			SFD.Filter = "Zip File (.zip)|*.zip";
+			if (Git.CommitHashShort != null)
+			{
+				SFD.FileName = Git.CommitHashShort;
+			}
 			System.Windows.Forms.DialogResult SaveDialogResult = SFD.ShowDialog();
 			if (SaveDialogResult == System.Windows.Forms.DialogResult.OK)
 			{
@@ -1767,6 +1776,10 @@ namespace UnrealBinaryBuilder
 				if (EngineVersion != null)
 				{
 					FoundEngineLabel.Content = $"Selected Unreal Engine {EngineVersion}";
+					if (Git.CommitHashShort != null)
+					{
+						FoundEngineLabel.Content = $"Selected Unreal Engine {EngineVersion}. Commit - {Git.CommitHashShort}";
+					}
 				}
 				else
 				{
