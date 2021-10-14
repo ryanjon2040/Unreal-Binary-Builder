@@ -11,7 +11,7 @@
 	<StackPanel>
 		<TextBlock x:Name="DownloadProgressTextBlock" Margin="10 10 40 10" Style="{StaticResource TextBlockDefaultInfo}" Text="Downloading..."/>
 		<ProgressBar x:Name="DownloadProgressbar" Style="{DynamicResource ProgressBarInfo}" HorizontalAlignment="Stretch" Value="20" IsIndeterminate="True" Margin="10"/>
-		<wpf:ChromiumWebBrowser x:Name="CefWebBrowser" Address="https://github.com/ryanjon2040/UE4-Binary-Builder/blob/master/CHANGELOG.md" Height="400"/>
+		<wpf:ChromiumWebBrowser x:Name="CefWebBrowser" Address="https://github.com/ryanjon2040/Unreal-Binary-Builder/blob/master/CHANGELOG.md" Height="400"/>
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 			<Button x:Name="DownloadNowBtn" Content="Download Update" Margin="10" Width="150" Click="DownloadNowBtn_Click"/>
 			<Button x:Name="CancelBtn" Content="Cancel" Margin="10" Width="150" Click="CancelBtn_Click"/>

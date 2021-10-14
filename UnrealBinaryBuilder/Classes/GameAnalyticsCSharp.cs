@@ -15,12 +15,12 @@ namespace UnrealBinaryBuilder.Classes
 		{
 			if (GAME_KEY != null && SECRET_KEY != null)
 			{
-				GameAnalytics.ConfigureBuild($"UE4 Binary Builder {InProductVersion}");
+				GameAnalytics.ConfigureBuild($"Unreal Binary Builder {InProductVersion}");
 
 				// https://gameanalytics.com/docs/item/c-sharp-sdk#initializing
 				GameAnalytics.Initialize(GAME_KEY, SECRET_KEY);
 				mainWindow = InMainWindow;
-				mainWindow.AddLogEntry("UE4 Binary Builder Analytics Initialized.");
+				mainWindow.AddLogEntry("Unreal Binary Builder Analytics Initialized.");
 #if DEBUG
 				GameAnalytics.AddDesignEvent("Program:Start:Debug");
 #else
@@ -43,7 +43,7 @@ namespace UnrealBinaryBuilder.Classes
 			{
 				GameAnalytics.AddDesignEvent(InMessage);
 #if DEBUG
-				mainWindow.AddLogEntry($"UE4 Binary Builder Analytics (Design): {InMessage}");
+				mainWindow.AddLogEntry($"Unreal Binary Builder Analytics (Design): {InMessage}");
 #endif
 			}
 		}
@@ -54,7 +54,7 @@ namespace UnrealBinaryBuilder.Classes
 			{
 				GameAnalytics.AddProgressionEvent(EGAProgressionStatus.Start, InProgression01);
 #if DEBUG
-				mainWindow.AddLogEntry($"UE4 Binary Builder Analytics (Progress Start): {InProgression01}");
+				mainWindow.AddLogEntry($"Unreal Binary Builder Analytics (Progress Start): {InProgression01}");
 #endif
 			}
 		}
@@ -65,7 +65,7 @@ namespace UnrealBinaryBuilder.Classes
 			{
 				GameAnalytics.AddProgressionEvent(EGAProgressionStatus.Start, InProgression01, InProgression02);
 #if DEBUG
-				mainWindow.AddLogEntry($"UE4 Binary Builder Analytics (Progress Start): {InProgression01}::{InProgression02}");
+				mainWindow.AddLogEntry($"Unreal Binary Builder Analytics (Progress Start): {InProgression01}::{InProgression02}");
 #endif
 			}
 		}
@@ -76,7 +76,7 @@ namespace UnrealBinaryBuilder.Classes
 			{
 				GameAnalytics.AddProgressionEvent(bIsFail ? EGAProgressionStatus.Fail : EGAProgressionStatus.Complete, InProgression01);
 #if DEBUG
-				mainWindow.AddLogEntry($"UE4 Binary Builder Analytics (Progress End): {InProgression01}");
+				mainWindow.AddLogEntry($"Unreal Binary Builder Analytics (Progress End): {InProgression01}");
 #endif
 			}
 		}
@@ -87,7 +87,7 @@ namespace UnrealBinaryBuilder.Classes
 			{
 				GameAnalytics.AddProgressionEvent(bIsFail ? EGAProgressionStatus.Fail : EGAProgressionStatus.Complete, InProgression01, InProgression02);
 #if DEBUG
-				mainWindow.AddLogEntry($"UE4 Binary Builder Analytics (Progress End): {InProgression01}::{InProgression02}");
+				mainWindow.AddLogEntry($"Unreal Binary Builder Analytics (Progress End): {InProgression01}::{InProgression02}");
 #endif
 			}
 		}
@@ -98,7 +98,7 @@ namespace UnrealBinaryBuilder.Classes
 			{
 				GameAnalytics.AddErrorEvent(InLogLevel, InMessage);
 #if DEBUG
-				mainWindow.AddLogEntry($"UE4 Binary Builder Analytics (Log): {InMessage}");
+				mainWindow.AddLogEntry($"Unreal Binary Builder Analytics (Log): {InMessage}");
 #endif
 			}
 		}

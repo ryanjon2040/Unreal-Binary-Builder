@@ -852,7 +852,7 @@ namespace UnrealBinaryBuilder
 				if (bClearLogs)
 				{
 					LogControl.ClearAllLogs();
-					AddLogEntry($"Welcome to UE4 Binary Builder v{UnrealBinaryBuilderHelpers.GetProductVersionString()}");
+					AddLogEntry($"Welcome to Unreal Binary Builder v{UnrealBinaryBuilderHelpers.GetProductVersionString()}");
 				}
 
 				AddLogEntry($"========================== RUNNING - {Path.GetFileName(processStartInfo.FileName)} ==========================");
@@ -1659,7 +1659,7 @@ namespace UnrealBinaryBuilder
 
 		private void GetSourceCode_Click(object sender, RoutedEventArgs e)
 		{
-			OpenBrowser("https://github.com/ryanjon2040/UE4-Binary-Builder");
+			OpenBrowser("https://github.com/ryanjon2040/Unreal-Binary-Builder");
 			GameAnalyticsCSharp.AddDesignEvent("Menu:Click:SourceCode");
 		}
 
@@ -1682,7 +1682,7 @@ namespace UnrealBinaryBuilder
 		}
 		private void ChangelogBtn_Click(object sender, RoutedEventArgs e)
 		{
-			OpenBrowser("https://github.com/ryanjon2040/UE4-Binary-Builder/blob/master/CHANGELOG.md");
+			OpenBrowser("https://github.com/ryanjon2040/Unreal-Binary-Builder/blob/master/CHANGELOG.md");
 			GameAnalyticsCSharp.AddDesignEvent("Menu:Click:Changelog");
 		}
 
