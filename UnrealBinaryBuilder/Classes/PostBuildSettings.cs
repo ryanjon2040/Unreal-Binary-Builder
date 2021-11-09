@@ -342,8 +342,7 @@ namespace UnrealBinaryBuilder.Classes
 					zipFile.Save(ZipLocationToSave);
 					Application.Current.Dispatcher.Invoke(() => 
 					{
-						mainWindow.CancelZipping.IsEnabled = false;
-						mainWindow.CurrentFileSaving.Visibility = Visibility.Collapsed;
+						mainWindow.CurrentFileSaving.Visibility = mainWindow.OverallProgressbar.Visibility = mainWindow.CancelZipping.Visibility = Visibility.Collapsed;
 						mainWindow.FileSaveState.Content = $"State: Saved to {ZipLocationToSave}";
 						mainWindow.AddLogEntry($"Done zipping. {ZipLocationToSave}");
 					});
