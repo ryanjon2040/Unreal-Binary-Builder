@@ -1,4 +1,20 @@
-﻿# 3.1.3
+﻿# 3.1.4
+
+**THIS IS A CRITICAL UPDATE. DO NO SKIP**
+* Updates to the updater.
+* Show commit of current Engine.
+* Add LinuxArm64 for Unreal Engine 5.
+* Update some UE4 names to Unreal.
+* Errors are now written to separate log file.
+* Support custom Engines.
+* New crash reporter.
+* **FIXED**: Progressbar and cancel button not hiding after zipping..
+* **FIXED**: Issue with CanSaveToZip.
+* **FIXED**: Incorrect behavior when canceling build.
+* **FIXED**: Issue when selecting Host DDC.
+* **FIXED**: Plugin zipping crash if locations are same.
+
+# 3.1.3
 
 * Improve UE5 support
 * Improve app update. Now shows changelog as well.
