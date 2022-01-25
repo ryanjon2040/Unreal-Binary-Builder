@@ -5,14 +5,15 @@
 		<language>en</language>
 		<item>
 			<title>Unreal Binary Builder 3.1.4</title>
-			<pubDate>Tue, 25 Jan 2022 16:00:25 +05:30</pubDate>
+			<pubDate>Tue, 25 Jan 2022 16:06:52 +05:30</pubDate>
 			<enclosure url="https://github.com/ryanjon2040/Unreal-Binary-Builder/releases/download/3.1.4/UnrealBinaryBuilder.v3.1.4.zip" 
-            sparkle:version="3.1.4" 
+            sparkle:version="3.1.4"
             sparkle:shortVersionString="3.1" 
-            length="384578265" 
+            length="384753313" 
             sparkle:os="windows" 
             type="application/octet-stream" 
-            sparkle:signature="lntuluoJheddU1H7iSxVEMZ2JDngJIfmn+Rf9L0i3TS5kB9NpFZRgyCYpEi5fdUdOJYE0qGxWN4HJzgtBxPFAw==" />
+            sparkle:signature="K+r86kj/rPTmu7kO3Buc+XCNyJ48tOao6GQq2C+5aPc2EdjHuXOjRxtBCA31lt0buKx1vKbYCNpucKGEGJkyDQ==" />
 		</item>
 	</channel>
 </rss>
+
