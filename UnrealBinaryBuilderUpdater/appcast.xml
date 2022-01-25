@@ -2,12 +2,10 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
 	<channel>
 		<title>Unreal Binary Builder</title>
-		<description>Most recent changes with links to updates.</description>
-		<link>https://github.com/ryanjon2040/Unreal-Binary-Builder/raw/master/UnrealBinaryBuilderUpdater/appcast.xml</link>
 		<language>en</language>
 		<item>
 			<title>Unreal Binary Builder 3.1.4</title>
-			<pubDate>Tue, 25 Jan 2022 15:20:47 +05:30</pubDate>
+			<pubDate>Tue, 25 Jan 2022 16:00:25 +05:30</pubDate>
 			<enclosure url="https://github.com/ryanjon2040/Unreal-Binary-Builder/releases/download/3.1.4/UnrealBinaryBuilder.v3.1.4.zip" 
             sparkle:version="3.1.4" 
             sparkle:shortVersionString="3.1" 
