@@ -1,6 +1,6 @@
 @echo off
 set tools_version=2.0.0-preview20201108002
-set appcast_path=%UserProfile%\.nuget\packages\netsparkleupdater.tools\%tools_version%\tools\windows\generate_appcast.exe
+set appcast_path=%UserProfile%\.dotnet\tools\netsparkle-generate-appcast.exe
 set appcast_output=%cd%\UnrealBinaryBuilderUpdater
 set appcast_binary=%cd%\Output
 set appcast_mainexe=%appcast_binary%\UnrealBinaryBuilder.exe
