@@ -28,7 +28,7 @@
     <PackageReference Include="DotNetZip" Version="1.16.0" />
     <PackageReference Include="GameAnalytics.Net.Core.SDK" Version="3.3.2" />
     <PackageReference Include="HandyControl" Version="3.3.0" />
-    <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
+    <PackageReference Include="LibGit2Sharp" Version="0.27.0-preview-0175" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Sentry" Version="3.13.0" />
     <PackageReference Include="SpicyTaco.AutoGrid" Version="1.2.29" />
