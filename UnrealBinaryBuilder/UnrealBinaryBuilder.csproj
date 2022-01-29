@@ -23,15 +23,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AvalonEdit" Version="6.1.2.30" />
-    <PackageReference Include="CefSharp.Wpf.NETCore" Version="91.1.211" />
-    <PackageReference Include="DotNetZip" Version="1.15.0" />
-    <PackageReference Include="GameAnalytics.Net.Core.SDK" Version="3.1.2" />
-    <PackageReference Include="HandyControl" Version="3.2.0" />
+    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
+    <PackageReference Include="CefSharp.Wpf.NETCore" Version="97.1.60" />
+    <PackageReference Include="DotNetZip" Version="1.16.0" />
+    <PackageReference Include="GameAnalytics.Net.Core.SDK" Version="3.3.2" />
+    <PackageReference Include="HandyControl" Version="3.3.0" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
-    <PackageReference Include="LibGit2Sharp.NativeBinaries" Version="2.0.314" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Sentry" Version="3.6.0" />
+    <PackageReference Include="Sentry" Version="3.13.0" />
     <PackageReference Include="SpicyTaco.AutoGrid" Version="1.2.29" />
   </ItemGroup>
 
@@ -48,6 +47,14 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-x64" Version="97.1.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-x86" Version="97.1.6" />
   </ItemGroup>
 
 </Project>
