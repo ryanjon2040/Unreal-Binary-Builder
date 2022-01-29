@@ -1,4 +1,7 @@
-﻿# 3.1.4
+﻿# 3.1.5
+* **FIXED**: Crash when clicking Browse button in zip tab (reported by Gambit)
+
+# 3.1.4
 
 **THIS IS A CRITICAL UPDATE. DO NO SKIP**
 * Updates to the updater.
