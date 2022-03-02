@@ -1,5 +1,5 @@
 ﻿# 3.1.6
-**CRITICAL SECUTORY UPDATE**
+**CRITICAL SECURITY UPDATE**
 * [CefSharp security update.](https://github.com/ryanjon2040/Unreal-Binary-Builder/pull/58)
 * HandyControl messageboxes now shows English instead of Chinese.
 
