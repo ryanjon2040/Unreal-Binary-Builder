@@ -1,4 +1,9 @@
-﻿# 3.1.5
+﻿# 3.1.6
+**CRITICAL SECUTORY UPDATE**
+* [CefSharp security update.](https://github.com/ryanjon2040/Unreal-Binary-Builder/pull/58)
+* HandyControl messageboxes now shows English instead of Chinese.
+
+# 3.1.5
 * **FIXED**: Crash when clicking Browse button in zip tab (reported by Gambit)
 
 # 3.1.4
