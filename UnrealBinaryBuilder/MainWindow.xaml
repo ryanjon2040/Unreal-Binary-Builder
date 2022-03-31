@@ -90,11 +90,11 @@
 											<CheckBox HorizontalAlignment="Left" Content="Force" Margin="5" IsChecked="True" IsEnabled="False" ToolTip="--force parameter must be added to git."/>
 											<StackPanel Orientation="Horizontal" >
 												<TextBlock Text="Threads " VerticalAlignment="Center"/>
-												<hc:TextBox x:Name="GitNumberOfThreads" VerticalAlignment="Center" TextType="Number" hc:InfoElement.Placeholder="Number of threads" Text="{Binding GitDependencyThreads}" Margin="5" Width="140" ToolTip="Use N cpu threads when downloading new files"/>
+												<hc:TextBox x:Name="GitNumberOfThreads" VerticalAlignment="Center" TextType="PInt" hc:InfoElement.Placeholder="Number of threads" Text="{Binding GitDependencyThreads}" Margin="5" Width="140" ToolTip="Use N cpu threads when downloading new files"/>
 											</StackPanel>
 											<StackPanel Orientation="Horizontal" >
 												<TextBlock Text="Retries  " VerticalAlignment="Center"/>
-												<hc:TextBox x:Name="GitNumberOfRetries" VerticalAlignment="Center" TextType="Number" hc:InfoElement.Placeholder="Number of retries" Text="{Binding GitDependencyMaxRetries}" Margin="5" Width="140" ToolTip="Override maximum number of retries per file"/>
+												<hc:TextBox x:Name="GitNumberOfRetries" VerticalAlignment="Center" TextType="PInt" hc:InfoElement.Placeholder="Number of retries" Text="{Binding GitDependencyMaxRetries}" Margin="5" Width="140" ToolTip="Override maximum number of retries per file"/>
 											</StackPanel>
 										</StackPanel>
 									</GroupBox>
@@ -105,7 +105,7 @@
 												<hc:TextBox x:Name="GitCachePath" hc:InfoElement.Placeholder="Cache path" IsEnabled="{Binding IsChecked, ElementName=bGitEnableCache}" Text="{Binding GitDependencyCache}" ToolTip="Custom path for the download cache" Width="132"/>
 												<Button x:Name="GitCachePathBrowse" Content="Browse" HorizontalAlignment="Right" IsEnabled="{Binding IsChecked, ElementName=bGitEnableCache}" Click="GitCachePathBrowse_Click"/>
 											</StackPanel>
-											<hc:TextBox x:Name="GitCacheDays" VerticalAlignment="Center" TextType="Number" hc:InfoElement.Placeholder="Cache days" IsEnabled="{Binding IsChecked, ElementName=bGitEnableCache}" Text="{Binding GitDependencyCacheDays}" ToolTip="Number of days to keep entries in cache"/>
+											<hc:TextBox x:Name="GitCacheDays" VerticalAlignment="Center" TextType="PInt" hc:InfoElement.Placeholder="Cache days" IsEnabled="{Binding IsChecked, ElementName=bGitEnableCache}" Text="{Binding GitDependencyCacheDays}" ToolTip="Number of days to keep entries in cache"/>
 											<hc:TextBox x:Name="GitCacheMultiplier" VerticalAlignment="Center" TextType="Digits" hc:InfoElement.Placeholder="Cache Multiplier" IsEnabled="{Binding IsChecked, ElementName=bGitEnableCache}" Text="{Binding GitDependencyCacheMultiplier}" ToolTip="Cache size as multiplier of current download"/>
 										</StackPanel>
 									</GroupBox>
