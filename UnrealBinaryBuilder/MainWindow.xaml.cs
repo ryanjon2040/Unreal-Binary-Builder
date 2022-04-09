@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -1267,6 +1268,12 @@ namespace UnrealBinaryBuilder
 				{
 					string sub = MyEngineName.Substring(pos).Replace(".", "");
 					string RemovedName = MyEngineName.Remove(pos);
+					string DecimalSeparator = Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+					if (DecimalSeparator != ".")
+                    {
+						RemovedName = RemovedName.Replace(".", DecimalSeparator);
+                    }
+
 					double EngineValue = Convert.ToDouble(RemovedName.Insert(pos, sub));
 					return EngineValue;
 				}
