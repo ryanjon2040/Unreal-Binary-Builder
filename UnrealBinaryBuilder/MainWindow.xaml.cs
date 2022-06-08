@@ -235,6 +235,10 @@ namespace UnrealBinaryBuilder
 			{
 				foreach (EngineBuild engineBuild in Plugins.GetInstalledEngines())
 				{
+					if(engineBuild.EnginePath == null)
+					{
+						continue;
+					}
 					string RunUATFile = Path.Combine(engineBuild.EnginePath, "Engine", "Build", "BatchFiles", "RunUAT.bat");
 					if (File.Exists(RunUATFile))
 					{
