@@ -1699,7 +1699,8 @@ namespace UnrealBinaryBuilder
 		private void AboutBtn_Click(object sender, RoutedEventArgs e)
 		{
 			GameAnalyticsCSharp.AddDesignEvent("AboutDialog:Open");
-			aboutDialog = Dialog.Show(new AboutDialog(this));
+			if (aboutDialog is null || aboutDialog.IsClosed)
+				aboutDialog = Dialog.Show(new AboutDialog(this));
 		}
 
 		public void CloseAboutDialog()
